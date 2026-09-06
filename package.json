@@ -73,7 +73,8 @@
     "build:apk": "eas build -p android --profile preview",
     "build:aab": "eas build -p android --profile production",
     "update:preview": "eas update --channel preview",
-    "update:prod": "eas update --channel production"
+    "update:prod": "eas update --channel production",
+    "screenshots:generate": "node scripts/generate-screenshots.js"
   },
   "private": true
 }
