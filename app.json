@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "tw-sports-500-helper",
+    "name": "加碼券小幫手",
     "slug": "tw-sports-500-helper",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,11 +8,14 @@
     "scheme": "twsports500helper",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "me.patw.twsports500helper",
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "me.patw.twsports500helper",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#FF5E1E",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -24,12 +27,18 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#FF5E1E",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "請允許存取 Face ID 以保護加碼券身分個資。"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
