@@ -7,12 +7,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  SafeAreaView,
   ScrollView,
   Modal,
   FlatList,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 
 import { Spacing } from '@/constants/theme';
@@ -183,7 +183,10 @@ export default function BrowserScreen() {
   const injectedScript = generateAutoFillScript(activeUser);
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.background }]}
+      edges={['top', 'left', 'right']}
+    >
       {/* Top Controls Bar */}
       <View
         style={[
