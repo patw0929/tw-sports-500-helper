@@ -119,25 +119,61 @@ export function generateAutoFillScript(profile: UserProfile | null): string {
       function triggerInput(el, val) {
         if (!el) return;
         el.focus();
-        el.value = val;
+        try {
+          const proto = Object.getPrototypeOf(el);
+          const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set ||
+                         Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+          if (setter) {
+            setter.call(el, val);
+          } else {
+            el.value = val;
+          }
+        } catch (e) {
+          el.value = val;
+        }
         el.dispatchEvent(new Event('input', { bubbles: true }));
         el.dispatchEvent(new Event('change', { bubbles: true }));
       }
 
       function tryFillAccessPage() {
         const idInput = document.querySelector('input#idNo, input[name="idNo"]');
-        if (idInput && !idInput.readOnly) {
-          triggerInput(idInput, user.idNo);
-          showNotice('已為 ' + user.name + ' 自動填寫身分證號！');
+        if (!idInput || idInput.readOnly) return false;
 
-          const submitBtn = document.querySelector('form[action*="access"] button[type="submit"], button.btn--primary');
-          if (submitBtn && !submitBtn.disabled) {
+        // Check if there is an active error message from server
+        const hasError = !!document.querySelector('.error, .alert-danger, .form-error, .text-danger, .field__error, .notice--warning:not(noscript p)');
+        if (hasError) {
+          console.log('[Sports500Helper] Page has error message, skipping auto-submit to prevent loop');
+          showNotice('網頁顯示提示或錯誤，請確認身分證號後手動送出。', false);
+          return false;
+        }
+
+        // Prevent rapid re-submissions on access page (throttle 6 seconds)
+        const lastSubmit = parseInt(sessionStorage.getItem('sports500_last_access_submit') || '0', 10);
+        if (Date.now() - lastSubmit < 6000) {
+          console.log('[Sports500Helper] Skipping access submit: submitted recently');
+          showNotice('已為 ' + user.name + ' 填寫身分證號，若未跳轉請點擊「確認」。');
+          return false;
+        }
+
+        if (window._sports500_access_submitting) {
+          return false;
+        }
+
+        triggerInput(idInput, user.idNo);
+        showNotice('已為 ' + user.name + ' 自動填寫身分證號！');
+
+        const submitBtn = document.querySelector('form[action*="access"] button[type="submit"], button.btn--primary');
+        if (submitBtn && !submitBtn.disabled) {
+          window._sports500_access_submitting = true;
+          sessionStorage.setItem('sports500_last_access_submit', Date.now().toString());
+          setTimeout(() => {
+            showNotice('正在進入下一步...');
+            submitBtn.click();
             setTimeout(() => {
-              showNotice('正在進入下一步...');
-              submitBtn.click();
-            }, 600);
-            return true;
-          }
+              window._sports500_access_submitting = false;
+            }, 2000);
+          }, 700);
+          return true;
         }
         return false;
       }
@@ -215,11 +251,31 @@ export function generateAutoFillScript(profile: UserProfile | null): string {
 
         if (filledAny) {
           showNotice('已自動填入 ' + user.name + ' 的登入資料！');
+
+          const hasError = !!document.querySelector('.error, .alert-danger, .form-error, .text-danger, .field__error');
+          if (hasError) {
+            console.log('[Sports500Helper] Login page has error, skipping auto-submit');
+            return true;
+          }
+
+          const lastLogin = parseInt(sessionStorage.getItem('sports500_last_login_submit') || '0', 10);
+          if (Date.now() - lastLogin < 6000) {
+            console.log('[Sports500Helper] Skipping login submit: submitted recently');
+            showNotice('已填入登入資料，若未自動登入請點擊「登入」。');
+            return true;
+          }
+
           const loginBtn = document.querySelector('button[type="submit"], input[type="submit"]');
-          if (loginBtn) {
+          if (loginBtn && !loginBtn.disabled) {
+            if (window._sports500_login_submitting) return true;
+            window._sports500_login_submitting = true;
+            sessionStorage.setItem('sports500_last_login_submit', Date.now().toString());
             setTimeout(() => {
               showNotice('正在為您登入我的任務...');
               loginBtn.click();
+              setTimeout(() => {
+                window._sports500_login_submitting = false;
+              }, 2000);
             }, 800);
           }
           return true;
@@ -287,17 +343,19 @@ export function generateAutoFillScript(profile: UserProfile | null): string {
         runAutoFill();
       }
 
-      // Re-run after any dynamic DOM loads
+      // Re-run once after dynamic DOM loads
       setTimeout(runAutoFill, 800);
-      setTimeout(runAutoFill, 1800);
 
-      // Notify React Native WebView
-      if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'PAGE_LOADED',
-          url: window.location.href,
-          title: document.title,
-        }));
+      // Notify React Native WebView once per URL to avoid terminal message flood
+      if (window._sports500_last_reported_url !== window.location.href) {
+        window._sports500_last_reported_url = window.location.href;
+        if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'PAGE_LOADED',
+            url: window.location.href,
+            title: document.title,
+          }));
+        }
       }
     })();
     true;

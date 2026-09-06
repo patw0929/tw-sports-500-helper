@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   Modal,
   FlatList,
   Alert,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
@@ -44,7 +45,11 @@ export default function BrowserScreen() {
     timestamp?: string;
   }>();
 
-  const [currentUrl, setCurrentUrl] = useState<string>(params.initialUrl || DEFAULT_URL);
+  const initialSource = useMemo(
+    () => ({ uri: params.initialUrl || DEFAULT_URL }),
+    [params.initialUrl]
+  );
+  const [activeUrl, setActiveUrl] = useState<string>(params.initialUrl || DEFAULT_URL);
   const [activeUser, setActiveUser] = useState<UserProfile | null>(null);
   const [allProfiles, setAllProfiles] = useState<UserProfile[]>([]);
   const [isAccountModalVisible, setAccountModalVisible] = useState(false);
@@ -59,6 +64,7 @@ export default function BrowserScreen() {
   useEffect(() => {
     if (params.initialUrl && params.initialUrl !== lastInjectedUrlRef.current) {
       lastInjectedUrlRef.current = params.initialUrl;
+      setActiveUrl(params.initialUrl);
       if (webViewRef.current) {
         webViewRef.current.injectJavaScript(`window.location.href = '${params.initialUrl}'; true;`);
       }
@@ -173,7 +179,7 @@ export default function BrowserScreen() {
   };
 
   const handleNavigate = (url: string) => {
-    setCurrentUrl(url);
+    setActiveUrl(url);
     if (webViewRef.current) {
       // @ts-ignore
       webViewRef.current.injectJavaScript(`window.location.href = '${url}'; true;`);
@@ -257,7 +263,7 @@ export default function BrowserScreen() {
           contentContainerStyle={styles.shortcutsScrollContent}
         >
           {VENDOR_SHORTCUTS.map((item) => {
-            const isMatch = currentUrl.startsWith(item.url);
+            const isMatch = activeUrl.startsWith(item.url);
             return (
               <TouchableOpacity
                 key={item.url}
@@ -296,7 +302,7 @@ export default function BrowserScreen() {
       {/* Native WebView */}
       <WebView
         ref={webViewRef}
-        source={{ uri: currentUrl }}
+        source={initialSource}
         style={styles.webView}
         injectedJavaScript={injectedScript}
         injectedJavaScriptBeforeContentLoaded={injectedScript}
@@ -304,18 +310,33 @@ export default function BrowserScreen() {
         domStorageEnabled={true}
         sharedCookiesEnabled={true}
         thirdPartyCookiesEnabled={true}
+        mixedContentMode="always"
+        setSupportMultipleWindows={false}
         allowsInlineMediaPlayback={true}
+        userAgent={
+          Platform.OS === 'android'
+            ? 'Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36'
+            : undefined
+        }
         onLoadStart={() => setIsLoading(true)}
-        onLoadEnd={() => {
-          setIsLoading(false);
-          if (activeUser && webViewRef.current) {
-            webViewRef.current.injectJavaScript(injectedScript);
+        onLoadEnd={() => setIsLoading(false)}
+        onShouldStartLoadWithRequest={(request) => {
+          // Fix 500.gov.tw backend HTTP cleartext redirects on Android
+          if (request.url.startsWith('http://500.gov.tw/')) {
+            const secureUrl = request.url.replace('http://500.gov.tw/', 'https://500.gov.tw/');
+            if (webViewRef.current) {
+              webViewRef.current.injectJavaScript(`window.location.href = '${secureUrl}'; true;`);
+            }
+            return false;
           }
+          return true;
         }}
         onNavigationStateChange={(navState) => {
           setCanGoBack(navState.canGoBack);
           setCanGoForward(navState.canGoForward);
-          setCurrentUrl(navState.url);
+          if (navState.url && navState.url !== activeUrl) {
+            setActiveUrl(navState.url);
+          }
         }}
         onMessage={(event) => {
           try {
