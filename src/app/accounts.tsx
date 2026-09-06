@@ -3,11 +3,14 @@ import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
 import { useFocusEffect } from 'expo-router';
 import * as Updates from 'expo-updates';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Keyboard,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Switch,
@@ -45,10 +48,27 @@ const COMMON_LABELS = ['本人', '配偶', '父親', '母親', '子女', '長輩
 export default function AccountsScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const formScrollRef = useRef<ScrollView>(null);
 
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => setKeyboardVisible(true)
+    );
+    const hideSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => setKeyboardVisible(false)
+    );
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   // Updates
   const { currentlyRunning, isUpdatePending } = Updates.useUpdates();
@@ -704,19 +724,39 @@ export default function AccountsScreen() {
       </ScrollView>
 
       {/* Add / Edit Profile Modal */}
-      <Modal visible={isModalOpen} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
+      <Modal
+        visible={isModalOpen}
+        transparent
+        animationType="slide"
+        statusBarTranslucent
+        onRequestClose={() => {
+          Keyboard.dismiss();
+          setIsModalOpen(false);
+        }}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalOverlay}
+        >
           <TouchableOpacity
             style={StyleSheet.absoluteFill}
             activeOpacity={1}
-            onPress={() => setIsModalOpen(false)}
+            onPress={() => {
+              Keyboard.dismiss();
+              setIsModalOpen(false);
+            }}
           />
           <View
             style={[
               styles.modalContent,
               {
                 backgroundColor: theme.cardBackground,
-                paddingBottom: insets.bottom > 0 ? insets.bottom + 12 : Spacing.four,
+                maxHeight: isKeyboardVisible ? '100%' : '85%',
+                paddingBottom: isKeyboardVisible
+                  ? 12
+                  : insets.bottom > 0
+                    ? insets.bottom + 12
+                    : Spacing.four,
               },
             ]}
           >
@@ -724,12 +764,23 @@ export default function AccountsScreen() {
               <Text style={[styles.modalTitle, { color: theme.text }]}>
                 {editingId ? '編輯登入身分' : '新增登入身分'}
               </Text>
-              <TouchableOpacity onPress={() => setIsModalOpen(false)}>
+              <TouchableOpacity
+                onPress={() => {
+                  Keyboard.dismiss();
+                  setIsModalOpen(false);
+                }}
+              >
                 <Ionicons name="close" size={24} color={theme.textSecondary} />
               </TouchableOpacity>
             </View>
 
-            <ScrollView style={styles.modalFormScroll} showsVerticalScrollIndicator={false}>
+            <ScrollView
+              ref={formScrollRef}
+              style={styles.modalFormScroll}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+              showsVerticalScrollIndicator={false}
+            >
               {/* Name */}
               <View style={styles.formField}>
                 <Text style={[styles.fieldLabel, { color: theme.text }]}>
@@ -748,6 +799,11 @@ export default function AccountsScreen() {
                   placeholderTextColor={theme.textMuted}
                   value={formName}
                   onChangeText={setFormName}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      formScrollRef.current?.scrollTo({ y: 0, animated: true });
+                    }, 150);
+                  }}
                 />
               </View>
 
@@ -798,6 +854,11 @@ export default function AccountsScreen() {
                   maxLength={10}
                   value={formIdNo}
                   onChangeText={(t) => setFormIdNo(t.toUpperCase())}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      formScrollRef.current?.scrollTo({ y: 80, animated: true });
+                    }, 150);
+                  }}
                 />
                 <Text style={[styles.fieldHint, { color: theme.textMuted }]}>
                   首碼英文大寫加 9 碼數字，系統會自動核對檢核碼
@@ -830,6 +891,11 @@ export default function AccountsScreen() {
                       maxLength={3}
                       value={formRocYear}
                       onChangeText={setFormRocYear}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          formScrollRef.current?.scrollTo({ y: 150, animated: true });
+                        }, 150);
+                      }}
                     />
                   </View>
 
@@ -851,6 +917,11 @@ export default function AccountsScreen() {
                       maxLength={2}
                       value={formMonth}
                       onChangeText={setFormMonth}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          formScrollRef.current?.scrollTo({ y: 150, animated: true });
+                        }, 150);
+                      }}
                     />
                   </View>
 
@@ -872,6 +943,11 @@ export default function AccountsScreen() {
                       maxLength={2}
                       value={formDay}
                       onChangeText={setFormDay}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          formScrollRef.current?.scrollTo({ y: 150, animated: true });
+                        }, 150);
+                      }}
                     />
                   </View>
                 </View>
@@ -900,6 +976,11 @@ export default function AccountsScreen() {
                   maxLength={10}
                   value={formPhone}
                   onChangeText={setFormPhone}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      formScrollRef.current?.scrollToEnd({ animated: true });
+                    }, 150);
+                  }}
                 />
                 <Text style={[styles.fieldHint, { color: theme.textMuted }]}>
                   需與登記於運動部系統之門號一致
@@ -933,7 +1014,7 @@ export default function AccountsScreen() {
               </TouchableOpacity>
             </ScrollView>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </SafeAreaView>
   );

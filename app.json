@@ -15,6 +15,7 @@
       "package": "me.patw.twsports500helper",
       "versionCode": 1,
       "usesCleartextTraffic": true,
+      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#FF5E1E",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
