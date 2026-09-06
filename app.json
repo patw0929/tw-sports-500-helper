@@ -52,6 +52,12 @@
         "projectId": "912c3037-6f60-4da0-a62b-e39659febab4"
       }
     },
-    "owner": "patw"
+    "owner": "patw",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/912c3037-6f60-4da0-a62b-e39659febab4"
+    }
   }
 }

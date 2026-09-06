@@ -40,6 +40,7 @@
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.2",
     "expo-system-ui": "~57.0.3",
+    "expo-updates": "~57.0.21",
     "expo-web-browser": "~57.0.2",
     "react": "19.2.3",
     "react-native": "0.86.3",
@@ -70,7 +71,9 @@
     "format:check": "prettier --check .",
     "prepare": "husky",
     "build:apk": "eas build -p android --profile preview",
-    "build:aab": "eas build -p android --profile production"
+    "build:aab": "eas build -p android --profile production",
+    "update:preview": "eas update --channel preview",
+    "update:prod": "eas update --channel production"
   },
   "private": true
 }
