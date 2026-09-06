@@ -1,14 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useFocusEffect } from 'expo-router';
-import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Spacing, MaxContentWidth } from '@/constants/theme';
+import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { getCurrentPeriod, PARTNER_PERKS } from '@/services/periods';
-import { getProfiles, getActiveProfile, setActiveProfile } from '@/services/storage';
-import { UserProfile, maskId, maskPhone } from '@/types/sports500';
+import { getActiveProfile, getProfiles, setActiveProfile } from '@/services/storage';
+import { maskId, maskPhone, UserProfile } from '@/types/sports500';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -233,24 +233,33 @@ export default function HomeScreen() {
         </View>
 
         {/* Big One-Click Auto Login Button */}
-        <TouchableOpacity
-          style={[styles.mainLoginButton, { backgroundColor: theme.primary }]}
-          activeOpacity={0.88}
-          onPress={handleQuickLogin}
-        >
-          <View style={styles.mainLoginIconWrap}>
-            <Ionicons name="flash" size={26} color="#ffffff" />
-          </View>
-          <View style={styles.mainLoginTextWrap}>
-            <Text style={styles.mainLoginTitle}>一鍵快速登入「我的任務」</Text>
-            <Text style={styles.mainLoginSubtitle}>
-              {activeUser
-                ? `自動填入 ${activeUser.name} 的身分證、生日與手機`
-                : '點此立即開始快速登入'}
+        <View style={styles.loginSection}>
+          <TouchableOpacity
+            style={[styles.mainLoginButton, { backgroundColor: theme.primary }]}
+            activeOpacity={0.88}
+            onPress={handleQuickLogin}
+          >
+            <View style={styles.mainLoginIconWrap}>
+              <Ionicons name="flash" size={26} color="#ffffff" />
+            </View>
+            <View style={styles.mainLoginTextWrap}>
+              <Text style={styles.mainLoginTitle}>一鍵快速登入「我的任務」</Text>
+              <Text style={styles.mainLoginSubtitle}>
+                {activeUser
+                  ? `自動填入 ${activeUser.name} 的身分證、生日與手機`
+                  : '點此立即開始快速登入'}
+              </Text>
+            </View>
+            <Ionicons name="arrow-forward" size={22} color="#ffffff" />
+          </TouchableOpacity>
+
+          <View style={styles.loginHintBox}>
+            <Ionicons name="information-circle-outline" size={14} color={theme.textMuted} />
+            <Text style={[styles.loginHintText, { color: theme.textMuted }]}>
+              注意：若揮汗有禮網站載入過慢時，自動登入可能失敗，請稍後重試。
             </Text>
           </View>
-          <Ionicons name="arrow-forward" size={22} color="#ffffff" />
-        </TouchableOpacity>
+        </View>
 
         {/* Quick Features Grid */}
         <Text style={[styles.sectionHeading, { color: theme.text }]}>常用功能捷徑</Text>
@@ -640,6 +649,20 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 12,
     fontWeight: '700',
+  },
+  loginSection: {
+    gap: 8,
+  },
+  loginHintBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+  },
+  loginHintText: {
+    fontSize: 12,
+    lineHeight: 16,
   },
   mainLoginButton: {
     flexDirection: 'row',
