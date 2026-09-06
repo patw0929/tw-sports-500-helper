@@ -1,3 +1,7 @@
+<p align="center">
+<img width="1024" height="500" alt="feature_graphic_1024x500" src="./play-store-assets/feature_graphic_1024x500.png" />
+</p>
+
 # 🏃 揮汗有禮・加碼券小幫手 (Taiwan Sports 500 Helper)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
