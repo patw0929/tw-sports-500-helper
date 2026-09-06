@@ -5,26 +5,58 @@ import { Colors } from '@/constants/theme';
 
 export default function AppTabs() {
   const scheme = useColorScheme();
-  const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
+  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
 
   return (
     <NativeTabs
-      backgroundColor={colors.background}
+      backgroundColor={colors.cardBackground}
       indicatorColor={colors.backgroundElement}
-      labelStyle={{ selected: { color: colors.text } }}>
+      tintColor={colors.tabIconSelected}
+      iconColor={{
+        default: colors.tabIconDefault,
+        selected: colors.tabIconSelected,
+      }}
+      labelStyle={{
+        default: { color: colors.tabIconDefault },
+        selected: { color: colors.tabIconSelected },
+      }}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>快速登入</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
+          sf={{ default: 'house', selected: 'house.fill' }}
           src={require('@/assets/images/tabIcons/home.png')}
           renderingMode="template"
+          selectedColor={colors.tabIconSelected}
         />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="browser">
+        <NativeTabs.Trigger.Label>官方網頁</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
+          sf={{ default: 'globe', selected: 'globe.americas.fill' }}
           src={require('@/assets/images/tabIcons/explore.png')}
           renderingMode="template"
+          selectedColor={colors.tabIconSelected}
+        />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="tasks">
+        <NativeTabs.Trigger.Label>任務週程</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          sf={{ default: 'calendar', selected: 'calendar.circle.fill' }}
+          src={require('@/assets/images/tabIcons/explore.png')}
+          renderingMode="template"
+          selectedColor={colors.tabIconSelected}
+        />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="accounts">
+        <NativeTabs.Trigger.Label>帳號管理</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          sf={{ default: 'person.crop.circle', selected: 'person.crop.circle.fill' }}
+          src={require('@/assets/images/tabIcons/home.png')}
+          renderingMode="template"
+          selectedColor={colors.tabIconSelected}
         />
       </NativeTabs.Trigger>
     </NativeTabs>
