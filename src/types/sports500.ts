@@ -10,6 +10,7 @@ export interface UserProfile {
   birthMonth: number; // 1-12
   birthDay: number; // 1-31
   phone: string; // 09xxxxxxxx
+  /** @deprecated 官方登記流程不需 Email，已自表單中移除，此欄位保留供舊資料相容 */
   email?: string;
   label?: string; // 常用標籤，例如 "本人"、"配偶"、"長輩"、"子女"
   isDefault: boolean;

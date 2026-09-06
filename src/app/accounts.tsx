@@ -1,8 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
 import { useFocusEffect } from 'expo-router';
+import * as Updates from 'expo-updates';
 import { useCallback, useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Modal,
   ScrollView,
@@ -46,6 +49,10 @@ export default function AccountsScreen() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
+  // Updates
+  const { currentlyRunning, isUpdatePending } = Updates.useUpdates();
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
+
   // Form states
   const [formName, setFormName] = useState('');
   const [formIdNo, setFormIdNo] = useState('');
@@ -53,7 +60,6 @@ export default function AccountsScreen() {
   const [formMonth, setFormMonth] = useState('1');
   const [formDay, setFormDay] = useState('1');
   const [formPhone, setFormPhone] = useState('');
-  const [formEmail, setFormEmail] = useState('');
   const [formLabel, setFormLabel] = useState('本人');
   const [formIsDefault, setFormIsDefault] = useState(false);
 
@@ -94,7 +100,6 @@ export default function AccountsScreen() {
     setFormMonth('1');
     setFormDay('1');
     setFormPhone('');
-    setFormEmail('');
     setFormLabel('本人');
     setFormIsDefault(profiles.length === 0);
     setIsModalOpen(true);
@@ -115,7 +120,6 @@ export default function AccountsScreen() {
     setFormMonth(String(item.birthMonth));
     setFormDay(String(item.birthDay));
     setFormPhone(item.phone);
-    setFormEmail(item.email || '');
     setFormLabel(item.label || '本人');
     setFormIsDefault(item.isDefault);
     setIsModalOpen(true);
@@ -125,7 +129,6 @@ export default function AccountsScreen() {
     const cleanName = formName.trim();
     const cleanIdNo = formIdNo.trim().toUpperCase();
     const cleanPhone = formPhone.trim().replace(/\s+/g, '');
-    const cleanEmail = formEmail.trim();
 
     if (!cleanName) {
       Alert.alert('請填寫姓名', '請輸入使用者的真實姓名或稱呼。');
@@ -175,7 +178,6 @@ export default function AccountsScreen() {
         birthMonth: month,
         birthDay: day,
         phone: cleanPhone,
-        email: cleanEmail,
         label: formLabel,
         isDefault: formIsDefault,
       },
@@ -237,6 +239,62 @@ export default function AccountsScreen() {
 
   const handleOpenUrl = (url: string) => {
     Linking.openURL(url);
+  };
+
+  const appVersion = Constants.expoConfig?.version || '1.0.0';
+  const buildCommit =
+    (Constants.expoConfig?.extra as { gitCommit?: string } | undefined)?.gitCommit || '';
+  const updateCommit =
+    (currentlyRunning?.manifest as { extra?: { gitCommit?: string } })?.extra?.gitCommit ||
+    (currentlyRunning?.manifest as { metadata?: { gitCommit?: string } })?.metadata?.gitCommit ||
+    '';
+  const currentCommit = updateCommit || buildCommit || '';
+
+  const updateSourceText = currentlyRunning.isEmbeddedLaunch ? '內建版本' : '雲端更新';
+
+  const handleCheckUpdate = async () => {
+    if (__DEV__ || !Updates.isEnabled) {
+      Alert.alert(
+        '本地開發環境',
+        '目前處於本地開發環境（Expo Go 或 Local Dev Server），EAS 雲端更新需在獨立打包的發布版本（Release / Preview Build）中運作。'
+      );
+      return;
+    }
+
+    setIsCheckingUpdate(true);
+    try {
+      const update = await Updates.checkForUpdateAsync();
+      if (update.isAvailable) {
+        Alert.alert('發現新版本', '伺服器上有可用的最新版本，是否立即下載更新？', [
+          { text: '稍後', style: 'cancel' },
+          {
+            text: '立即下載',
+            onPress: async () => {
+              setIsCheckingUpdate(true);
+              try {
+                await Updates.fetchUpdateAsync();
+                Alert.alert('下載完成', '新版本已下載完成，是否立即重新啟動套用？', [
+                  { text: '稍後重啟', style: 'cancel' },
+                  { text: '立即重啟', onPress: () => Updates.reloadAsync() },
+                ]);
+              } catch (err: unknown) {
+                const message = err instanceof Error ? err.message : '無法下載更新';
+                Alert.alert('下載失敗', message);
+              } finally {
+                setIsCheckingUpdate(false);
+              }
+            },
+          },
+        ]);
+      } else {
+        Alert.alert('已是最新版本', '目前運行的已經是最新版本，沒有更新需要下載。');
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : '檢查更新時發生錯誤，請稍後再試。';
+      Alert.alert('檢查失敗', message);
+    } finally {
+      setIsCheckingUpdate(false);
+    }
   };
 
   return (
@@ -523,6 +581,117 @@ export default function AccountsScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Version & Updates Section */}
+        <View
+          style={[
+            styles.settingsCard,
+            { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+          ]}
+        >
+          <View style={styles.authorHeaderRow}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Ionicons name="git-branch-outline" size={18} color={theme.primary} />
+              <Text style={[styles.cardSectionTitle, { color: theme.text }]}>版本與更新</Text>
+            </View>
+            <View
+              style={[
+                styles.unofficialAuthorBadge,
+                { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+              ]}
+            >
+              <Text style={[styles.unofficialAuthorBadgeText, { color: theme.textSecondary }]}>
+                v{appVersion}
+              </Text>
+            </View>
+          </View>
+
+          {/* Commit & Build Info */}
+          <View style={[styles.versionInfoRow, { borderColor: theme.cardBorder }]}>
+            <TouchableOpacity
+              style={styles.versionInfoCol}
+              disabled={!currentCommit}
+              onPress={() => {
+                if (currentCommit) {
+                  handleOpenUrl(
+                    `https://github.com/patw0929/tw-sports-500-helper/commit/${currentCommit}`
+                  );
+                }
+              }}
+            >
+              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>Latest Commit</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                <Text style={[styles.versionValue, { color: theme.text }]}>
+                  {currentCommit ? `#${currentCommit}` : 'N/A'}
+                </Text>
+                {currentCommit ? (
+                  <Ionicons name="open-outline" size={11} color={theme.textMuted} />
+                ) : null}
+              </View>
+            </TouchableOpacity>
+
+            <View style={[styles.versionDivider, { backgroundColor: theme.cardBorder }]} />
+
+            <View style={styles.versionInfoCol}>
+              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>運作模式</Text>
+              <Text style={[styles.versionValue, { color: theme.text }]}>{updateSourceText}</Text>
+            </View>
+
+            <View style={[styles.versionDivider, { backgroundColor: theme.cardBorder }]} />
+
+            <View style={styles.versionInfoCol}>
+              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>更新渠道</Text>
+              <Text style={[styles.versionValue, { color: theme.text }]}>
+                {Updates.channel || '預設'}
+              </Text>
+            </View>
+          </View>
+
+          {/* If update downloaded and waiting for restart */}
+          {isUpdatePending && (
+            <View style={[styles.pendingUpdateBanner, { backgroundColor: theme.primaryLight }]}>
+              <Ionicons name="sparkles" size={16} color={theme.primary} />
+              <Text style={[styles.pendingUpdateText, { color: theme.primary }]}>
+                新版本已下載就緒，重啟立即生效！
+              </Text>
+              <TouchableOpacity
+                style={[styles.pendingRestartBtn, { backgroundColor: theme.primary }]}
+                onPress={() => Updates.reloadAsync()}
+              >
+                <Text style={styles.pendingRestartBtnText}>重啟</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Check for Updates Button */}
+          <TouchableOpacity
+            style={[
+              styles.checkUpdateBtn,
+              {
+                backgroundColor: isCheckingUpdate ? theme.backgroundElement : theme.primaryLight,
+                borderColor: theme.primary,
+              },
+            ]}
+            disabled={isCheckingUpdate}
+            onPress={handleCheckUpdate}
+          >
+            {isCheckingUpdate ? (
+              <>
+                <ActivityIndicator size="small" color={theme.primary} />
+                <Text style={[styles.checkUpdateBtnText, { color: theme.primary }]}>
+                  正在檢查雲端更新...
+                </Text>
+              </>
+            ) : (
+              <>
+                <Ionicons name="cloud-download-outline" size={18} color={theme.primary} />
+                <Text style={[styles.checkUpdateBtnText, { color: theme.primary }]}>
+                  手動檢查雲端更新 (EAS Update)
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+
         {/* Security Declaration & Disclaimer */}
         <View style={[styles.disclaimerBox, { backgroundColor: theme.backgroundElement }]}>
           <Ionicons name="information-circle-outline" size={18} color={theme.textSecondary} />
@@ -721,27 +890,6 @@ export default function AccountsScreen() {
                 <Text style={[styles.fieldHint, { color: theme.textMuted }]}>
                   需與登記於運動部系統之門號一致
                 </Text>
-              </View>
-
-              {/* Email */}
-              <View style={styles.formField}>
-                <Text style={[styles.fieldLabel, { color: theme.text }]}>電子郵件（選填）</Text>
-                <TextInput
-                  style={[
-                    styles.input,
-                    {
-                      backgroundColor: theme.backgroundElement,
-                      color: theme.text,
-                      borderColor: theme.cardBorder,
-                    },
-                  ]}
-                  keyboardType="email-address"
-                  placeholder="example@mail.com"
-                  placeholderTextColor={theme.textMuted}
-                  autoCapitalize="none"
-                  value={formEmail}
-                  onChangeText={setFormEmail}
-                />
               </View>
 
               {/* Default Toggle */}
@@ -1101,5 +1249,68 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 15,
     fontWeight: '800',
+  },
+  versionInfoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    marginVertical: 12,
+  },
+  versionInfoCol: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 3,
+  },
+  versionDivider: {
+    width: 1,
+    height: 24,
+  },
+  versionLabel: {
+    fontSize: 11,
+    fontWeight: '500',
+  },
+  versionValue: {
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  pendingUpdateBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+    gap: 8,
+  },
+  pendingUpdateText: {
+    fontSize: 12,
+    fontWeight: '600',
+    flex: 1,
+  },
+  pendingRestartBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  pendingRestartBtnText: {
+    color: '#ffffff',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  checkUpdateBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    gap: 6,
+  },
+  checkUpdateBtnText: {
+    fontSize: 13,
+    fontWeight: '700',
   },
 });
