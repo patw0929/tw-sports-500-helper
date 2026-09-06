@@ -13,7 +13,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 
 import { Spacing } from '@/constants/theme';
@@ -70,6 +70,7 @@ function isShortcutActive(shortcutUrl: string, currentUrl: string): boolean {
 export default function BrowserScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{
     initialUrl?: string;
     autoRelogin?: string;
@@ -390,7 +391,20 @@ export default function BrowserScreen() {
       {/* Profile Switcher Modal */}
       <Modal visible={isAccountModalVisible} transparent animationType="slide">
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: theme.cardBackground }]}>
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={() => setAccountModalVisible(false)}
+          />
+          <View
+            style={[
+              styles.modalContent,
+              {
+                backgroundColor: theme.cardBackground,
+                paddingBottom: insets.bottom > 0 ? insets.bottom + 16 : 24,
+              },
+            ]}
+          >
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: theme.text }]}>切換登入身分</Text>
               <TouchableOpacity onPress={() => setAccountModalVisible(false)}>
@@ -460,7 +474,13 @@ export default function BrowserScreen() {
 
             {/* Modal Bottom: Jump to Accounts */}
             <TouchableOpacity
-              style={[styles.manageAccountsBtn, { backgroundColor: theme.backgroundElement }]}
+              style={[
+                styles.manageAccountsBtn,
+                {
+                  backgroundColor: theme.backgroundElement,
+                  borderColor: theme.cardBorder,
+                },
+              ]}
               onPress={() => {
                 setAccountModalVisible(false);
                 router.push('/accounts');
@@ -625,9 +645,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
+    paddingVertical: 13,
     paddingHorizontal: 16,
     borderRadius: 14,
+    borderWidth: 1,
     gap: 8,
     marginTop: 12,
   },

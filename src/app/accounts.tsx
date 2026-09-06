@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
@@ -44,6 +44,7 @@ const COMMON_LABELS = ['本人', '配偶', '父親', '母親', '子女', '長輩
 
 export default function AccountsScreen() {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
 
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -705,7 +706,20 @@ export default function AccountsScreen() {
       {/* Add / Edit Profile Modal */}
       <Modal visible={isModalOpen} transparent animationType="slide">
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: theme.cardBackground }]}>
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            activeOpacity={1}
+            onPress={() => setIsModalOpen(false)}
+          />
+          <View
+            style={[
+              styles.modalContent,
+              {
+                backgroundColor: theme.cardBackground,
+                paddingBottom: insets.bottom > 0 ? insets.bottom + 12 : Spacing.four,
+              },
+            ]}
+          >
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: theme.text }]}>
                 {editingId ? '編輯登入身分' : '新增登入身分'}
