@@ -1,40 +1,40 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import { useFocusEffect } from 'expo-router';
-import React, { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  Modal,
   Alert,
+  Modal,
+  ScrollView,
+  StyleSheet,
   Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Spacing, MaxContentWidth } from '@/constants/theme';
+import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import {
-  getProfiles,
-  saveProfile,
-  deleteProfile,
-  setActiveProfile,
-  isBiometricsEnabled,
-  setBiometricsEnabled,
+  BiometricsSupportInfo,
   authenticateBiometrics,
   checkBiometricsSupport,
-  BiometricsSupportInfo,
+  deleteProfile,
+  getProfiles,
+  isBiometricsEnabled,
+  saveProfile,
+  setActiveProfile,
+  setBiometricsEnabled,
 } from '@/services/storage';
 import {
   UserProfile,
+  formatRocDate,
   isValidTaiwanId,
   isValidTaiwanPhone,
   maskId,
   maskPhone,
-  formatRocDate,
 } from '@/types/sports500';
 
 const COMMON_LABELS = ['本人', '配偶', '父親', '母親', '子女', '長輩'];
@@ -447,12 +447,79 @@ export default function AccountsScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.linkRow}
+            style={[styles.linkRow, { borderBottomWidth: 0 }]}
             onPress={() => handleOpenUrl('https://twedu.qbicloud.com/webchat_sa/index.html')}
           >
             <Ionicons name="chatbubbles-outline" size={20} color="#3B82F6" />
             <Text style={[styles.linkRowText, { color: theme.text }]}>線上文字客服小幫手</Text>
             <Ionicons name="open-outline" size={16} color={theme.textMuted} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Unofficial App Author / 非官方 App 作者 */}
+        <View
+          style={[
+            styles.settingsCard,
+            { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+          ]}
+        >
+          <View style={styles.authorHeaderRow}>
+            <Text style={[styles.cardSectionTitle, { color: theme.text }]}>非官方 App 作者</Text>
+            <View
+              style={[
+                styles.unofficialAuthorBadge,
+                { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+              ]}
+            >
+              <Text style={[styles.unofficialAuthorBadgeText, { color: theme.textSecondary }]}>
+                開源專案
+              </Text>
+            </View>
+          </View>
+
+          <Text style={[styles.authorIntroText, { color: theme.textSecondary }]}>
+            由開發者 patw 因個人需求自製開發，無廣告、零伺服器後端，原始碼完全開源於
+            GitHub，歡迎前往加顆星支持。
+          </Text>
+
+          <TouchableOpacity
+            style={styles.linkRow}
+            onPress={() => handleOpenUrl('https://github.com/patw0929/tw-sports-500-helper')}
+          >
+            <Ionicons name="logo-github" size={20} color={theme.text} />
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.linkRowText, { color: theme.text }]}>GitHub 原始碼庫</Text>
+              <Text style={[styles.linkSubtext, { color: theme.textMuted }]}>
+                patw0929/tw-sports-500-helper
+              </Text>
+            </View>
+            <Ionicons name="open-outline" size={16} color={theme.textMuted} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.linkRow}
+            onPress={() => handleOpenUrl('https://patw.me/')}
+          >
+            <Ionicons name="globe-outline" size={20} color={theme.primary} />
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.linkRowText, { color: theme.text }]}>個人網站</Text>
+              <Text style={[styles.linkSubtext, { color: theme.textMuted }]}>patw.me</Text>
+            </View>
+            <Ionicons name="open-outline" size={16} color={theme.textMuted} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.linkRow, { borderBottomWidth: 0 }]}
+            onPress={() => handleOpenUrl('mailto:patw.hi@gmail.com')}
+          >
+            <Ionicons name="mail-outline" size={20} color={theme.accent} />
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.linkRowText, { color: theme.text }]}>聯絡作者信箱</Text>
+              <Text style={[styles.linkSubtext, { color: theme.textMuted }]}>
+                patw.hi@gmail.com
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={theme.textMuted} />
           </TouchableOpacity>
         </View>
 
@@ -903,6 +970,25 @@ const styles = StyleSheet.create({
   linkSubtext: {
     fontSize: 11,
     marginTop: 2,
+  },
+  authorHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  unofficialAuthorBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  unofficialAuthorBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  authorIntroText: {
+    fontSize: 13,
+    lineHeight: 19,
   },
   disclaimerBox: {
     flexDirection: 'row',

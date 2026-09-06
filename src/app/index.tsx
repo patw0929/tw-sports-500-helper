@@ -78,7 +78,19 @@ export default function HomeScreen() {
           </View>
           <View style={styles.brandTextGroup}>
             <Text style={[styles.brandSuper, { color: theme.primary }]}>運動部 115 年加碼活動</Text>
-            <Text style={[styles.brandTitle, { color: theme.text }]}>揮汗有禮・加碼券小幫手</Text>
+            <View style={styles.brandTitleRow}>
+              <Text style={[styles.brandTitle, { color: theme.text }]}>揮汗有禮・加碼券小幫手</Text>
+              <View
+                style={[
+                  styles.unofficialBadge,
+                  { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+                ]}
+              >
+                <Text style={[styles.unofficialBadgeText, { color: theme.textSecondary }]}>
+                  非官方
+                </Text>
+              </View>
+            </View>
           </View>
           <TouchableOpacity
             style={[
@@ -441,10 +453,28 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
+  brandTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexWrap: 'wrap',
+  },
   brandTitle: {
-    fontSize: 19,
+    fontSize: 18,
     fontWeight: '900',
     letterSpacing: -0.2,
+  },
+  unofficialBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 6,
+    borderWidth: 1,
+    alignSelf: 'center',
+  },
+  unofficialBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
   settingsIconButton: {
     width: 40,

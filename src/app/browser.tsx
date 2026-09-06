@@ -35,6 +35,38 @@ const VENDOR_SHORTCUTS = [
   { label: '任務辦法', url: 'https://500.gov.tw/registrant/activity-rules' },
 ];
 
+function isShortcutActive(shortcutUrl: string, currentUrl: string): boolean {
+  if (!currentUrl) return false;
+
+  const cleanCurrent = currentUrl.split('?')[0].split('#')[0];
+  const cleanShortcut = shortcutUrl.split('?')[0].split('#')[0];
+
+  // Exact match
+  if (cleanShortcut === cleanCurrent) return true;
+
+  // 活動首頁: only match root /registrant/ or /registrant or /registrant/index.html
+  if (shortcutUrl === 'https://500.gov.tw/registrant/') {
+    return (
+      cleanCurrent === 'https://500.gov.tw/registrant/' ||
+      cleanCurrent === 'https://500.gov.tw/registrant' ||
+      cleanCurrent === 'https://500.gov.tw/registrant/index.html'
+    );
+  }
+
+  // 登入 / 任務: match /access, /login, /member/tasks, /register
+  if (shortcutUrl === 'https://500.gov.tw/registrant/access') {
+    return (
+      cleanCurrent.includes('/registrant/access') ||
+      cleanCurrent.includes('/registrant/login') ||
+      cleanCurrent.includes('/registrant/register') ||
+      cleanCurrent.includes('/registrant/member')
+    );
+  }
+
+  // Other pages (e.g. vendor intro or rules)
+  return cleanCurrent.startsWith(cleanShortcut);
+}
+
 export default function BrowserScreen() {
   const router = useRouter();
   const theme = useTheme();
@@ -172,8 +204,15 @@ export default function BrowserScreen() {
       Alert.alert('尚無帳號', '請先至「帳號管理」新增身分證與生日資料，才能自動填入。');
       return;
     }
+
+    // If currently on an external URL or PDF, navigate directly to official access page
+    if (!activeUrl.includes('500.gov.tw') || activeUrl.endsWith('.pdf')) {
+      handleNavigate(DEFAULT_URL);
+      return;
+    }
+
     if (webViewRef.current) {
-      const script = generateAutoFillScript(activeUser);
+      const script = generateAutoFillScript(activeUser, true);
       webViewRef.current.injectJavaScript(script);
     }
   };
@@ -263,7 +302,7 @@ export default function BrowserScreen() {
           contentContainerStyle={styles.shortcutsScrollContent}
         >
           {VENDOR_SHORTCUTS.map((item) => {
-            const isMatch = activeUrl.startsWith(item.url);
+            const isMatch = isShortcutActive(item.url, activeUrl);
             return (
               <TouchableOpacity
                 key={item.url}
