@@ -77,8 +77,10 @@ export default function HomeScreen() {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.primary} />}>
-        
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.primary} />
+        }
+      >
         {/* Header Branding */}
         <View style={styles.brandRow}>
           <View style={[styles.logoIconCircle, { backgroundColor: theme.primary }]}>
@@ -89,14 +91,23 @@ export default function HomeScreen() {
             <Text style={[styles.brandTitle, { color: theme.text }]}>揮汗有禮・加碼券小幫手</Text>
           </View>
           <TouchableOpacity
-            style={[styles.settingsIconButton, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}
-            onPress={() => router.push('/accounts')}>
+            style={[
+              styles.settingsIconButton,
+              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+            ]}
+            onPress={() => router.push('/accounts')}
+          >
             <Ionicons name="settings-outline" size={20} color={theme.textSecondary} />
           </TouchableOpacity>
         </View>
 
         {/* Current Period Banner */}
-        <View style={[styles.periodCard, { backgroundColor: theme.primaryLight, borderColor: theme.primary }]}>
+        <View
+          style={[
+            styles.periodCard,
+            { backgroundColor: theme.primaryLight, borderColor: theme.primary },
+          ]}
+        >
           <View style={styles.periodCardTop}>
             <View style={[styles.periodBadge, { backgroundColor: theme.primary }]}>
               <Text style={styles.periodBadgeText}>{currentPeriod.label}</Text>
@@ -107,19 +118,26 @@ export default function HomeScreen() {
                 {currentPeriod.isCurrent
                   ? `剩餘 ${currentPeriod.daysLeft} 天 ${currentPeriod.hoursLeft} 小時`
                   : currentPeriod.isFuture
-                  ? '即將開始'
-                  : '已結束'}
+                    ? '即將開始'
+                    : '已結束'}
               </Text>
             </View>
           </View>
-          <Text style={[styles.periodDateText, { color: theme.text }]}>{currentPeriod.dateRangeText}</Text>
+          <Text style={[styles.periodDateText, { color: theme.text }]}>
+            {currentPeriod.dateRangeText}
+          </Text>
           <Text style={[styles.periodHintText, { color: theme.textSecondary }]}>
             每週每人限上傳一次運動截圖，審核通過即享 50 元加碼券！
           </Text>
         </View>
 
         {/* Active Profile Card */}
-        <View style={[styles.card, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}>
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+          ]}
+        >
           <View style={styles.cardHeaderRow}>
             <Text style={[styles.cardSectionTitle, { color: theme.textSecondary }]}>登入身分</Text>
             <TouchableOpacity onPress={() => router.push('/accounts')} style={styles.manageLink}>
@@ -137,8 +155,15 @@ export default function HomeScreen() {
                 <View style={styles.profileNameLine}>
                   <Text style={[styles.profileName, { color: theme.text }]}>{activeUser.name}</Text>
                   {activeUser.label && (
-                    <View style={[styles.profileLabelPill, { backgroundColor: theme.backgroundElement }]}>
-                      <Text style={[styles.profileLabelText, { color: theme.textSecondary }]}>{activeUser.label}</Text>
+                    <View
+                      style={[
+                        styles.profileLabelPill,
+                        { backgroundColor: theme.backgroundElement },
+                      ]}
+                    >
+                      <Text style={[styles.profileLabelText, { color: theme.textSecondary }]}>
+                        {activeUser.label}
+                      </Text>
                     </View>
                   )}
                 </View>
@@ -146,7 +171,8 @@ export default function HomeScreen() {
                   {maskId(activeUser.idNo)} • {maskPhone(activeUser.phone)}
                 </Text>
                 <Text style={[styles.profileDateSmall, { color: theme.textMuted }]}>
-                  民國 {activeUser.birthYearRoc} 年 {activeUser.birthMonth} 月 {activeUser.birthDay} 日出生
+                  民國 {activeUser.birthYearRoc} 年 {activeUser.birthMonth} 月 {activeUser.birthDay}{' '}
+                  日出生
                 </Text>
               </View>
             </View>
@@ -159,7 +185,8 @@ export default function HomeScreen() {
               </Text>
               <TouchableOpacity
                 style={[styles.addAccountButton, { backgroundColor: theme.primary }]}
-                onPress={() => router.push('/accounts')}>
+                onPress={() => router.push('/accounts')}
+              >
                 <Ionicons name="add" size={18} color="#fff" />
                 <Text style={styles.addAccountButtonText}>立即新增身分證資料</Text>
               </TouchableOpacity>
@@ -170,7 +197,11 @@ export default function HomeScreen() {
           {allProfiles.length > 1 && (
             <View style={styles.switchBar}>
               <Text style={[styles.switchBarLabel, { color: theme.textMuted }]}>快速切換：</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.switchChips}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.switchChips}
+              >
                 {allProfiles.map((p) => {
                   const isCurrent = p.id === activeUser?.id;
                   return (
@@ -181,8 +212,14 @@ export default function HomeScreen() {
                         { borderColor: isCurrent ? theme.primary : theme.cardBorder },
                         isCurrent && { backgroundColor: theme.primaryLight },
                       ]}
-                      onPress={() => handleSelectUser(p)}>
-                      <Text style={[styles.chipText, { color: isCurrent ? theme.primary : theme.textSecondary }]}>
+                      onPress={() => handleSelectUser(p)}
+                    >
+                      <Text
+                        style={[
+                          styles.chipText,
+                          { color: isCurrent ? theme.primary : theme.textSecondary },
+                        ]}
+                      >
                         {p.name}
                       </Text>
                     </TouchableOpacity>
@@ -197,14 +234,17 @@ export default function HomeScreen() {
         <TouchableOpacity
           style={[styles.mainLoginButton, { backgroundColor: theme.primary }]}
           activeOpacity={0.88}
-          onPress={handleQuickLogin}>
+          onPress={handleQuickLogin}
+        >
           <View style={styles.mainLoginIconWrap}>
             <Ionicons name="flash" size={26} color="#ffffff" />
           </View>
           <View style={styles.mainLoginTextWrap}>
             <Text style={styles.mainLoginTitle}>一鍵快速登入「我的任務」</Text>
             <Text style={styles.mainLoginSubtitle}>
-              {activeUser ? `自動填入 ${activeUser.name} 的身分證、生日與手機` : '點此立即開始快速登入'}
+              {activeUser
+                ? `自動填入 ${activeUser.name} 的身分證、生日與手機`
+                : '點此立即開始快速登入'}
             </Text>
           </View>
           <Ionicons name="arrow-forward" size={22} color="#ffffff" />
@@ -214,52 +254,79 @@ export default function HomeScreen() {
         <Text style={[styles.sectionHeading, { color: theme.text }]}>常用功能捷徑</Text>
         <View style={styles.gridContainer}>
           <TouchableOpacity
-            style={[styles.gridCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}
-            onPress={handleQuickLogin}>
+            style={[
+              styles.gridCard,
+              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+            ]}
+            onPress={handleQuickLogin}
+          >
             <View style={[styles.gridIconCircle, { backgroundColor: '#FFF0EA' }]}>
               <Ionicons name="cloud-upload" size={24} color="#FF5E1E" />
             </View>
             <Text style={[styles.gridCardTitle, { color: theme.text }]}>上傳運動紀錄</Text>
-            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>截圖上傳與審核進度查詢</Text>
+            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
+              截圖上傳與審核進度查詢
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.gridCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}
-            onPress={handleQuickLogin}>
+            style={[
+              styles.gridCard,
+              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+            ]}
+            onPress={handleQuickLogin}
+          >
             <View style={[styles.gridIconCircle, { backgroundColor: '#FEF3C7' }]}>
               <Ionicons name="gift" size={24} color="#F59E0B" />
             </View>
             <Text style={[styles.gridCardTitle, { color: theme.text }]}>兌換加碼券</Text>
-            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>超商及門市即時動態條碼</Text>
+            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
+              超商及門市即時動態條碼
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.gridCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}
-            onPress={() => router.push('/tasks')}>
+            style={[
+              styles.gridCard,
+              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+            ]}
+            onPress={() => router.push('/tasks')}
+          >
             <View style={[styles.gridIconCircle, { backgroundColor: '#ECFDF5' }]}>
               <Ionicons name="checkmark-done-circle" size={24} color="#10B981" />
             </View>
             <Text style={[styles.gridCardTitle, { color: theme.text }]}>截圖合格規範</Text>
-            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>狀態列、日期與數據規範</Text>
+            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
+              狀態列、日期與數據規範
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.gridCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}
-            onPress={() => router.push('/tasks')}>
+            style={[
+              styles.gridCard,
+              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+            ]}
+            onPress={() => router.push('/tasks')}
+          >
             <View style={[styles.gridIconCircle, { backgroundColor: '#EFF6FF' }]}>
               <Ionicons name="calendar-outline" size={24} color="#3B82F6" />
             </View>
             <Text style={[styles.gridCardTitle, { color: theme.text }]}>14 週任務時程</Text>
-            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>查看全活動各期起迄日</Text>
+            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
+              查看全活動各期起迄日
+            </Text>
           </TouchableOpacity>
         </View>
 
         {/* Merchant Merchandise Showcase */}
         <View style={styles.sectionHeaderRow}>
-          <Text style={[styles.sectionHeading, { color: theme.text, marginTop: 0 }]}>各商家兌換商品列表</Text>
+          <Text style={[styles.sectionHeading, { color: theme.text, marginTop: 0 }]}>
+            各商家兌換商品列表
+          </Text>
           <TouchableOpacity
             style={styles.sectionMoreLink}
-            onPress={() => router.push({ pathname: '/tasks', params: { tab: 'perks' } })}>
+            onPress={() => router.push({ pathname: '/tasks', params: { tab: 'perks' } })}
+          >
             <Text style={[styles.sectionMoreText, { color: theme.primary }]}>查看完整說明</Text>
             <Ionicons name="chevron-forward" size={14} color={theme.primary} />
           </TouchableOpacity>
@@ -269,8 +336,14 @@ export default function HomeScreen() {
           {PARTNER_PERKS.map((perk) => (
             <TouchableOpacity
               key={perk.id}
-              style={[styles.vendorRowCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}
-              onPress={() => router.push({ pathname: '/browser', params: { initialUrl: perk.url } })}>
+              style={[
+                styles.vendorRowCard,
+                { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+              ]}
+              onPress={() =>
+                router.push({ pathname: '/browser', params: { initialUrl: perk.url } })
+              }
+            >
               <View style={styles.vendorRowLeft}>
                 <View style={[styles.vendorIconPill, { backgroundColor: theme.primaryLight }]}>
                   <Ionicons
@@ -278,8 +351,8 @@ export default function HomeScreen() {
                       perk.id === 'vendor-1' || perk.id === 'vendor-2' || perk.id === 'vendor-3'
                         ? 'storefront-outline'
                         : perk.id === 'vendor-5'
-                        ? 'cart-outline'
-                        : 'barbell-outline'
+                          ? 'cart-outline'
+                          : 'barbell-outline'
                     }
                     size={16}
                     color={theme.primary}
@@ -289,7 +362,9 @@ export default function HomeScreen() {
                   <View style={styles.vendorRowNameRow}>
                     <Text style={[styles.vendorRowName, { color: theme.text }]}>{perk.name}</Text>
                     <View style={[styles.vendorBadgeMini, { backgroundColor: theme.primaryLight }]}>
-                      <Text style={[styles.vendorBadgeMiniText, { color: theme.primary }]}>{perk.badge}</Text>
+                      <Text style={[styles.vendorBadgeMiniText, { color: theme.primary }]}>
+                        {perk.badge}
+                      </Text>
                     </View>
                   </View>
                   <Text style={[styles.vendorRowItemCount, { color: theme.textSecondary }]}>
@@ -312,9 +387,12 @@ export default function HomeScreen() {
         <View style={[styles.securityNotice, { backgroundColor: theme.backgroundElement }]}>
           <Ionicons name="shield-checkmark" size={20} color={theme.success} />
           <View style={{ flex: 1 }}>
-            <Text style={[styles.securityNoticeTitle, { color: theme.text }]}>本機硬體安全加密保證</Text>
+            <Text style={[styles.securityNoticeTitle, { color: theme.text }]}>
+              本機硬體安全加密保證
+            </Text>
             <Text style={[styles.securityNoticeDesc, { color: theme.textSecondary }]}>
-              所有身分證與電話資訊僅保存在本機裝置安全晶片（Keychain / Keystore），絕不上傳任何第三方伺服器。
+              所有身分證與電話資訊僅保存在本機裝置安全晶片（Keychain /
+              Keystore），絕不上傳任何第三方伺服器。
             </Text>
           </View>
         </View>

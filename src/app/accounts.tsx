@@ -133,7 +133,10 @@ export default function AccountsScreen() {
     }
 
     if (!isValidTaiwanId(cleanIdNo)) {
-      Alert.alert('身分證號格式不正確', '請輸入合法的台灣身分證字號（1 碼大寫英文字母加 9 碼數字）。');
+      Alert.alert(
+        '身分證號格式不正確',
+        '請輸入合法的台灣身分證字號（1 碼大寫英文字母加 9 碼數字）。'
+      );
       return;
     }
 
@@ -142,7 +145,10 @@ export default function AccountsScreen() {
     const day = parseInt(formDay, 10);
 
     if (isNaN(rocYear) || rocYear < 1 || rocYear > 98) {
-      Alert.alert('年齡不符合資格', '官方規定參加者需為民國 98 年 12 月 31 日前出生（年滿 16 歲）。');
+      Alert.alert(
+        '年齡不符合資格',
+        '官方規定參加者需為民國 98 年 12 月 31 日前出生（年滿 16 歲）。'
+      );
       return;
     }
 
@@ -248,17 +254,25 @@ export default function AccountsScreen() {
         {/* Profiles Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeaderRow}>
-            <Text style={[styles.sectionTitle, { color: theme.text }]}>已儲存身分證資料 ({profiles.length})</Text>
+            <Text style={[styles.sectionTitle, { color: theme.text }]}>
+              已儲存身分證資料 ({profiles.length})
+            </Text>
             <TouchableOpacity
               style={[styles.addButton, { backgroundColor: theme.primary }]}
-              onPress={handleOpenAddModal}>
+              onPress={handleOpenAddModal}
+            >
               <Ionicons name="add" size={18} color="#fff" />
               <Text style={styles.addButtonText}>新增帳號</Text>
             </TouchableOpacity>
           </View>
 
           {profiles.length === 0 ? (
-            <View style={[styles.emptyCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}>
+            <View
+              style={[
+                styles.emptyCard,
+                { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+              ]}
+            >
               <Ionicons name="shield-outline" size={36} color={theme.primary} />
               <Text style={[styles.emptyCardTitle, { color: theme.text }]}>尚未儲存任何帳號</Text>
               <Text style={[styles.emptyCardText, { color: theme.textSecondary }]}>
@@ -274,34 +288,53 @@ export default function AccountsScreen() {
                     styles.profileCard,
                     { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
                     item.isDefault && { borderColor: theme.primary, borderWidth: 1.5 },
-                  ]}>
+                  ]}
+                >
                   <View style={styles.profileCardTop}>
                     <View style={styles.profileCardHeaderLeft}>
-                      <Text style={[styles.profileCardName, { color: theme.text }]}>{item.name}</Text>
+                      <Text style={[styles.profileCardName, { color: theme.text }]}>
+                        {item.name}
+                      </Text>
                       {item.label && (
-                        <View style={[styles.labelBadge, { backgroundColor: theme.backgroundElement }]}>
-                          <Text style={[styles.labelBadgeText, { color: theme.textSecondary }]}>{item.label}</Text>
+                        <View
+                          style={[styles.labelBadge, { backgroundColor: theme.backgroundElement }]}
+                        >
+                          <Text style={[styles.labelBadgeText, { color: theme.textSecondary }]}>
+                            {item.label}
+                          </Text>
                         </View>
                       )}
                       {item.isDefault && (
-                        <View style={[styles.defaultBadge, { backgroundColor: theme.primaryLight }]}>
+                        <View
+                          style={[styles.defaultBadge, { backgroundColor: theme.primaryLight }]}
+                        >
                           <Ionicons name="star" size={11} color={theme.primary} />
-                          <Text style={[styles.defaultBadgeText, { color: theme.primary }]}>預設登入</Text>
+                          <Text style={[styles.defaultBadgeText, { color: theme.primary }]}>
+                            預設登入
+                          </Text>
                         </View>
                       )}
                     </View>
 
                     <View style={styles.cardActionsGroup}>
-                      <TouchableOpacity onPress={() => handleOpenEditModal(item)} style={styles.actionIconButton}>
+                      <TouchableOpacity
+                        onPress={() => handleOpenEditModal(item)}
+                        style={styles.actionIconButton}
+                      >
                         <Ionicons name="pencil" size={18} color={theme.textSecondary} />
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => handleDelete(item)} style={styles.actionIconButton}>
+                      <TouchableOpacity
+                        onPress={() => handleDelete(item)}
+                        style={styles.actionIconButton}
+                      >
                         <Ionicons name="trash-outline" size={18} color={theme.danger} />
                       </TouchableOpacity>
                     </View>
                   </View>
 
-                  <View style={[styles.profileInfoBox, { backgroundColor: theme.backgroundElement }]}>
+                  <View
+                    style={[styles.profileInfoBox, { backgroundColor: theme.backgroundElement }]}
+                  >
                     <Text style={[styles.infoLine, { color: theme.text }]}>
                       身分證號：<Text style={{ fontWeight: '800' }}>{maskId(item.idNo)}</Text>
                     </Text>
@@ -316,9 +349,12 @@ export default function AccountsScreen() {
                   {!item.isDefault && (
                     <TouchableOpacity
                       style={[styles.setDefaultBtn, { borderColor: theme.cardBorder }]}
-                      onPress={() => handleSetDefault(item)}>
+                      onPress={() => handleSetDefault(item)}
+                    >
                       <Ionicons name="star-outline" size={14} color={theme.textSecondary} />
-                      <Text style={[styles.setDefaultBtnText, { color: theme.textSecondary }]}>設為一鍵預設登入身分</Text>
+                      <Text style={[styles.setDefaultBtnText, { color: theme.textSecondary }]}>
+                        設為一鍵預設登入身分
+                      </Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -329,13 +365,24 @@ export default function AccountsScreen() {
 
         {/* Biometrics Settings - 若裝置不支援或無法啟用則完全不顯示 */}
         {Boolean(bioSupport?.isAvailable) && (
-          <View style={[styles.settingsCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}>
+          <View
+            style={[
+              styles.settingsCard,
+              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+            ]}
+          >
             <View style={styles.settingRow}>
               <View style={[styles.settingIconWrap, { backgroundColor: theme.primaryLight }]}>
-                <Ionicons name={bioSupport?.icon || 'finger-print'} size={22} color={theme.primary} />
+                <Ionicons
+                  name={bioSupport?.icon || 'finger-print'}
+                  size={22}
+                  color={theme.primary}
+                />
               </View>
               <View style={{ flex: 1, gap: 2 }}>
-                <Text style={[styles.settingTitle, { color: theme.text }]}>{bioSupport?.label || '生物辨識保護'}</Text>
+                <Text style={[styles.settingTitle, { color: theme.text }]}>
+                  {bioSupport?.label || '生物辨識保護'}
+                </Text>
                 <Text style={[styles.settingDesc, { color: theme.textSecondary }]}>
                   開啟後存取帳號保險箱需通過身分驗證，保護個資隱私。
                 </Text>
@@ -351,12 +398,20 @@ export default function AccountsScreen() {
         )}
 
         {/* Official Resources & Support */}
-        <View style={[styles.settingsCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}>
+        <View
+          style={[
+            styles.settingsCard,
+            { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+          ]}
+        >
           <Text style={[styles.cardSectionTitle, { color: theme.text }]}>官方資源與客服管道</Text>
 
           <TouchableOpacity
             style={styles.linkRow}
-            onPress={() => handleOpenUrl('https://500.gov.tw/news/115/115年揮汗有禮加碼活動使用說明_0831V4.pdf')}>
+            onPress={() =>
+              handleOpenUrl('https://500.gov.tw/news/115/115年揮汗有禮加碼活動使用說明_0831V4.pdf')
+            }
+          >
             <Ionicons name="document-text-outline" size={20} color={theme.primary} />
             <Text style={[styles.linkRowText, { color: theme.text }]}>官方操作說明手冊 (PDF)</Text>
             <Ionicons name="open-outline" size={16} color={theme.textMuted} />
@@ -364,7 +419,12 @@ export default function AccountsScreen() {
 
           <TouchableOpacity
             style={styles.linkRow}
-            onPress={() => handleOpenUrl('https://500.gov.tw/news/115/運動幣全民運動加碼方案規劃-懶人包08261609_300dpi.pdf')}>
+            onPress={() =>
+              handleOpenUrl(
+                'https://500.gov.tw/news/115/運動幣全民運動加碼方案規劃-懶人包08261609_300dpi.pdf'
+              )
+            }
+          >
             <Ionicons name="sparkles-outline" size={20} color={theme.accent} />
             <Text style={[styles.linkRowText, { color: theme.text }]}>運動部活動懶人包 (PDF)</Text>
             <Ionicons name="open-outline" size={16} color={theme.textMuted} />
@@ -373,15 +433,20 @@ export default function AccountsScreen() {
           <TouchableOpacity style={styles.linkRow} onPress={handleCallHotline}>
             <Ionicons name="call-outline" size={20} color={theme.success} />
             <View style={{ flex: 1 }}>
-              <Text style={[styles.linkRowText, { color: theme.text }]}>撥打活動客服專線 02-7752-3658</Text>
-              <Text style={[styles.linkSubtext, { color: theme.textMuted }]}>週一至週日 09:00~18:00 (12:00~13:00休息)</Text>
+              <Text style={[styles.linkRowText, { color: theme.text }]}>
+                撥打活動客服專線 02-7752-3658
+              </Text>
+              <Text style={[styles.linkSubtext, { color: theme.textMuted }]}>
+                週一至週日 09:00~18:00 (12:00~13:00休息)
+              </Text>
             </View>
             <Ionicons name="chevron-forward" size={16} color={theme.textMuted} />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.linkRow}
-            onPress={() => handleOpenUrl('https://twedu.qbicloud.com/webchat_sa/index.html')}>
+            onPress={() => handleOpenUrl('https://twedu.qbicloud.com/webchat_sa/index.html')}
+          >
             <Ionicons name="chatbubbles-outline" size={20} color="#3B82F6" />
             <Text style={[styles.linkRowText, { color: theme.text }]}>線上文字客服小幫手</Text>
             <Ionicons name="open-outline" size={16} color={theme.textMuted} />
@@ -392,7 +457,8 @@ export default function AccountsScreen() {
         <View style={[styles.disclaimerBox, { backgroundColor: theme.backgroundElement }]}>
           <Ionicons name="information-circle-outline" size={18} color={theme.textSecondary} />
           <Text style={[styles.disclaimerText, { color: theme.textSecondary }]}>
-            免責聲明：本 App 非官方所有，僅為開發者個人方便使用開發，請以官方規則為主。所有身分證與電話等資訊僅加密保存在使用者裝置本機硬體晶片中，絕不上傳任何第三方伺服器，登入與資料核驗皆直接於運動部官方主機進行。
+            免責聲明：本 App
+            非官方所有，僅為開發者個人方便使用開發，請以官方規則為主。所有身分證與電話等資訊僅加密保存在使用者裝置本機硬體晶片中，絕不上傳任何第三方伺服器，登入與資料核驗皆直接於運動部官方主機進行。
           </Text>
         </View>
       </ScrollView>
@@ -413,9 +479,18 @@ export default function AccountsScreen() {
             <ScrollView style={styles.modalFormScroll} showsVerticalScrollIndicator={false}>
               {/* Name */}
               <View style={styles.formField}>
-                <Text style={[styles.fieldLabel, { color: theme.text }]}>姓名或稱呼 <Text style={{ color: theme.primary }}>*</Text></Text>
+                <Text style={[styles.fieldLabel, { color: theme.text }]}>
+                  姓名或稱呼 <Text style={{ color: theme.primary }}>*</Text>
+                </Text>
                 <TextInput
-                  style={[styles.input, { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.cardBorder }]}
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: theme.backgroundElement,
+                      color: theme.text,
+                      borderColor: theme.cardBorder,
+                    },
+                  ]}
                   placeholder="例如：王小明"
                   placeholderTextColor={theme.textMuted}
                   value={formName}
@@ -435,8 +510,14 @@ export default function AccountsScreen() {
                         { borderColor: formLabel === lbl ? theme.primary : theme.cardBorder },
                         formLabel === lbl && { backgroundColor: theme.primaryLight },
                       ]}
-                      onPress={() => setFormLabel(lbl)}>
-                      <Text style={[styles.labelSelectChipText, { color: formLabel === lbl ? theme.primary : theme.textSecondary }]}>
+                      onPress={() => setFormLabel(lbl)}
+                    >
+                      <Text
+                        style={[
+                          styles.labelSelectChipText,
+                          { color: formLabel === lbl ? theme.primary : theme.textSecondary },
+                        ]}
+                      >
                         {lbl}
                       </Text>
                     </TouchableOpacity>
@@ -446,9 +527,18 @@ export default function AccountsScreen() {
 
               {/* ID Number */}
               <View style={styles.formField}>
-                <Text style={[styles.fieldLabel, { color: theme.text }]}>身分證字號 <Text style={{ color: theme.primary }}>*</Text></Text>
+                <Text style={[styles.fieldLabel, { color: theme.text }]}>
+                  身分證字號 <Text style={{ color: theme.primary }}>*</Text>
+                </Text>
                 <TextInput
-                  style={[styles.input, { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.cardBorder }]}
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: theme.backgroundElement,
+                      color: theme.text,
+                      borderColor: theme.cardBorder,
+                    },
+                  ]}
                   placeholder="A123456789"
                   placeholderTextColor={theme.textMuted}
                   autoCapitalize="characters"
@@ -463,12 +553,24 @@ export default function AccountsScreen() {
 
               {/* Birth Date (ROC) */}
               <View style={styles.formField}>
-                <Text style={[styles.fieldLabel, { color: theme.text }]}>出生年月日（民國） <Text style={{ color: theme.primary }}>*</Text></Text>
+                <Text style={[styles.fieldLabel, { color: theme.text }]}>
+                  出生年月日（民國） <Text style={{ color: theme.primary }}>*</Text>
+                </Text>
                 <View style={styles.dateInputsRow}>
                   <View style={styles.dateInputCol}>
-                    <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>民國年</Text>
+                    <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>
+                      民國年
+                    </Text>
                     <TextInput
-                      style={[styles.input, styles.dateInput, { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.cardBorder }]}
+                      style={[
+                        styles.input,
+                        styles.dateInput,
+                        {
+                          backgroundColor: theme.backgroundElement,
+                          color: theme.text,
+                          borderColor: theme.cardBorder,
+                        },
+                      ]}
                       keyboardType="number-pad"
                       placeholder="85"
                       placeholderTextColor={theme.textMuted}
@@ -481,7 +583,15 @@ export default function AccountsScreen() {
                   <View style={styles.dateInputCol}>
                     <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>月份</Text>
                     <TextInput
-                      style={[styles.input, styles.dateInput, { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.cardBorder }]}
+                      style={[
+                        styles.input,
+                        styles.dateInput,
+                        {
+                          backgroundColor: theme.backgroundElement,
+                          color: theme.text,
+                          borderColor: theme.cardBorder,
+                        },
+                      ]}
                       keyboardType="number-pad"
                       placeholder="1"
                       placeholderTextColor={theme.textMuted}
@@ -494,7 +604,15 @@ export default function AccountsScreen() {
                   <View style={styles.dateInputCol}>
                     <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>日期</Text>
                     <TextInput
-                      style={[styles.input, styles.dateInput, { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.cardBorder }]}
+                      style={[
+                        styles.input,
+                        styles.dateInput,
+                        {
+                          backgroundColor: theme.backgroundElement,
+                          color: theme.text,
+                          borderColor: theme.cardBorder,
+                        },
+                      ]}
                       keyboardType="number-pad"
                       placeholder="1"
                       placeholderTextColor={theme.textMuted}
@@ -511,9 +629,18 @@ export default function AccountsScreen() {
 
               {/* Phone */}
               <View style={styles.formField}>
-                <Text style={[styles.fieldLabel, { color: theme.text }]}>手機號碼 <Text style={{ color: theme.primary }}>*</Text></Text>
+                <Text style={[styles.fieldLabel, { color: theme.text }]}>
+                  手機號碼 <Text style={{ color: theme.primary }}>*</Text>
+                </Text>
                 <TextInput
-                  style={[styles.input, { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.cardBorder }]}
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: theme.backgroundElement,
+                      color: theme.text,
+                      borderColor: theme.cardBorder,
+                    },
+                  ]}
                   keyboardType="phone-pad"
                   placeholder="0912345678"
                   placeholderTextColor={theme.textMuted}
@@ -530,7 +657,14 @@ export default function AccountsScreen() {
               <View style={styles.formField}>
                 <Text style={[styles.fieldLabel, { color: theme.text }]}>電子郵件（選填）</Text>
                 <TextInput
-                  style={[styles.input, { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.cardBorder }]}
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: theme.backgroundElement,
+                      color: theme.text,
+                      borderColor: theme.cardBorder,
+                    },
+                  ]}
                   keyboardType="email-address"
                   placeholder="example@mail.com"
                   placeholderTextColor={theme.textMuted}
@@ -543,8 +677,12 @@ export default function AccountsScreen() {
               {/* Default Toggle */}
               <View style={[styles.toggleRow, { borderColor: theme.cardBorder }]}>
                 <View style={{ flex: 1 }}>
-                  <Text style={[styles.toggleTitle, { color: theme.text }]}>設為一鍵快速登入帳號</Text>
-                  <Text style={[styles.toggleDesc, { color: theme.textSecondary }]}>首頁點擊快速登入時將自動採用此帳號</Text>
+                  <Text style={[styles.toggleTitle, { color: theme.text }]}>
+                    設為一鍵快速登入帳號
+                  </Text>
+                  <Text style={[styles.toggleDesc, { color: theme.textSecondary }]}>
+                    首頁點擊快速登入時將自動採用此帳號
+                  </Text>
                 </View>
                 <Switch
                   value={formIsDefault}
@@ -556,7 +694,8 @@ export default function AccountsScreen() {
 
               <TouchableOpacity
                 style={[styles.saveSubmitBtn, { backgroundColor: theme.primary }]}
-                onPress={handleSave}>
+                onPress={handleSave}
+              >
                 <Ionicons name="checkmark-circle" size={20} color="#fff" />
                 <Text style={styles.saveSubmitBtnText}>儲存身分資料</Text>
               </TouchableOpacity>

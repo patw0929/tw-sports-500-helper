@@ -19,7 +19,8 @@ export default function AppTabs() {
       labelStyle={{
         default: { color: colors.tabIconDefault },
         selected: { color: colors.tabIconSelected },
-      }}>
+      }}
+    >
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>快速登入</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon

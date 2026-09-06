@@ -177,7 +177,9 @@ export async function setBiometricsEnabled(enabled: boolean): Promise<void> {
   await setStorageItem(BIOMETRIC_KEY, enabled ? 'true' : 'false');
 }
 
-export async function authenticateBiometrics(promptMessage = '請驗證身分以解鎖加碼券個資'): Promise<boolean> {
+export async function authenticateBiometrics(
+  promptMessage = '請驗證身分以解鎖加碼券個資'
+): Promise<boolean> {
   try {
     const hasHardware = await LocalAuthentication.hasHardwareAsync();
     const isEnrolled = await LocalAuthentication.isEnrolledAsync();

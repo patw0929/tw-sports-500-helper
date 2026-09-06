@@ -43,40 +43,55 @@ export default function TasksScreen() {
         {/* Tab Switcher */}
         <View style={[styles.segmentContainer, { backgroundColor: theme.backgroundElement }]}>
           <TouchableOpacity
-            style={[styles.segmentButton, activeTab === 'schedule' && { backgroundColor: theme.cardBackground }]}
-            onPress={() => setSelectedTab('schedule')}>
+            style={[
+              styles.segmentButton,
+              activeTab === 'schedule' && { backgroundColor: theme.cardBackground },
+            ]}
+            onPress={() => setSelectedTab('schedule')}
+          >
             <Text
               style={[
                 styles.segmentText,
                 { color: activeTab === 'schedule' ? theme.primary : theme.textSecondary },
                 activeTab === 'schedule' && styles.segmentTextActive,
-              ]}>
+              ]}
+            >
               14 週時程表
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.segmentButton, activeTab === 'criteria' && { backgroundColor: theme.cardBackground }]}
-            onPress={() => setSelectedTab('criteria')}>
+            style={[
+              styles.segmentButton,
+              activeTab === 'criteria' && { backgroundColor: theme.cardBackground },
+            ]}
+            onPress={() => setSelectedTab('criteria')}
+          >
             <Text
               style={[
                 styles.segmentText,
                 { color: activeTab === 'criteria' ? theme.primary : theme.textSecondary },
                 activeTab === 'criteria' && styles.segmentTextActive,
-              ]}>
+              ]}
+            >
               三大任務標準
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.segmentButton, activeTab === 'perks' && { backgroundColor: theme.cardBackground }]}
-            onPress={() => setSelectedTab('perks')}>
+            style={[
+              styles.segmentButton,
+              activeTab === 'perks' && { backgroundColor: theme.cardBackground },
+            ]}
+            onPress={() => setSelectedTab('perks')}
+          >
             <Text
               style={[
                 styles.segmentText,
                 { color: activeTab === 'perks' ? theme.primary : theme.textSecondary },
                 activeTab === 'perks' && styles.segmentTextActive,
-              ]}>
+              ]}
+            >
               好禮兌換通路
             </Text>
           </TouchableOpacity>
@@ -85,7 +100,9 @@ export default function TasksScreen() {
         {/* Tab 1: 14 Weeks Schedule */}
         {activeTab === 'schedule' && (
           <View style={styles.sectionWrapper}>
-            <Text style={[styles.sectionTitle, { color: theme.text }]}>全活動 14 週時程（9/1 ~ 11/30）</Text>
+            <Text style={[styles.sectionTitle, { color: theme.text }]}>
+              全活動 14 週時程（9/1 ~ 11/30）
+            </Text>
             <Text style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
               每週一 00:00 起至週日 24:00 止為計算週期；審核時間約 5 個工作日。
             </Text>
@@ -102,23 +119,32 @@ export default function TasksScreen() {
                       borderWidth: 2,
                       backgroundColor: theme.primaryLight,
                     },
-                  ]}>
+                  ]}
+                >
                   <View style={styles.periodItemHeader}>
                     <View style={styles.periodItemTitleGroup}>
                       <View
                         style={[
                           styles.periodNumberPill,
-                          { backgroundColor: item.isCurrent ? theme.primary : theme.backgroundElement },
-                        ]}>
+                          {
+                            backgroundColor: item.isCurrent
+                              ? theme.primary
+                              : theme.backgroundElement,
+                          },
+                        ]}
+                      >
                         <Text
                           style={[
                             styles.periodNumberText,
                             { color: item.isCurrent ? '#ffffff' : theme.textSecondary },
-                          ]}>
+                          ]}
+                        >
                           {item.label}
                         </Text>
                       </View>
-                      <Text style={[styles.periodDate, { color: theme.text }]}>{item.dateRangeText}</Text>
+                      <Text style={[styles.periodDate, { color: theme.text }]}>
+                        {item.dateRangeText}
+                      </Text>
                     </View>
 
                     {item.isCurrent && (
@@ -128,19 +154,27 @@ export default function TasksScreen() {
                       </View>
                     )}
                     {item.isPast && (
-                      <View style={[styles.statusBadge, { backgroundColor: theme.backgroundElement }]}>
+                      <View
+                        style={[styles.statusBadge, { backgroundColor: theme.backgroundElement }]}
+                      >
                         <Text style={[styles.statusText, { color: theme.textMuted }]}>已截止</Text>
                       </View>
                     )}
                     {item.isFuture && (
-                      <View style={[styles.statusBadge, { backgroundColor: theme.backgroundElement }]}>
-                        <Text style={[styles.statusText, { color: theme.textSecondary }]}>尚未開放</Text>
+                      <View
+                        style={[styles.statusBadge, { backgroundColor: theme.backgroundElement }]}
+                      >
+                        <Text style={[styles.statusText, { color: theme.textSecondary }]}>
+                          尚未開放
+                        </Text>
                       </View>
                     )}
                   </View>
 
                   {item.isCurrent && (
-                    <View style={[styles.activeWeekNotice, { backgroundColor: theme.cardBackground }]}>
+                    <View
+                      style={[styles.activeWeekNotice, { backgroundColor: theme.cardBackground }]}
+                    >
                       <Ionicons name="time" size={16} color={theme.primary} />
                       <Text style={[styles.activeWeekNoticeText, { color: theme.primaryDark }]}>
                         距離上傳截止剩餘：{item.daysLeft} 天 {item.hoursLeft} 小時，請把握時間！
@@ -156,7 +190,9 @@ export default function TasksScreen() {
         {/* Tab 2: Three Tasks Criteria */}
         {activeTab === 'criteria' && (
           <View style={styles.sectionWrapper}>
-            <Text style={[styles.sectionTitle, { color: theme.text }]}>三大指定運動任務（擇一達標即可）</Text>
+            <Text style={[styles.sectionTitle, { color: theme.text }]}>
+              三大指定運動任務（擇一達標即可）
+            </Text>
             <Text style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
               不限地點時間，完成任一種即可於當週登入上傳 APP 截圖或完賽證明。
             </Text>
@@ -165,21 +201,33 @@ export default function TasksScreen() {
               {TASK_CRITERIA_LIST.map((task) => (
                 <View
                   key={task.type}
-                  style={[styles.taskCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}>
+                  style={[
+                    styles.taskCard,
+                    { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+                  ]}
+                >
                   <View style={styles.taskCardHeader}>
                     <View style={[styles.taskIconCircle, { backgroundColor: theme.primaryLight }]}>
                       <Ionicons name={task.iconName as any} size={24} color={theme.primary} />
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={[styles.taskCardTitle, { color: theme.text }]}>{task.title}</Text>
-                      <Text style={[styles.taskCardTarget, { color: theme.primary }]}>{task.target}</Text>
+                      <Text style={[styles.taskCardTitle, { color: theme.text }]}>
+                        {task.title}
+                      </Text>
+                      <Text style={[styles.taskCardTarget, { color: theme.primary }]}>
+                        {task.target}
+                      </Text>
                     </View>
                   </View>
 
-                  <Text style={[styles.taskCardDesc, { color: theme.textSecondary }]}>{task.description}</Text>
+                  <Text style={[styles.taskCardDesc, { color: theme.textSecondary }]}>
+                    {task.description}
+                  </Text>
 
                   <View style={[styles.appsRow, { backgroundColor: theme.backgroundElement }]}>
-                    <Text style={[styles.appsTitle, { color: theme.textSecondary }]}>常見適用 APP：</Text>
+                    <Text style={[styles.appsTitle, { color: theme.textSecondary }]}>
+                      常見適用 APP：
+                    </Text>
                     <Text style={[styles.appsList, { color: theme.text }]}>
                       {task.recommendedApps.join('、')}
                     </Text>
@@ -189,34 +237,45 @@ export default function TasksScreen() {
             </View>
 
             {/* Checklist Guide */}
-            <View style={[styles.checklistCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}>
-              <Text style={[styles.checklistTitle, { color: theme.text }]}>📸 截圖佐證合格檢核清單（避免被退件）</Text>
-              
+            <View
+              style={[
+                styles.checklistCard,
+                { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+              ]}
+            >
+              <Text style={[styles.checklistTitle, { color: theme.text }]}>
+                📸 截圖佐證合格檢核清單（避免被退件）
+              </Text>
+
               <View style={styles.checkItem}>
                 <Ionicons name="checkmark-circle" size={20} color={theme.success} />
                 <Text style={[styles.checkText, { color: theme.text }]}>
-                  <Text style={{ fontWeight: '800' }}>必須包含完整手機狀態列</Text>：需清楚顯示手機頂部時間、電量及連線圖示，不可裁切。
+                  <Text style={{ fontWeight: '800' }}>必須包含完整手機狀態列</Text>
+                  ：需清楚顯示手機頂部時間、電量及連線圖示，不可裁切。
                 </Text>
               </View>
 
               <View style={styles.checkItem}>
                 <Ionicons name="checkmark-circle" size={20} color={theme.success} />
                 <Text style={[styles.checkText, { color: theme.text }]}>
-                  <Text style={{ fontWeight: '800' }}>必須顯示當週運動日期</Text>：日期需介於當週週一至週日區間，逾期不得補件。
+                  <Text style={{ fontWeight: '800' }}>必須顯示當週運動日期</Text>
+                  ：日期需介於當週週一至週日區間，逾期不得補件。
                 </Text>
               </View>
 
               <View style={styles.checkItem}>
                 <Ionicons name="checkmark-circle" size={20} color={theme.success} />
                 <Text style={[styles.checkText, { color: theme.text }]}>
-                  <Text style={{ fontWeight: '800' }}>必須清楚顯示運動數據</Text>：時間需滿 30 分鐘、步數滿 8,000 步或距離滿 5km。
+                  <Text style={{ fontWeight: '800' }}>必須清楚顯示運動數據</Text>：時間需滿 30
+                  分鐘、步數滿 8,000 步或距離滿 5km。
                 </Text>
               </View>
 
               <View style={styles.checkItem}>
                 <Ionicons name="close-circle" size={20} color={theme.danger} />
                 <Text style={[styles.checkText, { color: theme.textSecondary }]}>
-                  <Text style={{ fontWeight: '800' }}>嚴禁翻拍與修圖</Text>：不可翻拍運動手錶、不可翻拍電腦螢幕、嚴禁 AI 生成或修圖，違者將取消後續資格。
+                  <Text style={{ fontWeight: '800' }}>嚴禁翻拍與修圖</Text>
+                  ：不可翻拍運動手錶、不可翻拍電腦螢幕、嚴禁 AI 生成或修圖，違者將取消後續資格。
                 </Text>
               </View>
             </View>
@@ -233,9 +292,12 @@ export default function TasksScreen() {
                   官方 5 大合作通路兌換品項
                 </Text>
               </View>
-              <Text style={[styles.sectionTitle, { color: theme.text }]}>各商家加碼優惠與兌換商品清單</Text>
+              <Text style={[styles.sectionTitle, { color: theme.text }]}>
+                各商家加碼優惠與兌換商品清單
+              </Text>
               <Text style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
-                審核通過後可獲得加碼券（總計 200 萬份）。點選下方商家可直接在 App 內瀏覽或以外部瀏覽器開啟官方商品明細。
+                審核通過後可獲得加碼券（總計 200 萬份）。點選下方商家可直接在 App
+                內瀏覽或以外部瀏覽器開啟官方商品明細。
               </Text>
             </View>
 
@@ -243,18 +305,29 @@ export default function TasksScreen() {
               {PARTNER_PERKS.map((perk) => (
                 <View
                   key={perk.name}
-                  style={[styles.perkCard, { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder }]}>
+                  style={[
+                    styles.perkCard,
+                    { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+                  ]}
+                >
                   {/* Top Row: Name & Badge */}
                   <View style={styles.perkTopRow}>
                     <View style={styles.perkTitleGroup}>
-                      <View style={[styles.perkVendorIconCircle, { backgroundColor: theme.backgroundElement }]}>
+                      <View
+                        style={[
+                          styles.perkVendorIconCircle,
+                          { backgroundColor: theme.backgroundElement },
+                        ]}
+                      >
                         <Ionicons
                           name={
-                            perk.id === 'vendor-1' || perk.id === 'vendor-2' || perk.id === 'vendor-3'
+                            perk.id === 'vendor-1' ||
+                            perk.id === 'vendor-2' ||
+                            perk.id === 'vendor-3'
                               ? 'storefront-outline'
                               : perk.id === 'vendor-5'
-                              ? 'cart-outline'
-                              : 'barbell-outline'
+                                ? 'cart-outline'
+                                : 'barbell-outline'
                           }
                           size={18}
                           color={theme.primary}
@@ -262,30 +335,49 @@ export default function TasksScreen() {
                       </View>
                       <View>
                         <Text style={[styles.perkName, { color: theme.text }]}>{perk.name}</Text>
-                        <Text style={[styles.perkItemCount, { color: theme.primary }]}>{perk.itemCountText}</Text>
+                        <Text style={[styles.perkItemCount, { color: theme.primary }]}>
+                          {perk.itemCountText}
+                        </Text>
                       </View>
                     </View>
                     <View style={[styles.perkBadge, { backgroundColor: theme.primaryLight }]}>
-                      <Text style={[styles.perkBadgeText, { color: theme.primary }]}>{perk.badge}</Text>
+                      <Text style={[styles.perkBadgeText, { color: theme.primary }]}>
+                        {perk.badge}
+                      </Text>
                     </View>
                   </View>
 
                   <Text style={[styles.perkTag, { color: theme.primaryDark }]}>{perk.tag}</Text>
-                  <Text style={[styles.perkDesc, { color: theme.textSecondary }]}>{perk.description}</Text>
+                  <Text style={[styles.perkDesc, { color: theme.textSecondary }]}>
+                    {perk.description}
+                  </Text>
 
                   {/* Highlights */}
                   {perk.highlights && perk.highlights.length > 0 && (
-                    <View style={[styles.highlightsContainer, { backgroundColor: theme.backgroundElement }]}>
-                      <Text style={[styles.highlightsTitle, { color: theme.textSecondary }]}>熱門推薦兌換品項：</Text>
+                    <View
+                      style={[
+                        styles.highlightsContainer,
+                        { backgroundColor: theme.backgroundElement },
+                      ]}
+                    >
+                      <Text style={[styles.highlightsTitle, { color: theme.textSecondary }]}>
+                        熱門推薦兌換品項：
+                      </Text>
                       <View style={styles.highlightsWrap}>
                         {perk.highlights.map((h, i) => (
                           <View
                             key={i}
                             style={[
                               styles.highlightChip,
-                              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
-                            ]}>
-                            <Text style={[styles.highlightChipText, { color: theme.text }]}>{h}</Text>
+                              {
+                                backgroundColor: theme.cardBackground,
+                                borderColor: theme.cardBorder,
+                              },
+                            ]}
+                          >
+                            <Text style={[styles.highlightChipText, { color: theme.text }]}>
+                              {h}
+                            </Text>
                           </View>
                         ))}
                       </View>
@@ -295,7 +387,11 @@ export default function TasksScreen() {
                   {/* Official URL display */}
                   <View style={[styles.urlBox, { backgroundColor: theme.backgroundElement }]}>
                     <Ionicons name="link-outline" size={13} color={theme.textMuted} />
-                    <Text style={[styles.urlText, { color: theme.textMuted }]} numberOfLines={1} ellipsizeMode="middle">
+                    <Text
+                      style={[styles.urlText, { color: theme.textMuted }]}
+                      numberOfLines={1}
+                      ellipsizeMode="middle"
+                    >
                       {perk.url}
                     </Text>
                   </View>
@@ -304,7 +400,10 @@ export default function TasksScreen() {
                   <View style={styles.actionButtonsRow}>
                     <TouchableOpacity
                       style={[styles.primaryActionBtn, { backgroundColor: theme.primary }]}
-                      onPress={() => router.push({ pathname: '/browser', params: { initialUrl: perk.url } })}>
+                      onPress={() =>
+                        router.push({ pathname: '/browser', params: { initialUrl: perk.url } })
+                      }
+                    >
                       <Ionicons name="browsers-outline" size={15} color="#ffffff" />
                       <Text style={styles.primaryActionBtnText}>App 內瀏覽商品清單</Text>
                     </TouchableOpacity>
@@ -314,9 +413,12 @@ export default function TasksScreen() {
                         styles.secondaryActionBtn,
                         { borderColor: theme.cardBorder, backgroundColor: theme.cardBackground },
                       ]}
-                      onPress={() => Linking.openURL(perk.url)}>
+                      onPress={() => Linking.openURL(perk.url)}
+                    >
                       <Ionicons name="open-outline" size={15} color={theme.text} />
-                      <Text style={[styles.secondaryActionBtnText, { color: theme.text }]}>外部開啟</Text>
+                      <Text style={[styles.secondaryActionBtnText, { color: theme.text }]}>
+                        外部開啟
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -324,12 +426,24 @@ export default function TasksScreen() {
             </View>
 
             {/* Offline usage warning */}
-            <View style={[styles.ruleNotice, { backgroundColor: theme.warningLight, borderColor: theme.warning }]}>
+            <View
+              style={[
+                styles.ruleNotice,
+                { backgroundColor: theme.warningLight, borderColor: theme.warning },
+              ]}
+            >
               <Ionicons name="alert-circle" size={20} color={theme.warning} />
               <View style={{ flex: 1, gap: 4 }}>
-                <Text style={[styles.ruleNoticeTitle, { color: theme.text }]}>門市抵用重要規定</Text>
+                <Text style={[styles.ruleNoticeTitle, { color: theme.text }]}>
+                  門市抵用重要規定
+                </Text>
                 <Text style={[styles.ruleNoticeText, { color: theme.textSecondary }]}>
-                  加碼券抵用時，<Text style={{ fontWeight: '800', color: theme.text }}>必須於合作店家櫃檯出示活動網站即時動態條碼畫面</Text>，現場不得以紙本列印、手機截圖或翻拍畫面抵用。加碼券使用期限至 115 年 12 月 31 日止。
+                  加碼券抵用時，
+                  <Text style={{ fontWeight: '800', color: theme.text }}>
+                    必須於合作店家櫃檯出示活動網站即時動態條碼畫面
+                  </Text>
+                  ，現場不得以紙本列印、手機截圖或翻拍畫面抵用。加碼券使用期限至 115 年 12 月 31
+                  日止。
                 </Text>
               </View>
             </View>

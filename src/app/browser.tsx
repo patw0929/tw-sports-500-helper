@@ -185,33 +185,50 @@ export default function BrowserScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       {/* Top Controls Bar */}
-      <View style={[styles.topBar, { backgroundColor: theme.cardBackground, borderBottomColor: theme.cardBorder }]}>
+      <View
+        style={[
+          styles.topBar,
+          { backgroundColor: theme.cardBackground, borderBottomColor: theme.cardBorder },
+        ]}
+      >
         <View style={styles.navButtonGroup}>
           <TouchableOpacity
             style={[styles.iconButton, !canGoBack && styles.disabledButton]}
             disabled={!canGoBack}
-            onPress={() => webViewRef.current?.goBack()}>
-            <Ionicons name="chevron-back" size={20} color={canGoBack ? theme.text : theme.textMuted} />
+            onPress={() => webViewRef.current?.goBack()}
+          >
+            <Ionicons
+              name="chevron-back"
+              size={20}
+              color={canGoBack ? theme.text : theme.textMuted}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.iconButton, !canGoForward && styles.disabledButton]}
             disabled={!canGoForward}
-            onPress={() => webViewRef.current?.goForward()}>
-            <Ionicons name="chevron-forward" size={20} color={canGoForward ? theme.text : theme.textMuted} />
+            onPress={() => webViewRef.current?.goForward()}
+          >
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={canGoForward ? theme.text : theme.textMuted}
+            />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => webViewRef.current?.reload()}>
+          <TouchableOpacity style={styles.iconButton} onPress={() => webViewRef.current?.reload()}>
             <Ionicons name="reload" size={18} color={theme.text} />
           </TouchableOpacity>
         </View>
 
         {/* Account Selector Pill */}
         <TouchableOpacity
-          style={[styles.profilePill, { backgroundColor: theme.primaryLight, borderColor: theme.primary }]}
-          onPress={handleOpenAccountModal}>
+          style={[
+            styles.profilePill,
+            { backgroundColor: theme.primaryLight, borderColor: theme.primary },
+          ]}
+          onPress={handleOpenAccountModal}
+        >
           <Ionicons name="person-circle" size={18} color={theme.primary} />
           <Text style={[styles.profilePillText, { color: theme.primary }]} numberOfLines={1}>
             {activeUser ? `${activeUser.name} (${maskId(activeUser.idNo)})` : '未選取帳號'}
@@ -222,7 +239,8 @@ export default function BrowserScreen() {
         {/* Quick Auto-fill button */}
         <TouchableOpacity
           style={[styles.autoFillButton, { backgroundColor: theme.primary }]}
-          onPress={handleManualAutoFill}>
+          onPress={handleManualAutoFill}
+        >
           <Ionicons name="flash" size={15} color="#fff" />
           <Text style={styles.autoFillButtonText}>自動填寫</Text>
         </TouchableOpacity>
@@ -233,7 +251,8 @@ export default function BrowserScreen() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.shortcutsScrollContent}>
+          contentContainerStyle={styles.shortcutsScrollContent}
+        >
           {VENDOR_SHORTCUTS.map((item) => {
             const isMatch = currentUrl.startsWith(item.url);
             return (
@@ -247,13 +266,15 @@ export default function BrowserScreen() {
                     borderWidth: 1,
                   },
                 ]}
-                onPress={() => handleNavigate(item.url)}>
+                onPress={() => handleNavigate(item.url)}
+              >
                 <Text
                   style={[
                     styles.shortcutTagText,
                     { color: isMatch ? theme.primary : theme.textSecondary },
                     isMatch && { fontWeight: '800' },
-                  ]}>
+                  ]}
+                >
                   {item.label}
                 </Text>
               </TouchableOpacity>
@@ -319,7 +340,9 @@ export default function BrowserScreen() {
               keyExtractor={(item) => item.id}
               ListEmptyComponent={
                 <View style={styles.emptyProfiles}>
-                  <Text style={{ color: theme.textSecondary }}>目前尚未建立任何帳號，請至帳號管理建立。</Text>
+                  <Text style={{ color: theme.textSecondary }}>
+                    目前尚未建立任何帳號，請至帳號管理建立。
+                  </Text>
                 </View>
               }
               renderItem={({ item }) => {
@@ -331,7 +354,8 @@ export default function BrowserScreen() {
                       { borderColor: isSelected ? theme.primary : theme.cardBorder },
                       isSelected && { backgroundColor: theme.primaryLight },
                     ]}
-                    onPress={() => handleSelectProfile(item)}>
+                    onPress={() => handleSelectProfile(item)}
+                  >
                     <View style={styles.profileItemLeft}>
                       <Ionicons
                         name={isSelected ? 'radio-button-on' : 'radio-button-off'}
@@ -340,14 +364,25 @@ export default function BrowserScreen() {
                       />
                       <View style={{ marginLeft: 10 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                          <Text style={[styles.profileItemName, { color: theme.text }]}>{item.name}</Text>
+                          <Text style={[styles.profileItemName, { color: theme.text }]}>
+                            {item.name}
+                          </Text>
                           {item.label && (
-                            <View style={[styles.badgePill, { backgroundColor: theme.backgroundElement }]}>
-                              <Text style={[styles.badgePillText, { color: theme.textSecondary }]}>{item.label}</Text>
+                            <View
+                              style={[
+                                styles.badgePill,
+                                { backgroundColor: theme.backgroundElement },
+                              ]}
+                            >
+                              <Text style={[styles.badgePillText, { color: theme.textSecondary }]}>
+                                {item.label}
+                              </Text>
                             </View>
                           )}
                         </View>
-                        <Text style={[styles.profileItemId, { color: theme.textSecondary }]}>{maskId(item.idNo)}</Text>
+                        <Text style={[styles.profileItemId, { color: theme.textSecondary }]}>
+                          {maskId(item.idNo)}
+                        </Text>
                       </View>
                     </View>
                     {isSelected && (
@@ -366,7 +401,8 @@ export default function BrowserScreen() {
               onPress={() => {
                 setAccountModalVisible(false);
                 router.push('/accounts');
-              }}>
+              }}
+            >
               <Ionicons name="settings-outline" size={16} color={theme.primary} />
               <Text style={[styles.manageAccountsBtnText, { color: theme.primary }]}>
                 前往帳號管理（新增或編輯帳號）
