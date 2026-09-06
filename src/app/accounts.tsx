@@ -22,7 +22,7 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { useTheme, useThemeContext } from '@/hooks/use-theme';
 import {
   BiometricsSupportInfo,
   authenticateBiometrics,
@@ -49,6 +49,7 @@ export default function AccountsScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const formScrollRef = useRef<ScrollView>(null);
+  const { preference, colorScheme, setThemePreference } = useThemeContext();
 
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -479,6 +480,198 @@ export default function AccountsScreen() {
           </View>
         )}
 
+        {/* Appearance / Theme Settings Section */}
+        <View
+          style={[
+            styles.settingsCard,
+            { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+          ]}
+        >
+          <View style={styles.authorHeaderRow}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Ionicons name="color-palette-outline" size={18} color={theme.primary} />
+              <Text style={[styles.cardSectionTitle, { color: theme.text }]}>外觀主題</Text>
+            </View>
+            <View
+              style={[
+                styles.unofficialAuthorBadge,
+                { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+              ]}
+            >
+              <Text style={[styles.unofficialAuthorBadgeText, { color: theme.textSecondary }]}>
+                {preference === 'system'
+                  ? `跟隨系統 (${colorScheme === 'dark' ? '深色' : '淺色'})`
+                  : preference === 'dark'
+                    ? '深色模式'
+                    : '淺色模式'}
+              </Text>
+            </View>
+          </View>
+
+          <Text style={[styles.authorIntroText, { color: theme.textSecondary }]}>
+            可依照個人喜好鎖定淺色或深色風格，或自動隨手機系統外觀切換。
+          </Text>
+
+          <View
+            style={[
+              styles.themeSegmentContainer,
+              { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+            ]}
+          >
+            {(
+              [
+                { key: 'system', label: '跟隨系統', icon: 'contrast-outline' },
+                { key: 'light', label: '淺色模式', icon: 'sunny-outline' },
+                { key: 'dark', label: '深色模式', icon: 'moon-outline' },
+              ] as const
+            ).map((item) => {
+              const isSelected = preference === item.key;
+              return (
+                <TouchableOpacity
+                  key={item.key}
+                  style={[
+                    styles.themeSegmentBtn,
+                    isSelected && [
+                      styles.themeSegmentBtnActive,
+                      { backgroundColor: theme.cardBackground, borderColor: theme.primary },
+                    ],
+                  ]}
+                  activeOpacity={0.7}
+                  onPress={() => setThemePreference(item.key)}
+                >
+                  <Ionicons
+                    name={item.icon}
+                    size={16}
+                    color={isSelected ? theme.primary : theme.textSecondary}
+                  />
+                  <Text
+                    style={[
+                      styles.themeSegmentText,
+                      {
+                        color: isSelected ? theme.primary : theme.textSecondary,
+                        fontWeight: isSelected ? '700' : '500',
+                      },
+                    ]}
+                  >
+                    {item.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        {/* Version & Updates Section */}
+        <View
+          style={[
+            styles.settingsCard,
+            { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+          ]}
+        >
+          <View style={styles.authorHeaderRow}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Ionicons name="git-branch-outline" size={18} color={theme.primary} />
+              <Text style={[styles.cardSectionTitle, { color: theme.text }]}>版本與更新</Text>
+            </View>
+            <View
+              style={[
+                styles.unofficialAuthorBadge,
+                { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+              ]}
+            >
+              <Text style={[styles.unofficialAuthorBadgeText, { color: theme.textSecondary }]}>
+                v{appVersion}
+              </Text>
+            </View>
+          </View>
+
+          {/* Commit & Build Info */}
+          <View style={[styles.versionInfoRow, { borderColor: theme.cardBorder }]}>
+            <TouchableOpacity
+              style={styles.versionInfoCol}
+              disabled={!currentCommit}
+              onPress={() => {
+                if (currentCommit) {
+                  handleOpenUrl(
+                    `https://github.com/patw0929/tw-sports-500-helper/commit/${currentCommit}`
+                  );
+                }
+              }}
+            >
+              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>Latest Commit</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                <Text style={[styles.versionValue, { color: theme.text }]}>
+                  {currentCommit ? `#${currentCommit}` : 'N/A'}
+                </Text>
+                {currentCommit ? (
+                  <Ionicons name="open-outline" size={11} color={theme.textMuted} />
+                ) : null}
+              </View>
+            </TouchableOpacity>
+
+            <View style={[styles.versionDivider, { backgroundColor: theme.cardBorder }]} />
+
+            <View style={styles.versionInfoCol}>
+              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>運作模式</Text>
+              <Text style={[styles.versionValue, { color: theme.text }]}>{updateSourceText}</Text>
+            </View>
+
+            <View style={[styles.versionDivider, { backgroundColor: theme.cardBorder }]} />
+
+            <View style={styles.versionInfoCol}>
+              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>更新渠道</Text>
+              <Text style={[styles.versionValue, { color: theme.text }]}>
+                {Updates.channel || '預設'}
+              </Text>
+            </View>
+          </View>
+
+          {/* If update downloaded and waiting for restart */}
+          {isUpdatePending && (
+            <View style={[styles.pendingUpdateBanner, { backgroundColor: theme.primaryLight }]}>
+              <Ionicons name="sparkles" size={16} color={theme.primary} />
+              <Text style={[styles.pendingUpdateText, { color: theme.primary }]}>
+                新版本已下載就緒，重啟立即生效！
+              </Text>
+              <TouchableOpacity
+                style={[styles.pendingRestartBtn, { backgroundColor: theme.primary }]}
+                onPress={() => Updates.reloadAsync()}
+              >
+                <Text style={styles.pendingRestartBtnText}>重啟</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Check for Updates Button */}
+          <TouchableOpacity
+            style={[
+              styles.checkUpdateBtn,
+              {
+                backgroundColor: isCheckingUpdate ? theme.backgroundElement : theme.primaryLight,
+                borderColor: theme.primary,
+              },
+            ]}
+            disabled={isCheckingUpdate}
+            onPress={handleCheckUpdate}
+          >
+            {isCheckingUpdate ? (
+              <>
+                <ActivityIndicator size="small" color={theme.primary} />
+                <Text style={[styles.checkUpdateBtnText, { color: theme.primary }]}>
+                  正在檢查雲端更新...
+                </Text>
+              </>
+            ) : (
+              <>
+                <Ionicons name="cloud-download-outline" size={18} color={theme.primary} />
+                <Text style={[styles.checkUpdateBtnText, { color: theme.primary }]}>
+                  手動檢查雲端更新 (EAS Update)
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+
         {/* Official Resources & Support */}
         <View
           style={[
@@ -599,117 +792,6 @@ export default function AccountsScreen() {
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={16} color={theme.textMuted} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Version & Updates Section */}
-        <View
-          style={[
-            styles.settingsCard,
-            { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
-          ]}
-        >
-          <View style={styles.authorHeaderRow}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Ionicons name="git-branch-outline" size={18} color={theme.primary} />
-              <Text style={[styles.cardSectionTitle, { color: theme.text }]}>版本與更新</Text>
-            </View>
-            <View
-              style={[
-                styles.unofficialAuthorBadge,
-                { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
-              ]}
-            >
-              <Text style={[styles.unofficialAuthorBadgeText, { color: theme.textSecondary }]}>
-                v{appVersion}
-              </Text>
-            </View>
-          </View>
-
-          {/* Commit & Build Info */}
-          <View style={[styles.versionInfoRow, { borderColor: theme.cardBorder }]}>
-            <TouchableOpacity
-              style={styles.versionInfoCol}
-              disabled={!currentCommit}
-              onPress={() => {
-                if (currentCommit) {
-                  handleOpenUrl(
-                    `https://github.com/patw0929/tw-sports-500-helper/commit/${currentCommit}`
-                  );
-                }
-              }}
-            >
-              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>Latest Commit</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                <Text style={[styles.versionValue, { color: theme.text }]}>
-                  {currentCommit ? `#${currentCommit}` : 'N/A'}
-                </Text>
-                {currentCommit ? (
-                  <Ionicons name="open-outline" size={11} color={theme.textMuted} />
-                ) : null}
-              </View>
-            </TouchableOpacity>
-
-            <View style={[styles.versionDivider, { backgroundColor: theme.cardBorder }]} />
-
-            <View style={styles.versionInfoCol}>
-              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>運作模式</Text>
-              <Text style={[styles.versionValue, { color: theme.text }]}>{updateSourceText}</Text>
-            </View>
-
-            <View style={[styles.versionDivider, { backgroundColor: theme.cardBorder }]} />
-
-            <View style={styles.versionInfoCol}>
-              <Text style={[styles.versionLabel, { color: theme.textMuted }]}>更新渠道</Text>
-              <Text style={[styles.versionValue, { color: theme.text }]}>
-                {Updates.channel || '預設'}
-              </Text>
-            </View>
-          </View>
-
-          {/* If update downloaded and waiting for restart */}
-          {isUpdatePending && (
-            <View style={[styles.pendingUpdateBanner, { backgroundColor: theme.primaryLight }]}>
-              <Ionicons name="sparkles" size={16} color={theme.primary} />
-              <Text style={[styles.pendingUpdateText, { color: theme.primary }]}>
-                新版本已下載就緒，重啟立即生效！
-              </Text>
-              <TouchableOpacity
-                style={[styles.pendingRestartBtn, { backgroundColor: theme.primary }]}
-                onPress={() => Updates.reloadAsync()}
-              >
-                <Text style={styles.pendingRestartBtnText}>重啟</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Check for Updates Button */}
-          <TouchableOpacity
-            style={[
-              styles.checkUpdateBtn,
-              {
-                backgroundColor: isCheckingUpdate ? theme.backgroundElement : theme.primaryLight,
-                borderColor: theme.primary,
-              },
-            ]}
-            disabled={isCheckingUpdate}
-            onPress={handleCheckUpdate}
-          >
-            {isCheckingUpdate ? (
-              <>
-                <ActivityIndicator size="small" color={theme.primary} />
-                <Text style={[styles.checkUpdateBtnText, { color: theme.primary }]}>
-                  正在檢查雲端更新...
-                </Text>
-              </>
-            ) : (
-              <>
-                <Ionicons name="cloud-download-outline" size={18} color={theme.primary} />
-                <Text style={[styles.checkUpdateBtnText, { color: theme.primary }]}>
-                  手動檢查雲端更新 (EAS Update)
-                </Text>
-              </>
-            )}
           </TouchableOpacity>
         </View>
 
@@ -1407,5 +1489,33 @@ const styles = StyleSheet.create({
   checkUpdateBtnText: {
     fontSize: 13,
     fontWeight: '700',
+  },
+  themeSegmentContainer: {
+    flexDirection: 'row',
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 4,
+    gap: 4,
+    marginTop: 4,
+  },
+  themeSegmentBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+  themeSegmentBtnActive: {
+    borderWidth: 1.5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  themeSegmentText: {
+    fontSize: 13,
   },
 });

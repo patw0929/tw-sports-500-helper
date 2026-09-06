@@ -4,8 +4,9 @@ import { useCallback, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { ThemePickerModal } from '@/components/theme-picker-modal';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { useTheme, useThemeContext } from '@/hooks/use-theme';
 import { getCurrentPeriod, PARTNER_PERKS } from '@/services/periods';
 import { getActiveProfile, getProfiles, setActiveProfile } from '@/services/storage';
 import { maskId, maskPhone, UserProfile } from '@/types/sports500';
@@ -13,10 +14,19 @@ import { maskId, maskPhone, UserProfile } from '@/types/sports500';
 export default function HomeScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { preference } = useThemeContext();
 
   const [activeUser, setActiveUser] = useState<UserProfile | null>(null);
   const [allProfiles, setAllProfiles] = useState<UserProfile[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
+
+  const themeIcon: keyof typeof Ionicons.glyphMap =
+    preference === 'system'
+      ? 'contrast-outline'
+      : preference === 'dark'
+        ? 'moon-outline'
+        : 'sunny-outline';
 
   const currentPeriod = getCurrentPeriod();
 
@@ -79,7 +89,7 @@ export default function HomeScreen() {
           <View style={styles.brandTextGroup}>
             <Text style={[styles.brandSuper, { color: theme.primary }]}>運動部 115 年加碼活動</Text>
             <View style={styles.brandTitleRow}>
-              <Text style={[styles.brandTitle, { color: theme.text }]}>揮汗有禮・加碼券小幫手</Text>
+              <Text style={[styles.brandTitle, { color: theme.text }]}>揮汗有禮加碼券小幫手</Text>
               <View
                 style={[
                   styles.unofficialBadge,
@@ -87,20 +97,34 @@ export default function HomeScreen() {
                 ]}
               >
                 <Text style={[styles.unofficialBadgeText, { color: theme.textSecondary }]}>
-                  非官方
+                  非官方輔助工具
                 </Text>
               </View>
             </View>
           </View>
-          <TouchableOpacity
-            style={[
-              styles.settingsIconButton,
-              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
-            ]}
-            onPress={() => router.push('/accounts')}
-          >
-            <Ionicons name="settings-outline" size={20} color={theme.textSecondary} />
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity
+              style={[
+                styles.headerIconButton,
+                { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+              ]}
+              accessibilityLabel="切換外觀主題"
+              onPress={() => setIsThemeModalOpen(true)}
+            >
+              <Ionicons name={themeIcon} size={19} color={theme.textSecondary} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.headerIconButton,
+                { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+              ]}
+              accessibilityLabel="前往帳號管理與設定"
+              onPress={() => router.push('/accounts')}
+            >
+              <Ionicons name="settings-outline" size={19} color={theme.textSecondary} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Current Period Banner */}
@@ -243,7 +267,7 @@ export default function HomeScreen() {
               <Ionicons name="flash" size={26} color="#ffffff" />
             </View>
             <View style={styles.mainLoginTextWrap}>
-              <Text style={styles.mainLoginTitle}>一鍵快速登入「我的任務」</Text>
+              <Text style={styles.mainLoginTitle}>一鍵快登「我的任務」</Text>
               <Text style={styles.mainLoginSubtitle}>
                 {activeUser
                   ? `自動填入 ${activeUser.name} 的身分證、生日與手機`
@@ -416,6 +440,9 @@ export default function HomeScreen() {
           </Text>
         </View>
       </ScrollView>
+
+      {/* Theme Picker Bottom Sheet */}
+      <ThemePickerModal visible={isThemeModalOpen} onClose={() => setIsThemeModalOpen(false)} />
     </SafeAreaView>
   );
 }
@@ -485,10 +512,23 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.2,
   },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerIconButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   settingsIconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',

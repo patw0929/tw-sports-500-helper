@@ -6,6 +6,9 @@ import { UserProfile } from '@/types/sports500';
 const PROFILES_KEY = 'sports500_profiles_v2';
 const ACTIVE_PROFILE_KEY = 'sports500_active_profile_id_v2';
 const BIOMETRIC_KEY = 'sports500_biometric_enabled_v2';
+const THEME_PREFERENCE_KEY = 'sports500_theme_preference_v1';
+
+export type ThemePreference = 'system' | 'light' | 'dark';
 
 // In-memory fallback for environments where persistent storage fails
 let memoryStorage: Record<string, string> = {};
@@ -199,4 +202,16 @@ export async function authenticateBiometrics(
     console.warn('Biometric auth error:', err);
     return false;
   }
+}
+
+export async function getThemePreference(): Promise<ThemePreference> {
+  const val = await getStorageItem(THEME_PREFERENCE_KEY);
+  if (val === 'light' || val === 'dark' || val === 'system') {
+    return val;
+  }
+  return 'system';
+}
+
+export async function saveThemePreference(pref: ThemePreference): Promise<void> {
+  await setStorageItem(THEME_PREFERENCE_KEY, pref);
 }

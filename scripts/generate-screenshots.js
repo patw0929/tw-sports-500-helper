@@ -755,7 +755,7 @@ function renderScreen1() {
                 <div class="brand-text-group">
                   <div class="brand-super">運動部 115 年加碼活動</div>
                   <div class="brand-title-row">
-                    <span class="brand-title">揮汗有禮・加碼券小幫手</span>
+                    <span class="brand-title">揮汗有禮加碼券小幫手</span>
                     <span class="unofficial-badge">非官方</span>
                   </div>
                 </div>
