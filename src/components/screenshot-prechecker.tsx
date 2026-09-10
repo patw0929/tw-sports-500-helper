@@ -105,12 +105,21 @@ export function ScreenshotPrechecker() {
 
         const rawText = data.rawText || '';
         const meanConfidence = data.meanConfidence;
+        console.log('[Prechecker] OCR_DONE received, text length:', rawText.length);
+        console.log('[Prechecker] OCR RAW TEXT:\n' + rawText);
 
         // 1. 執行文字正則剖析 (日期、時間、距離、步數、App)
         const fields = parseSportsRecordText(rawText);
+        console.log('[Prechecker] Parsed date:', JSON.stringify(fields.date));
 
         // 2. 執行官方門檻審查評估
         const eligibility = evaluateFrontendEligibility(rawText, meanConfidence);
+        console.log(
+          '[Prechecker] Eligibility status:',
+          eligibility.status,
+          'matchedRule:',
+          eligibility.matchedRuleCode
+        );
 
         // 3. 匯總預檢狀態
         const codes: string[] = [];
@@ -126,12 +135,30 @@ export function ScreenshotPrechecker() {
         if (!fields.activityOrRoute.found) codes.push('MISSING_ACTIVITY_OR_ROUTE_HINT');
 
         let state: PrecheckResult['state'] = 'INCONCLUSIVE';
+        const isNotCurrentPeriod =
+          eligibility.observed.periodCheck && !eligibility.observed.periodCheck.isCurrentPeriod;
+
         if (eligibility.status === 'LIKELY_QUALIFIED') {
-          state = 'READY';
+          if (isNotCurrentPeriod) {
+            state = 'WARN';
+            codes.push('DATE_NOT_CURRENT_PERIOD');
+          } else {
+            state = 'READY';
+          }
           codes.push(eligibility.matchedRuleCode || 'MATCHED_THRESHOLD');
+          if (eligibility.isDivergent) {
+            codes.push('OFFICIAL_PRECHECK_MAY_FLAG');
+          }
         } else if (eligibility.status === 'LIKELY_NOT_QUALIFIED') {
           state = 'WARN';
-          codes.push('BELOW_ALL_ELIGIBILITY_THRESHOLDS');
+          if (isNotCurrentPeriod) {
+            codes.push('DATE_NOT_CURRENT_PERIOD');
+            if (eligibility.matchedRuleCode) {
+              codes.push(eligibility.matchedRuleCode);
+            }
+          } else {
+            codes.push('BELOW_ALL_ELIGIBILITY_THRESHOLDS');
+          }
         } else {
           state =
             fields.date.found || fields.duration.found || fields.distanceOrSteps.found
@@ -143,6 +170,9 @@ export function ScreenshotPrechecker() {
           if (eligibility.reasonCodes.includes('LOW_OCR_CONFIDENCE')) {
             codes.push('LOW_OCR_CONFIDENCE');
           }
+          if (isNotCurrentPeriod) {
+            codes.push('DATE_NOT_CURRENT_PERIOD');
+          }
         }
 
         const precheckResult: PrecheckResult = {
@@ -153,6 +183,9 @@ export function ScreenshotPrechecker() {
           codes,
           fields,
           eligibility,
+          officialEligibility: eligibility.officialEligibility,
+          isDivergent: eligibility.isDivergent,
+          divergenceReason: eligibility.divergenceReason,
           ocr: {
             engineId: 'tesseract.js/7.0.0',
             durationMs: data.durationMs || 0,
@@ -235,6 +268,7 @@ export function ScreenshotPrechecker() {
       {/* 方案 B：可視化 HTML5 檔案選取卡片（無選圖時可見；選圖後作為背景 Runner 運作） */}
       <View style={selectedImage ? styles.hiddenWebViewContainer : styles.visibleWebViewContainer}>
         <WebView
+          key={`ocr-runner-${isDark ? 'dark' : 'light'}-${runnerHtml.length}`}
           ref={webViewRef}
           style={styles.webViewFill}
           originWhitelist={['*']}
@@ -361,16 +395,30 @@ export function ScreenshotPrechecker() {
                   ]}
                 >
                   {result.state === 'READY'
-                    ? '預檢合格！符合揮汗有禮標準'
+                    ? result.isDivergent
+                      ? '預檢合格！符合揮汗有禮標準（官網自動判定可能不通過）'
+                      : '預檢合格！符合揮汗有禮標準'
                     : result.state === 'WARN'
-                      ? '截圖存有疑慮（需注意退件風險）'
+                      ? result.eligibility.observed.periodCheck &&
+                        !result.eligibility.observed.periodCheck.isCurrentPeriod
+                        ? '運動數據達標，但非當週運動紀錄（不符本期任務標準）'
+                        : '截圖存有疑慮（需注意退件風險）'
                       : '截圖未達合格標準'}
                 </Text>
                 <Text style={[styles.verdictSub, { color: theme.textSecondary }]}>
                   {result.state === 'READY'
-                    ? '已偵測到達標數值且包含日期，初步檢查通過，請再次確認無誤後前往官網上傳。'
+                    ? result.isDivergent
+                      ? '已偵測到達標數值且為當週紀錄。由於官網自動判定演算法較嚴格，系統自動判定可能審核不通過，但仍可正常送出，可能需待人工審核才會通過。'
+                      : '已偵測到達標數值且為當週紀錄，初步檢查通過，請再次確認無誤後前往官網上傳。'
                     : result.state === 'WARN'
-                      ? '請檢視下方警示項目，補正後再上傳以免遭官方退件審查。'
+                      ? result.eligibility.observed.periodCheck &&
+                        !result.eligibility.observed.periodCheck.isCurrentPeriod
+                        ? `截圖日期為 ${result.eligibility.observed.periodCheck.screenshotDate}${
+                            result.eligibility.observed.periodCheck.matchedPeriodLabel
+                              ? `（屬 ${result.eligibility.observed.periodCheck.matchedPeriodLabel}）`
+                              : ''
+                          }，非當前活動期別（${result.eligibility.observed.periodCheck.currentPeriodLabel}）。依運動部規定不可跨期補傳，建議換上本週紀錄。`
+                        : '請檢視下方警示項目，補正後再上傳以免遭官方退件審查。'
                       : '觀測到的各項數據均未達 115 年加碼活動任務標準。'}
                 </Text>
               </View>
@@ -392,6 +440,107 @@ export function ScreenshotPrechecker() {
             )}
           </View>
 
+          {/* 非當週特別警告橫幅 */}
+          {result.eligibility.observed.periodCheck &&
+            !result.eligibility.observed.periodCheck.isCurrentPeriod && (
+              <View
+                style={[
+                  styles.periodWarningBanner,
+                  {
+                    backgroundColor: theme.warningLight,
+                    borderColor: theme.warning,
+                  },
+                ]}
+              >
+                <View style={styles.bannerHeaderRow}>
+                  <Ionicons
+                    name="calendar"
+                    size={18}
+                    color={theme.warning}
+                    style={{ marginRight: 6 }}
+                  />
+                  <Text style={[styles.bannerTitle, { color: theme.warning }]}>
+                    非當週運動紀錄警示
+                  </Text>
+                </View>
+                <Text style={[styles.bannerText, { color: theme.text }]}>
+                  截圖日期為{' '}
+                  <Text style={{ fontWeight: '700' }}>
+                    {result.eligibility.observed.periodCheck.screenshotDate}
+                  </Text>
+                  {result.eligibility.observed.periodCheck.matchedPeriodLabel
+                    ? `（屬於 ${result.eligibility.observed.periodCheck.matchedPeriodLabel}）`
+                    : ''}
+                  ，而當前活動進行至{' '}
+                  <Text style={{ fontWeight: '700' }}>
+                    {result.eligibility.observed.periodCheck.currentPeriodLabel}
+                  </Text>
+                  。
+                </Text>
+                <Text style={[styles.bannerSubText, { color: theme.textSecondary }]}>
+                  運動部活動規範明定「當週紀錄限當週單日上傳，逾期不可跨期補傳」，現在上傳該紀錄極高機率遭官方審核退件。
+                </Text>
+              </View>
+            )}
+
+          {/* 雙軌演算法對照說明卡片 */}
+          {result.isDivergent && (
+            <View
+              style={[
+                styles.divergentBanner,
+                {
+                  backgroundColor: theme.cardBackground,
+                  borderColor: theme.cardBorder,
+                },
+              ]}
+            >
+              <View style={styles.bannerHeaderRow}>
+                <Ionicons
+                  name="sparkles"
+                  size={18}
+                  color={theme.primary}
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={[styles.bannerTitle, { color: theme.primary }]}>雙軌審核對照說明</Text>
+              </View>
+              <View style={styles.divergentItemRow}>
+                <Text
+                  style={[
+                    styles.divergentItemTag,
+                    {
+                      color:
+                        result.eligibility.observed.periodCheck &&
+                        !result.eligibility.observed.periodCheck.isCurrentPeriod
+                          ? theme.warning
+                          : theme.success,
+                    },
+                  ]}
+                >
+                  🌟 本 App 的改良版預檢：
+                </Text>
+                <Text style={[styles.divergentItemText, { color: theme.text }]}>
+                  {result.eligibility.observed.periodCheck &&
+                  !result.eligibility.observed.periodCheck.isCurrentPeriod
+                    ? `不符當週任務標準（數據已達標，但日期屬於 ${
+                        result.eligibility.observed.periodCheck.matchedPeriodName || '非當週'
+                      }，非當前活動期別）`
+                    : '符合任務標準（已精準辨識達標數據且為當週紀錄）'}
+                </Text>
+              </View>
+              <View style={[styles.divergentItemRow, { marginTop: 4 }]}>
+                <Text style={[styles.divergentItemTag, { color: theme.warning }]}>
+                  🏛️ 官網自動審核判定：
+                </Text>
+                <Text style={[styles.divergentItemText, { color: theme.textSecondary }]}>
+                  {result.eligibility.observed.periodCheck &&
+                  !result.eligibility.observed.periodCheck.isCurrentPeriod
+                    ? '系統自動判定可能審核不通過（未辨識出有效數據或非當週紀錄，逾期官方將退件審核）'
+                    : '系統自動判定可能審核不通過（因格式限制，但仍可正常送出，可能需待人工審核才會通過）'}
+                </Text>
+              </View>
+            </View>
+          )}
+
           {/* 2. 數據指標詳細檢核表 */}
           <View
             style={[
@@ -406,19 +555,25 @@ export function ScreenshotPrechecker() {
               <View style={styles.metricLabelCol}>
                 <Ionicons
                   name={
-                    result.eligibility.observed.dateFound
-                      ? 'calendar'
-                      : result.fields.dateRange?.found
-                        ? 'close-circle'
-                        : 'calendar-outline'
+                    result.eligibility.observed.periodCheck &&
+                    !result.eligibility.observed.periodCheck.isCurrentPeriod
+                      ? 'alert-circle'
+                      : result.eligibility.observed.dateFound
+                        ? 'calendar'
+                        : result.fields.dateRange?.found
+                          ? 'close-circle'
+                          : 'calendar-outline'
                   }
                   size={18}
                   color={
-                    result.eligibility.observed.dateFound
-                      ? theme.success
-                      : result.fields.dateRange?.found
-                        ? theme.danger
-                        : theme.warning
+                    result.eligibility.observed.periodCheck &&
+                    !result.eligibility.observed.periodCheck.isCurrentPeriod
+                      ? theme.warning
+                      : result.eligibility.observed.dateFound
+                        ? theme.success
+                        : result.fields.dateRange?.found
+                          ? theme.danger
+                          : theme.warning
                   }
                   style={{ marginRight: 8 }}
                 />
@@ -428,17 +583,33 @@ export function ScreenshotPrechecker() {
                 style={[
                   styles.metricValue,
                   {
-                    color: result.eligibility.observed.dateFound
-                      ? theme.text
-                      : result.fields.dateRange?.found
-                        ? theme.danger
-                        : theme.warning,
-                    fontWeight: result.fields.dateRange?.found ? '600' : '400',
+                    color:
+                      result.eligibility.observed.periodCheck &&
+                      !result.eligibility.observed.periodCheck.isCurrentPeriod
+                        ? theme.warning
+                        : result.eligibility.observed.dateFound
+                          ? theme.text
+                          : result.fields.dateRange?.found
+                            ? theme.danger
+                            : theme.warning,
+                    fontWeight:
+                      result.fields.dateRange?.found ||
+                      (result.eligibility.observed.periodCheck &&
+                        !result.eligibility.observed.periodCheck.isCurrentPeriod)
+                        ? '600'
+                        : '400',
                   },
                 ]}
               >
                 {result.fields.date.found
-                  ? result.fields.date.matches[0]?.value
+                  ? result.eligibility.observed.periodCheck &&
+                    !result.eligibility.observed.periodCheck.isCurrentPeriod
+                    ? `${result.fields.date.matches[0]?.value}（非當週：${
+                        result.eligibility.observed.periodCheck.matchedPeriodName ||
+                        result.eligibility.observed.periodCheck.matchedPeriodLabel ||
+                        '非活動期'
+                      }）`
+                    : result.fields.date.matches[0]?.value
                   : result.fields.dateRange?.found
                     ? `日期錯誤：非單日（${result.fields.dateRange.matches[0]?.value}）`
                     : '未偵測到日期（易遭退件）'}
@@ -1024,5 +1195,49 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 14,
     fontWeight: '700',
+  },
+  periodWarningBanner: {
+    borderRadius: 14,
+    borderWidth: 1.5,
+    padding: Spacing.three,
+    marginBottom: Spacing.three,
+  },
+  divergentBanner: {
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: Spacing.three,
+    marginBottom: Spacing.three,
+  },
+  bannerHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  bannerTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  bannerText: {
+    fontSize: 13,
+    lineHeight: 19,
+    marginBottom: 4,
+  },
+  bannerSubText: {
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  divergentItemRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  divergentItemTag: {
+    fontSize: 12,
+    fontWeight: '700',
+    minWidth: 115,
+  },
+  divergentItemText: {
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 17,
   },
 });

@@ -182,6 +182,10 @@ export function getOcrRunnerHtml(theme: RunnerThemeConfig): string {
             }
           }
         });
+        // 啟用 PSM.AUTO ('3') 全自動多區塊頁面分割，避免預設 PSM 6 單區塊模式略過大字號時間/步數
+        await w.setParameters({
+          tessedit_pageseg_mode: '3',
+        });
         worker = w;
         sendToNative({ type: 'STATUS', status: 'ENGINE_READY', progress: 0.2 });
         return worker;
@@ -202,9 +206,6 @@ export function getOcrRunnerHtml(theme: RunnerThemeConfig): string {
       let scale = 1;
       if (longEdge > maxLongEdge) {
         scale = maxLongEdge / longEdge;
-      } else if (origWidth < 900 && longEdge * (1080 / origWidth) <= maxLongEdge) {
-        // 對於過小或低解析度截圖，適度放大至 1080 寬度以保留中文字形筆畫特徵
-        scale = 1080 / origWidth;
       }
 
       const targetWidth = Math.max(1, Math.round(origWidth * scale));
@@ -309,7 +310,7 @@ export function getOcrRunnerHtml(theme: RunnerThemeConfig): string {
         });
 
         const prepStart = performance.now();
-        const prep = prepareCanvas(img, 1600);
+        const prep = prepareCanvas(img, 2400);
         const prepareDurationMs = Math.round(performance.now() - prepStart);
 
         sendToNative({ type: 'PROGRESS', id: reqId, status: 'RECOGNIZING_TEXT', progress: 0.3 });
