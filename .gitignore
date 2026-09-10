@@ -50,3 +50,6 @@ example
 # OCR data
 *.traineddata
 
+# Video generation temporary files
+promo-video/temp/
+

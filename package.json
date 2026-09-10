@@ -77,7 +77,8 @@
     "update:preview": "eas update --channel preview --auto",
     "update:prod": "eas update --channel production --auto",
     "screenshots:generate": "node scripts/generate-screenshots.js",
-    "assets:play-store": "node scripts/generate-play-store-assets.js"
+    "assets:play-store": "node scripts/generate-play-store-assets.js",
+    "video:promo": "node scripts/generate-promo-video.js"
   },
   "private": true
 }
