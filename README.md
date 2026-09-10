@@ -8,10 +8,15 @@
 [![Expo](https://img.shields.io/badge/Expo-SDK%2057-black.svg)](https://expo.dev)
 [![React Native](https://img.shields.io/badge/React%20Native-0.86-61dafb.svg)](https://reactnative.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue.svg)](https://www.typescriptlang.org)
+[![YouTube Shorts](https://img.shields.io/badge/YouTube_Shorts-宣傳短片-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/shorts/6kvV0BTkSwk)
+[![Google Play](https://img.shields.io/badge/Google_Play-立即下載-414141?logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=me.patw.twsports500helper)
 
 專為中華民國運動部「**115 年揮汗有禮・全民動起來**」（活動官網：[https://500.gov.tw/registrant/](https://500.gov.tw/registrant/)）加碼活動開發的輔助工具 App。
 
 解決繁瑣的登入步驟與多帳號切換痛點，提供家庭多成員個資安全保險箱、一鍵自動填表登入「我的任務」、14 週各期任務倒數指引，以及官方 5 大合作通路（全家、7-ELEVEN、萊爾富、全聯、萬家福）優惠與兌換品項清單。
+
+> 📺 **宣傳短片**：[觀看 YouTube Shorts 快速導覽（約 54 秒）](https://www.youtube.com/shorts/6kvV0BTkSwk)  
+> 📲 **商店下載**：[Google Play 商店立即下載](https://play.google.com/store/apps/details?id=me.patw.twsports500helper)
 
 ---
 

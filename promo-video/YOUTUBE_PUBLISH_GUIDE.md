@@ -2,9 +2,10 @@
 
 ## 📱 影片檔案資訊
 
-- **檔案路徑**：`promo-video/output/sports_helper_promo_shorts.mp4`
-- **解析度**：1080 × 1920（9:16 直式 Shorts 規格）
-- **時長**：約 53 秒（符合 YouTube Shorts < 60 秒完播加權區間）
+- **已發布 YouTube Shorts 網址**：https://www.youtube.com/shorts/6kvV0BTkSwk
+- **本機檔案路徑**：`promo-video/output/sports_helper_promo_shorts.mp4`
+- **解析度**：1080 × 1920（60fps 絲滑直式 Shorts 規格）
+- **時長**：約 54 秒（符合 YouTube Shorts < 60 秒完播加權區間）
 - **配音**：台灣繁體中文神經語音（自然親切、高清晰度）
 - **音訊**：旁白口白 + 動態字幕 + 溫暖輕快 Lo-Fi 背景音樂（BGM）
 
