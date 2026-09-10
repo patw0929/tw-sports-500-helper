@@ -107,7 +107,7 @@ function getCommonStyles() {
     /* Marketing Header Section */
     .header-area {
       width: 100%;
-      padding: 46px 60px 14px;
+      padding: 44px 50px 14px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -130,7 +130,7 @@ function getCommonStyles() {
       box-shadow: 0 4px 14px rgba(255, 94, 30, 0.08);
     }
     .marketing-title {
-      font-size: 55px;
+      font-size: 54px;
       font-weight: 900;
       color: #111827;
       line-height: 1.22;
@@ -141,32 +141,33 @@ function getCommonStyles() {
       color: ${THEME.primary};
     }
     .marketing-subtitle {
-      font-size: 23px;
+      font-size: 22px;
       color: #4B5563;
       font-weight: 500;
       line-height: 1.4;
-      max-width: 880px;
+      max-width: 860px;
     }
 
-    /* Modern Smartphone Frame */
+    /* Modern Smartphone Frame - 19.5:9 Flagship Phone Silhouette (736px width centered) */
     .phone-container {
       position: absolute;
-      top: 270px;
-      width: 864px;
-      height: 1625px;
+      top: 280px;
+      left: 172px;
+      width: 736px;
+      height: 1610px;
       z-index: 20;
     }
     .phone-frame {
       width: 100%;
       height: 100%;
-      background: #1C1E22;
+      background: #181A20;
       border-radius: 54px;
-      padding: 12px;
+      padding: 10px;
       box-shadow: 
-        0 45px 100px -15px rgba(31, 41, 55, 0.38),
-        0 20px 45px -5px rgba(255, 94, 30, 0.22),
+        0 40px 95px -15px rgba(25, 30, 45, 0.45),
+        0 18px 45px -5px rgba(255, 94, 30, 0.22),
         0 0 0 2px rgba(255, 255, 255, 0.25),
-        0 0 0 7px #2B2E35;
+        0 0 0 6px #282C34;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -175,23 +176,23 @@ function getCommonStyles() {
 
     /* Device Status Bar */
     .status-bar {
-      height: 44px;
+      height: 50px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 28px;
-      font-size: 17px;
-      font-weight: 700;
+      padding: 0 26px;
+      font-size: 19px;
+      font-weight: 800;
       color: #111827;
       background: ${THEME.background};
-      border-top-left-radius: 42px;
-      border-top-right-radius: 42px;
+      border-top-left-radius: 44px;
+      border-top-right-radius: 44px;
       z-index: 30;
       border-bottom: 1px solid rgba(0,0,0,0.03);
     }
     .punch-hole {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       background: #000000;
       border-radius: 50%;
       box-shadow: inset 0 0 2px rgba(255,255,255,0.4);
@@ -200,8 +201,8 @@ function getCommonStyles() {
       display: flex;
       align-items: center;
       gap: 7px;
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 800;
     }
     .battery-wrap {
       display: flex;
@@ -209,10 +210,10 @@ function getCommonStyles() {
       gap: 1px;
     }
     .battery-pill {
-      width: 22px;
-      height: 12px;
-      border: 1.5px solid #111827;
-      border-radius: 3px;
+      width: 24px;
+      height: 13px;
+      border: 1.8px solid #111827;
+      border-radius: 4px;
       padding: 1.5px;
       display: flex;
     }
@@ -220,7 +221,7 @@ function getCommonStyles() {
       width: 100%;
       height: 100%;
       background: #10B981;
-      border-radius: 1px;
+      border-radius: 1.5px;
     }
     .battery-tip {
       width: 2px;
@@ -237,16 +238,16 @@ function getCommonStyles() {
       flex-direction: column;
       overflow: hidden;
       position: relative;
-      border-bottom-left-radius: 42px;
-      border-bottom-right-radius: 42px;
+      border-bottom-left-radius: 44px;
+      border-bottom-right-radius: 44px;
     }
 
     .scroll-content {
       flex: 1;
-      padding: 14px 20px 96px;
+      padding: 16px 18px 108px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 13px;
       overflow: hidden;
     }
 
@@ -262,13 +263,13 @@ function getCommonStyles() {
       flex-direction: column;
       align-items: center;
       padding-bottom: 8px;
-      border-bottom-left-radius: 42px;
-      border-bottom-right-radius: 42px;
+      border-bottom-left-radius: 44px;
+      border-bottom-right-radius: 44px;
       z-index: 40;
     }
     .tab-bar {
       width: 100%;
-      height: 76px;
+      height: 86px;
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -278,28 +279,58 @@ function getCommonStyles() {
       flex-direction: column;
       align-items: center;
       gap: 5px;
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 13.5px;
+      font-weight: 700;
       color: ${THEME.tabIconDefault};
       text-decoration: none;
     }
     .tab-item.active {
       color: ${THEME.tabIconSelected};
-      font-weight: 800;
+      font-weight: 900;
     }
     .tab-item svg {
-      width: 25px;
-      height: 25px;
+      width: 26px;
+      height: 26px;
       fill: currentColor;
     }
     .gesture-home-bar {
       width: 140px;
-      height: 4.5px;
+      height: 5px;
       border-radius: 3px;
       background: #1F2937;
       opacity: 0.35;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
+  `;
+}
+
+function renderTabBar(activeTab) {
+  return `
+    <div class="tab-bar-container">
+      <div class="tab-bar">
+        <div class="tab-item ${activeTab === 'index' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span>快速登入</span>
+        </div>
+        <div class="tab-item ${activeTab === 'browser' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          <span>官方網頁</span>
+        </div>
+        <div class="tab-item ${activeTab === 'precheck' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15-5-5 1.41-1.41L11 14.17l7.59-7.59L20 8l-9 9z"/></svg>
+          <span>截圖預檢</span>
+        </div>
+        <div class="tab-item ${activeTab === 'tasks' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
+          <span>任務週程</span>
+        </div>
+        <div class="tab-item ${activeTab === 'accounts' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span>帳號管理</span>
+        </div>
+      </div>
+      <div class="gesture-home-bar"></div>
+    </div>
   `;
 }
 
@@ -321,9 +352,9 @@ function renderScreen1() {
           gap: 12px;
         }
         .logo-icon-circle {
-          width: 44px;
-          height: 44px;
-          border-radius: 22px;
+          width: 48px;
+          height: 48px;
+          border-radius: 24px;
           background: linear-gradient(135deg, #FF5E1E, #FF7A45);
           display: flex;
           align-items: center;
@@ -335,7 +366,7 @@ function renderScreen1() {
           flex: 1;
         }
         .brand-super {
-          font-size: 12px;
+          font-size: 13px;
           font-weight: 800;
           letter-spacing: 0.5px;
           color: ${THEME.primary};
@@ -348,24 +379,24 @@ function renderScreen1() {
           margin-top: 1px;
         }
         .brand-title {
-          font-size: 19px;
+          font-size: 22px;
           font-weight: 900;
           color: ${THEME.text};
           letter-spacing: -0.2px;
         }
         .unofficial-badge {
-          padding: 2px 7px;
+          padding: 3px 8px;
           border-radius: 6px;
           background: ${THEME.backgroundElement};
           border: 1px solid ${THEME.cardBorder};
           color: ${THEME.textSecondary};
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 700;
         }
         .settings-btn {
-          width: 40px;
-          height: 40px;
-          border-radius: 20px;
+          width: 44px;
+          height: 44px;
+          border-radius: 22px;
           background: ${THEME.cardBackground};
           border: 1px solid ${THEME.cardBorder};
           display: flex;
@@ -375,13 +406,13 @@ function renderScreen1() {
         }
 
         .period-card {
-          padding: 13px 18px;
+          padding: 15px 18px;
           border-radius: 18px;
           border: 1.5px solid ${THEME.primary};
           background: #FFFFFF;
           display: flex;
           flex-direction: column;
-          gap: 5px;
+          gap: 6px;
           box-shadow: 0 4px 14px rgba(255, 94, 30, 0.08);
         }
         .period-card-top {
@@ -390,11 +421,11 @@ function renderScreen1() {
           align-items: center;
         }
         .period-badge {
-          padding: 3px 10px;
+          padding: 4px 11px;
           border-radius: 12px;
           background: ${THEME.primary};
           color: #FFFFFF;
-          font-size: 12px;
+          font-size: 13.5px;
           font-weight: 800;
         }
         .period-countdown {
@@ -402,18 +433,18 @@ function renderScreen1() {
           align-items: center;
           gap: 5px;
           color: ${THEME.primaryDark};
-          font-size: 13px;
-          font-weight: 700;
+          font-size: 14.5px;
+          font-weight: 800;
         }
         .period-date-text {
-          font-size: 15px;
+          font-size: 17.5px;
           font-weight: 800;
           color: ${THEME.text};
           margin-top: 2px;
         }
         .period-hint-text {
-          font-size: 12px;
-          line-height: 16px;
+          font-size: 13.5px;
+          line-height: 18px;
           color: ${THEME.textSecondary};
         }
 
@@ -421,10 +452,10 @@ function renderScreen1() {
           background: ${THEME.cardBackground};
           border: 1px solid ${THEME.cardBorder};
           border-radius: 18px;
-          padding: 14px 18px;
+          padding: 15px 18px;
           display: flex;
           flex-direction: column;
-          gap: 11px;
+          gap: 12px;
         }
         .card-header-row {
           display: flex;
@@ -432,8 +463,8 @@ function renderScreen1() {
           align-items: center;
         }
         .card-section-title {
-          font-size: 12px;
-          font-weight: 700;
+          font-size: 13.5px;
+          font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 0.5px;
           color: ${THEME.textSecondary};
@@ -442,8 +473,8 @@ function renderScreen1() {
           display: flex;
           align-items: center;
           gap: 3px;
-          font-size: 13px;
-          font-weight: 700;
+          font-size: 14.5px;
+          font-weight: 800;
           color: ${THEME.primary};
         }
         .profile-details-row {
@@ -452,9 +483,9 @@ function renderScreen1() {
           gap: 14px;
         }
         .avatar-circle {
-          width: 46px;
-          height: 46px;
-          border-radius: 23px;
+          width: 48px;
+          height: 48px;
+          border-radius: 24px;
           background: ${THEME.primaryLight};
           color: ${THEME.primary};
           display: flex;
@@ -465,7 +496,7 @@ function renderScreen1() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          gap: 2px;
+          gap: 3px;
         }
         .profile-name-line {
           display: flex;
@@ -473,36 +504,36 @@ function renderScreen1() {
           gap: 8px;
         }
         .profile-name {
-          font-size: 17.5px;
-          font-weight: 800;
+          font-size: 21px;
+          font-weight: 900;
           color: ${THEME.text};
         }
         .profile-label-pill {
-          padding: 2px 8px;
+          padding: 3px 8px;
           border-radius: 8px;
           background: ${THEME.backgroundElement};
           color: ${THEME.textSecondary};
-          font-size: 11px;
-          font-weight: 600;
+          font-size: 12px;
+          font-weight: 700;
         }
         .profile-subtext {
-          font-size: 13px;
-          font-weight: 500;
+          font-size: 14.5px;
+          font-weight: 600;
           color: ${THEME.textSecondary};
         }
         .profile-date-small {
-          font-size: 11.5px;
+          font-size: 13px;
           color: ${THEME.textMuted};
         }
         .switch-bar {
           display: flex;
           align-items: center;
           border-top: 1px solid rgba(0,0,0,0.06);
-          padding-top: 9px;
+          padding-top: 10px;
           gap: 8px;
         }
         .switch-bar-label {
-          font-size: 12px;
+          font-size: 13.5px;
           color: ${THEME.textMuted};
           white-space: nowrap;
         }
@@ -512,11 +543,11 @@ function renderScreen1() {
           overflow-x: auto;
         }
         .chip {
-          padding: 5px 12px;
+          padding: 6px 13px;
           border-radius: 12px;
           border: 1px solid ${THEME.cardBorder};
-          font-size: 12px;
-          font-weight: 700;
+          font-size: 13.5px;
+          font-weight: 800;
           color: ${THEME.textSecondary};
           white-space: nowrap;
           background: transparent;
@@ -530,7 +561,7 @@ function renderScreen1() {
         .main-login-btn {
           display: flex;
           align-items: center;
-          padding: 14px 18px;
+          padding: 16px 18px;
           border-radius: 18px;
           background: ${THEME.primary};
           color: #FFFFFF;
@@ -538,9 +569,9 @@ function renderScreen1() {
           gap: 14px;
         }
         .main-login-icon-wrap {
-          width: 40px;
-          height: 40px;
-          border-radius: 20px;
+          width: 44px;
+          height: 44px;
+          border-radius: 22px;
           background: rgba(255, 255, 255, 0.2);
           display: flex;
           align-items: center;
@@ -550,54 +581,54 @@ function renderScreen1() {
           flex: 1;
         }
         .main-login-title {
-          font-size: 16px;
+          font-size: 19px;
           font-weight: 900;
           letter-spacing: -0.2px;
           line-height: 1.3;
         }
         .main-login-subtitle {
-          font-size: 11.5px;
+          font-size: 13.5px;
           color: rgba(255, 255, 255, 0.9);
           margin-top: 2px;
         }
 
         .section-heading {
-          font-size: 15px;
-          font-weight: 800;
+          font-size: 17.5px;
+          font-weight: 900;
           color: ${THEME.text};
         }
         .grid-container {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 9px;
+          gap: 10px;
         }
         .grid-card {
           background: ${THEME.cardBackground};
           border: 1px solid ${THEME.cardBorder};
-          border-radius: 15px;
-          padding: 10px 12px;
+          border-radius: 16px;
+          padding: 12px 14px;
           display: flex;
           flex-direction: column;
-          gap: 3px;
+          gap: 4px;
         }
         .grid-icon-circle {
-          width: 34px;
-          height: 34px;
-          border-radius: 10px;
+          width: 38px;
+          height: 38px;
+          border-radius: 11px;
           display: flex;
           align-items: center;
           justify-content: center;
           margin-bottom: 2px;
         }
         .grid-card-title {
-          font-size: 13.5px;
+          font-size: 15.5px;
           font-weight: 800;
           color: ${THEME.text};
         }
         .grid-card-desc {
-          font-size: 10.5px;
+          font-size: 12.5px;
           color: ${THEME.textSecondary};
-          line-height: 14px;
+          line-height: 16px;
         }
 
         /* Vendors showcase from index.tsx */
@@ -611,20 +642,20 @@ function renderScreen1() {
           display: flex;
           align-items: center;
           gap: 2px;
-          font-size: 12px;
-          font-weight: 700;
+          font-size: 13.5px;
+          font-weight: 800;
           color: ${THEME.primary};
         }
         .vendor-list {
           display: flex;
           flex-direction: column;
-          gap: 7px;
+          gap: 8px;
         }
         .vendor-card {
           background: ${THEME.cardBackground};
           border: 1px solid ${THEME.cardBorder};
-          border-radius: 14px;
-          padding: 9px 13px;
+          border-radius: 15px;
+          padding: 11px 14px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -632,11 +663,11 @@ function renderScreen1() {
         .vendor-left {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 11px;
         }
         .vendor-icon {
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           border-radius: 10px;
           background: ${THEME.primaryLight};
           color: ${THEME.primary};
@@ -650,27 +681,27 @@ function renderScreen1() {
           gap: 6px;
         }
         .vendor-name {
-          font-size: 13px;
+          font-size: 15.5px;
           font-weight: 800;
           color: ${THEME.text};
         }
         .vendor-tag {
-          font-size: 10px;
+          font-size: 12px;
           font-weight: 800;
           color: ${THEME.primary};
           background: ${THEME.primaryLight};
-          padding: 1px 5px;
+          padding: 2px 6px;
           border-radius: 5px;
         }
         .vendor-count {
-          font-size: 10.5px;
+          font-size: 13px;
           color: ${THEME.textSecondary};
           margin-top: 1px;
         }
         .vendor-view-btn {
-          font-size: 11px;
-          font-weight: 700;
-          padding: 4px 8px;
+          font-size: 12.5px;
+          font-weight: 800;
+          padding: 5px 9px;
           border-radius: 8px;
           background: ${THEME.backgroundElement};
           color: ${THEME.primary};
@@ -682,21 +713,21 @@ function renderScreen1() {
         /* Security Notice */
         .security-notice {
           background: ${THEME.backgroundElement};
-          border-radius: 14px;
-          padding: 10px 14px;
+          border-radius: 15px;
+          padding: 12px 15px;
           display: flex;
           align-items: flex-start;
-          gap: 10px;
+          gap: 11px;
         }
         .security-notice-title {
-          font-size: 12.5px;
+          font-size: 14.5px;
           font-weight: 800;
           color: ${THEME.text};
         }
         .security-notice-desc {
-          font-size: 10.5px;
+          font-size: 13px;
           color: ${THEME.textSecondary};
-          line-height: 15px;
+          line-height: 17px;
           margin-top: 2px;
         }
 
@@ -704,12 +735,12 @@ function renderScreen1() {
           display: flex;
           align-items: center;
           gap: 6px;
-          padding: 6px 10px;
+          padding: 8px 12px;
           border-radius: 10px;
           border: 1px solid ${THEME.cardBorder};
-          font-size: 10.5px;
+          font-size: 12px;
           color: ${THEME.textMuted};
-          line-height: 14px;
+          line-height: 16px;
         }
       </style>
     </head>
@@ -828,11 +859,11 @@ function renderScreen1() {
               <div class="section-heading">常用功能捷徑</div>
               <div class="grid-container">
                 <div class="grid-card">
-                  <div class="grid-icon-circle" style="background:#FFF0EA; color:#FF5E1E;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2-2.4-3.5-4.4-3.5h-1.2A7 7 0 0 0 3 12c0 2.6 1.4 4.8 3.5 6"></path><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line></svg>
+                  <div class="grid-icon-circle" style="background:#FFE8DF; color:#FF5E1E;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><circle cx="12" cy="12" r="3"></circle></svg>
                   </div>
-                  <div class="grid-card-title">上傳運動紀錄</div>
-                  <div class="grid-card-desc">截圖上傳與審核進度查詢</div>
+                  <div class="grid-card-title">截圖合格預檢</div>
+                  <div class="grid-card-desc">上傳前搶先診斷合格度</div>
                 </div>
 
                 <div class="grid-card">
@@ -893,7 +924,7 @@ function renderScreen1() {
                     </div>
                     <div>
                       <div class="vendor-title-row">
-                        <span class="vendor-name">7-ELEVEn</span>
+                        <span class="vendor-name">7-ELEVEN</span>
                         <span class="vendor-tag">50 + 5 元</span>
                       </div>
                       <div class="vendor-count">473 項可兌換商品</div>
@@ -926,7 +957,7 @@ function renderScreen1() {
                     <div>
                       <div class="vendor-title-row">
                         <span class="vendor-name">全聯福利中心</span>
-                        <span class="vendor-tag">50 元券</span>
+                        <span class="vendor-tag">商品折抵</span>
                       </div>
                       <div class="vendor-count">9 大類健康生鮮品項</div>
                     </div>
@@ -953,27 +984,7 @@ function renderScreen1() {
             </div>
 
             <!-- Bottom Tab Bar -->
-            <div class="tab-bar-container">
-              <div class="tab-bar">
-                <div class="tab-item active">
-                  <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                  <span>快速登入</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                  <span>官方網頁</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
-                  <span>任務週程</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                  <span>帳號管理</span>
-                </div>
-              </div>
-              <div class="gesture-home-bar"></div>
-            </div>
+            ${renderTabBar('index')}
           </div>
         </div>
       </div>
@@ -983,7 +994,522 @@ function renderScreen1() {
 }
 
 // -------------------------------------------------------------
-// Screen 2: 官方網頁 / 自動填寫 (100% 貼近揮汗有禮真實官方網站 500.gov.tw)
+// Screen Precheck: 截圖預先檢查 (src/app/precheck.tsx 1:1)
+// -------------------------------------------------------------
+function renderScreenPrecheck() {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        ${getCommonStyles()}
+
+        .intro-header-card {
+          background: #FFFFFF;
+          border: 1px solid ${THEME.cardBorder};
+          border-radius: 20px;
+          padding: 16px 18px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .intro-icon-circle {
+          width: 50px;
+          height: 50px;
+          border-radius: 25px;
+          background: #FFE8DF;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: ${THEME.primary};
+          flex-shrink: 0;
+        }
+        .intro-title {
+          font-size: 21px;
+          font-weight: 900;
+          color: ${THEME.text};
+        }
+        .intro-sub {
+          font-size: 14.5px;
+          color: ${THEME.textSecondary};
+          margin-top: 3px;
+          line-height: 1.4;
+        }
+
+        .sample-preview-card {
+          background: #FFFFFF;
+          border: 1px solid ${THEME.cardBorder};
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+        .mock-screenshot-hero {
+          height: 225px;
+          background: linear-gradient(135deg, #18191E 0%, #20232A 100%);
+          padding: 18px 22px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          position: relative;
+        }
+        .mock-hero-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .mock-hero-date {
+          font-size: 16px;
+          font-weight: 800;
+          color: #E5E7EB;
+        }
+        .mock-hero-apptag {
+          font-size: 13.5px;
+          font-weight: 800;
+          color: #38BDF8;
+          background: rgba(56, 189, 248, 0.15);
+          padding: 3px 10px;
+          border-radius: 12px;
+          border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        .mock-hero-middle {
+          display: flex;
+          align-items: center;
+          gap: 22px;
+        }
+        .mock-circle-dial {
+          width: 90px;
+          height: 90px;
+          border-radius: 50%;
+          border: 6.5px solid #10B981;
+          border-top-color: #38BDF8;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0,0,0,0.25);
+        }
+        .mock-dial-primary {
+          font-size: 26px;
+          font-weight: 900;
+          color: #10B981;
+          line-height: 1;
+        }
+        .mock-dial-secondary {
+          font-size: 14px;
+          font-weight: 800;
+          color: #38BDF8;
+          margin-top: 2px;
+        }
+        .mock-hero-stats {
+          display: flex;
+          gap: 22px;
+        }
+        .mock-stat-col {
+          display: flex;
+          flex-direction: column;
+        }
+        .mock-stat-num {
+          font-size: 26px;
+          font-weight: 900;
+          color: #FFFFFF;
+          line-height: 1.1;
+        }
+        .mock-stat-label {
+          font-size: 13.5px;
+          font-weight: 700;
+          color: #9CA3AF;
+          margin-top: 2px;
+        }
+        .sample-preview-bar {
+          padding: 12px 18px;
+          background: #FFFFFF;
+          border-top: 1px solid ${THEME.cardBorder};
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .sample-file-meta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14.5px;
+          font-weight: 800;
+          color: ${THEME.text};
+        }
+        .sample-file-sub {
+          font-size: 13px;
+          color: ${THEME.textMuted};
+          font-weight: 600;
+        }
+        .change-photo-btn {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          padding: 7px 15px;
+          border-radius: 12px;
+          background: ${THEME.primaryLight};
+          color: ${THEME.primary};
+          font-size: 14px;
+          font-weight: 700;
+          border: 1px solid rgba(255, 94, 30, 0.2);
+        }
+
+        /* Verdict Card */
+        .verdict-card {
+          background: ${THEME.successLight};
+          border: 1.5px solid ${THEME.success};
+          border-radius: 20px;
+          padding: 18px 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 13px;
+          box-shadow: 0 4px 18px rgba(16, 185, 129, 0.12);
+        }
+        .verdict-header-row {
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+        }
+        .verdict-header-text {
+          flex: 1;
+        }
+        .verdict-title {
+          font-size: 21px;
+          font-weight: 900;
+          color: ${THEME.success};
+          line-height: 1.25;
+        }
+        .verdict-sub {
+          font-size: 15px;
+          color: #374151;
+          margin-top: 5px;
+          line-height: 1.5;
+          font-weight: 600;
+        }
+        .matched-badge-pill {
+          align-self: flex-start;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 7px 15px;
+          border-radius: 12px;
+          background: #FFFFFF;
+          border: 1.5px solid rgba(16, 185, 129, 0.35);
+          color: ${THEME.text};
+          font-size: 15px;
+          font-weight: 800;
+        }
+
+        /* Metrics List Card */
+        .metrics-card {
+          background: #FFFFFF;
+          border: 1px solid ${THEME.cardBorder};
+          border-radius: 20px;
+          padding: 16px 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 11px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .card-inner-heading {
+          font-size: 17.5px;
+          font-weight: 800;
+          color: ${THEME.text};
+          margin-bottom: 2px;
+        }
+        .metric-item-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 0;
+          border-bottom: 1px solid ${THEME.backgroundElement};
+        }
+        .metric-item-row:last-child {
+          border-bottom: none;
+        }
+        .metric-item-left {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 15.5px;
+          color: ${THEME.text};
+          font-weight: 700;
+        }
+        .metric-item-val {
+          font-size: 16.5px;
+          font-weight: 800;
+        }
+        .metric-item-val.pass {
+          color: ${THEME.success};
+          font-weight: 900;
+        }
+        .metric-item-val.highlight {
+          color: ${THEME.primary};
+          font-weight: 900;
+        }
+
+        /* Tips Card */
+        .tips-card {
+          background: #FFFFFF;
+          border: 1px solid ${THEME.cardBorder};
+          border-radius: 20px;
+          padding: 16px 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .tip-line {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 14.5px;
+          color: ${THEME.text};
+          line-height: 1.45;
+        }
+        .app-detect-line {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-top: 2px;
+          font-size: 14px;
+          color: ${THEME.textSecondary};
+        }
+        .app-badge-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 4px 11px;
+          border-radius: 8px;
+          background: ${THEME.backgroundElement};
+          border: 1px solid ${THEME.cardBorder};
+          color: ${THEME.text};
+          font-size: 13.5px;
+          font-weight: 800;
+        }
+
+        .precheck-warning-card {
+          background: ${THEME.accentLight};
+          border: 1.5px solid ${THEME.accent};
+          border-radius: 18px;
+          padding: 14px 18px;
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+        }
+        .precheck-warning-text {
+          font-size: 13.5px;
+          color: #78350F;
+          line-height: 18px;
+        }
+        .warning-title {
+          font-weight: 900;
+          color: #92400E;
+        }
+        .precheck-cta-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 16px 20px;
+          border-radius: 18px;
+          background: ${THEME.primary};
+          color: #FFFFFF;
+          font-size: 17.5px;
+          font-weight: 900;
+          box-shadow: 0 4px 14px rgba(255, 94, 30, 0.3);
+        }
+      </style>
+    </head>
+    <body>
+      <div class="bg-circle-1"></div>
+      <div class="bg-circle-2"></div>
+      <div class="bg-dots"></div>
+
+      <!-- Marketing Header -->
+      <div class="header-area">
+        <div class="marketing-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>AI 前端合格診斷</span>
+        </div>
+        <div class="marketing-title">
+          截圖合格預先檢查，<span>不怕官方退件</span>
+        </div>
+        <div class="marketing-subtitle">
+          上傳只有一次機會！純本機離線 OCR 智慧分析步數、時長與日期，精準排除週統計區間，送出最安心
+        </div>
+      </div>
+
+      <!-- Smartphone Device Frame -->
+      <div class="phone-container">
+        <div class="phone-frame">
+          <div class="status-bar">
+            <span class="status-time">09:41</span>
+            <div class="punch-hole"></div>
+            <div class="status-right">
+              <span>5G</span>
+              <div class="battery-wrap">
+                <div class="battery-pill"><div class="battery-fill"></div></div>
+                <div class="battery-tip"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Screen Content -->
+          <div class="app-screen">
+            <div class="scroll-content">
+              <!-- Intro Header -->
+              <div class="intro-header-card">
+                <div class="intro-icon-circle">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </div>
+                <div>
+                  <div class="intro-title">運動紀錄截圖預先檢查</div>
+                  <div class="intro-sub">上傳只有一次機會，先幫您做基本檢查！</div>
+                </div>
+              </div>
+
+              <!-- Selected Image Mockup -->
+              <div class="sample-preview-card">
+                <div class="mock-screenshot-hero">
+                  <div class="mock-hero-top">
+                    <span class="mock-hero-date">9 月 10 日 星期四</span>
+                    <span class="mock-hero-apptag">Google Fit 運動紀錄</span>
+                  </div>
+                  <div class="mock-hero-middle">
+                    <div class="mock-circle-dial">
+                      <span class="mock-dial-primary">45</span>
+                      <span class="mock-dial-secondary">心肺強化</span>
+                    </div>
+                    <div class="mock-hero-stats">
+                      <div class="mock-stat-col">
+                        <span class="mock-stat-num">8,504</span>
+                        <span class="mock-stat-label">單日步數</span>
+                      </div>
+                      <div class="mock-stat-col">
+                        <span class="mock-stat-num">30</span>
+                        <span class="mock-stat-label">活動分鐘</span>
+                      </div>
+                      <div class="mock-stat-col">
+                        <span class="mock-stat-num">5.17</span>
+                        <span class="mock-stat-label">公里</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="sample-preview-bar">
+                  <div class="sample-file-meta">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${THEME.primary}" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <span>screenshot_fit_0910.jpg</span>
+                    <span class="sample-file-sub">(已完成分析)</span>
+                  </div>
+                  <div class="change-photo-btn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    <span>更換截圖</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Verdict Card -->
+              <div class="verdict-card">
+                <div class="verdict-header-row">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="${THEME.success}"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <div class="verdict-header-text">
+                    <div class="verdict-title">預檢合格！符合揮汗有禮標準</div>
+                    <div class="verdict-sub">已偵測到達標數值且包含日期，初步檢查通過，請再次確認無誤後前往官網上傳。</div>
+                  </div>
+                </div>
+                <div class="matched-badge-pill">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="${THEME.success}"><path d="M12 15.39l-3.76 2.27.99-4.28-3.32-2.88 4.38-.37L12 6.09l1.71 4.04 4.38.37-3.32 2.88.99 4.28z"/></svg>
+                  <span>符合單日步數標準 (8,000 步)</span>
+                </div>
+              </div>
+
+              <!-- Metrics Section -->
+              <div class="metrics-card">
+                <div class="card-inner-heading">📊 截圖觀測數值清單</div>
+
+                <div class="metric-item-row">
+                  <div class="metric-item-left">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${THEME.success}" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span>運動日期</span>
+                  </div>
+                  <span class="metric-item-val pass">9 月 10 日 星期四</span>
+                </div>
+
+                <div class="metric-item-row">
+                  <div class="metric-item-left">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${THEME.success}" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span>運動時長（門檻 30 分）</span>
+                  </div>
+                  <span class="metric-item-val pass">30 分鐘</span>
+                </div>
+
+                <div class="metric-item-row">
+                  <div class="metric-item-left">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${THEME.success}" stroke-width="2.2"><path d="M13 4v16M17 8v12M21 12v8M9 9v11M5 14v6"></path></svg>
+                    <span>單日步數（門檻 8,000 步）</span>
+                  </div>
+                  <span class="metric-item-val pass" style="font-size:16px;">8,504 步</span>
+                </div>
+
+                <div class="metric-item-row">
+                  <div class="metric-item-left">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${THEME.primary}" stroke-width="2.2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                    <span>運動類型判斷</span>
+                  </div>
+                  <span class="metric-item-val highlight">🏃 跑步 / 健走 / 徒步</span>
+                </div>
+              </div>
+
+              <!-- Tips Section -->
+              <div class="tips-card">
+                <div class="card-inner-heading">⚠️ 官方審核避坑重點</div>
+                <div class="tip-line">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="${THEME.success}"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <span>截圖符合各項審核指標，無常見的作弊或缺漏特徵。</span>
+                </div>
+                <div class="app-detect-line">
+                  <span>偵測到運動 App：</span>
+                  <div class="app-badge-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${THEME.primary}" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    <span>Google Fit</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Disclaimer Card from precheck.tsx -->
+              <div class="precheck-warning-card">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${THEME.accent}" stroke-width="2.2" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <div class="precheck-warning-text">
+                  <span class="warning-title">免責聲明與風險提示：</span>
+                  此功能僅供事前檢查參考，無法保證官方最終審核通過。實際資格認定請以運動部官方系統判定為準。
+                </div>
+              </div>
+
+              <!-- Upload CTA Button -->
+              <div class="precheck-cta-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span>前往官方網站上傳截圖</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+
+            </div>
+
+            <!-- 5-Tab Bar -->
+            ${renderTabBar('precheck')}
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+// -------------------------------------------------------------
+// Screen 3: 官方網頁 / 自動填寫 (100% 貼近揮汗有禮真實官方網站 500.gov.tw)
 // -------------------------------------------------------------
 function renderScreen2() {
   return `
@@ -998,7 +1524,7 @@ function renderScreen2() {
         .top-bar {
           background: #FFFFFF;
           border-bottom: 1px solid ${THEME.cardBorder};
-          padding: 8px 16px;
+          padding: 10px 16px;
           display: flex;
           align-items: center;
           gap: 10px;
@@ -1007,11 +1533,11 @@ function renderScreen2() {
         .nav-btn-group {
           display: flex;
           align-items: center;
-          gap: 2px;
+          gap: 3px;
         }
         .icon-btn {
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1024,16 +1550,16 @@ function renderScreen2() {
           flex: 1;
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 7px;
           background: ${THEME.primaryLight};
           border: 1px solid ${THEME.primary};
-          padding: 6px 12px;
-          border-radius: 18px;
+          padding: 7px 14px;
+          border-radius: 20px;
         }
         .profile-pill-text {
           flex: 1;
-          font-size: 13px;
-          font-weight: 700;
+          font-size: 14.5px;
+          font-weight: 800;
           color: ${THEME.primary};
           white-space: nowrap;
           overflow: hidden;
@@ -1044,10 +1570,10 @@ function renderScreen2() {
           align-items: center;
           gap: 5px;
           background: ${THEME.primary};
-          padding: 7px 13px;
-          border-radius: 12px;
+          padding: 8px 14px;
+          border-radius: 13px;
           color: #FFFFFF;
-          font-size: 12.5px;
+          font-size: 14px;
           font-weight: 800;
           box-shadow: 0 4px 10px rgba(255, 94, 30, 0.25);
         }
@@ -1055,19 +1581,19 @@ function renderScreen2() {
         /* Shortcuts ribbon */
         .shortcuts-bar {
           background: ${THEME.backgroundElement};
-          padding: 7px 14px;
+          padding: 8px 14px;
           display: flex;
-          gap: 7px;
+          gap: 8px;
           overflow-x: auto;
           border-bottom: 1px solid ${THEME.cardBorder};
           z-index: 20;
         }
         .shortcut-tag {
-          padding: 4px 11px;
+          padding: 5px 12px;
           border-radius: 12px;
           background: transparent;
-          font-size: 11.5px;
-          font-weight: 600;
+          font-size: 13px;
+          font-weight: 700;
           color: ${THEME.textSecondary};
           white-space: nowrap;
         }
@@ -1075,7 +1601,7 @@ function renderScreen2() {
           background: #FFFFFF;
           border: 1px solid ${THEME.primary};
           color: ${THEME.primary};
-          font-weight: 800;
+          font-weight: 900;
         }
 
         /* Official 500.gov.tw Web View Container */
@@ -1092,16 +1618,16 @@ function renderScreen2() {
         /* Floating Toast from autofill-engine.ts */
         .app-floating-toast {
           position: absolute;
-          top: 60px;
+          top: 64px;
           left: 50%;
           transform: translateX(-50%);
           z-index: 999;
           background: ${THEME.primary};
           color: #FFFFFF;
-          padding: 8px 16px;
+          padding: 10px 18px;
           border-radius: 30px;
-          font-size: 13px;
-          font-weight: 700;
+          font-size: 14.5px;
+          font-weight: 800;
           line-height: 1.4;
           box-shadow: 0 8px 24px rgba(255, 94, 30, 0.45), 0 2px 8px rgba(0, 0, 0, 0.18);
           display: flex;
@@ -1112,13 +1638,13 @@ function renderScreen2() {
         .toast-close {
           background: rgba(255, 255, 255, 0.25);
           color: #FFFFFF;
-          width: 18px;
-          height: 18px;
+          width: 20px;
+          height: 20px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 11px;
+          font-size: 12px;
           font-weight: bold;
         }
 
@@ -1126,20 +1652,20 @@ function renderScreen2() {
         .official-site-header {
           background: #FFFFFF;
           border-bottom: 1px solid ${GOV.line};
-          padding: 9px 18px;
+          padding: 10px 18px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           box-shadow: 0 2px 10px rgba(90, 50, 15, 0.05);
         }
         .official-logo-img {
-          height: 40px;
+          height: 44px;
           width: auto;
           display: block;
         }
         .official-menu-btn {
-          width: 36px;
-          height: 36px;
+          width: 38px;
+          height: 38px;
           border: 1px solid ${GOV.line};
           border-radius: 8px;
           display: flex;
@@ -1149,8 +1675,8 @@ function renderScreen2() {
           gap: 4px;
         }
         .official-menu-btn span {
-          width: 18px;
-          height: 2px;
+          width: 19px;
+          height: 2.2px;
           background: ${GOV.brown};
           border-radius: 1px;
         }
@@ -1165,43 +1691,43 @@ function renderScreen2() {
         .official-card {
           background: #FFFFFF;
           border-radius: 22px;
-          padding: 24px 22px;
+          padding: 22px 20px;
           box-shadow: 0 10px 25px rgba(90, 50, 15, 0.08);
           border: 1px solid rgba(234, 223, 209, 0.6);
         }
         .official-step-pill {
           display: inline-block;
-          margin-bottom: 12px;
-          padding: 4px 14px;
+          margin-bottom: 10px;
+          padding: 5px 14px;
           border-radius: 999px;
           background: ${GOV.orangeSoft};
           color: ${GOV.orangeDark};
-          font-size: 13px;
+          font-size: 14px;
           font-weight: 800;
         }
         .official-h1 {
-          font-size: 23px;
+          font-size: 24px;
           font-weight: 900;
           color: ${GOV.brown};
           margin-bottom: 6px;
           letter-spacing: -0.3px;
         }
         .official-lead {
-          font-size: 13.5px;
+          font-size: 14.5px;
           color: ${GOV.muted};
-          line-height: 19px;
-          margin-bottom: 20px;
+          line-height: 20px;
+          margin-bottom: 18px;
         }
 
         .official-field {
           display: flex;
           flex-direction: column;
-          gap: 6px;
-          margin-bottom: 22px;
+          gap: 7px;
+          margin-bottom: 20px;
         }
         .official-label {
-          font-size: 14.5px;
-          font-weight: 700;
+          font-size: 16px;
+          font-weight: 800;
           color: ${GOV.ink};
         }
         .official-required {
@@ -1215,13 +1741,13 @@ function renderScreen2() {
         }
         .official-input {
           width: 100%;
-          height: 52px;
+          height: 54px;
           padding: 10px 16px;
           border: 2px solid #005FCC;
           border-radius: 14px;
           background: #FFFFFF;
           color: ${GOV.brown};
-          font-size: 17px;
+          font-size: 18px;
           font-weight: 800;
           letter-spacing: 0.5px;
           outline: none;
@@ -1237,7 +1763,7 @@ function renderScreen2() {
           border-radius: 8px;
           background: #E6F5EC;
           color: #1C6B3F;
-          font-size: 12px;
+          font-size: 13px;
           font-weight: 800;
         }
 
@@ -1252,13 +1778,13 @@ function renderScreen2() {
           align-items: center;
           justify-content: center;
           gap: 8px;
-          height: 50px;
+          height: 52px;
           background: ${GOV.orangeText};
           border: none;
           border-radius: 999px;
           color: #FFFFFF;
-          font-size: 16.5px;
-          font-weight: 800;
+          font-size: 17.5px;
+          font-weight: 900;
           box-shadow: 0 4px 14px rgba(92, 52, 21, 0.18);
         }
         .official-arrow {
@@ -1277,12 +1803,12 @@ function renderScreen2() {
           display: flex;
           align-items: center;
           justify-content: center;
-          height: 50px;
+          height: 52px;
           background: #FFFFFF;
           border: 1.5px solid ${GOV.orangeText};
           border-radius: 999px;
           color: ${GOV.orangeText};
-          font-size: 15.5px;
+          font-size: 16.5px;
           font-weight: 800;
         }
 
@@ -1291,7 +1817,7 @@ function renderScreen2() {
           background: #FFFBF5;
           border: 1px solid ${GOV.line};
           border-radius: 16px;
-          padding: 14px 16px;
+          padding: 15px 18px;
           display: flex;
           flex-direction: column;
           gap: 6px;
@@ -1300,14 +1826,14 @@ function renderScreen2() {
           display: flex;
           align-items: center;
           gap: 6px;
-          font-size: 13px;
+          font-size: 14.5px;
           font-weight: 800;
           color: ${GOV.orangeDark};
         }
         .notice-text {
-          font-size: 12px;
+          font-size: 13.5px;
           color: ${GOV.muted};
-          line-height: 17px;
+          line-height: 18px;
         }
 
         /* Official Site Footer */
@@ -1321,9 +1847,9 @@ function renderScreen2() {
           position: relative;
         }
         .footer-row {
-          font-size: 11.5px;
+          font-size: 12.5px;
           color: ${GOV.muted};
-          line-height: 17px;
+          line-height: 18px;
         }
         .footer-row a {
           color: ${GOV.orangeText};
@@ -1344,7 +1870,7 @@ function renderScreen2() {
           display: flex;
           align-items: center;
           gap: 5px;
-          font-size: 12px;
+          font-size: 12.5px;
           font-weight: 700;
           color: ${GOV.brown};
         }
@@ -1353,7 +1879,7 @@ function renderScreen2() {
           height: 22px;
         }
         .footer-copyright {
-          font-size: 10.5px;
+          font-size: 11px;
           color: #8C6A53;
           margin-top: 6px;
           line-height: 15px;
@@ -1371,12 +1897,12 @@ function renderScreen2() {
           z-index: 10;
         }
         .customer-service-close {
-          width: 18px;
-          height: 18px;
+          width: 20px;
+          height: 20px;
           border-radius: 50%;
           background: #FFFFFF;
           border: 1px solid #D1D5DB;
-          font-size: 11px;
+          font-size: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1472,19 +1998,19 @@ function renderScreen2() {
 
               <!-- Floating In-App Toast from autofill-engine.ts -->
               <div class="app-floating-toast">
-                <span>⚡️ <b>加碼券小幫手</b>：已為 王大明 自動填寫身分證號！</span>
+                <span>⚡️ <b>加碼券小幫手</b>：已為 王大明 一鍵填妥身分證、生日與手機！</span>
                 <div class="toast-close">✕</div>
               </div>
 
               <!-- Official Form Card -->
               <div class="official-main">
                 <div class="official-card">
-                  <div class="official-step-pill">步驟 1 / 2</div>
-                  <h1 class="official-h1">註冊帳號/進入「我的任務」</h1>
-                  <p class="official-lead">請輸入身分證號，我們將帶您進入登記或會員登入流程。</p>
+                  <div class="official-step-pill">智慧登入模式</div>
+                  <h1 class="official-h1">登入「我的任務」專區</h1>
+                  <p class="official-lead">已智慧填入本人身分資訊，點擊即可快速登入官方上傳頁面。</p>
 
                   <div class="official-field">
-                    <label class="official-label">身分證號<span class="official-required">*</span></label>
+                    <label class="official-label">身分證字號<span class="official-required">*</span></label>
                     <div class="official-input-box">
                       <input type="text" class="official-input" value="A123456789" readonly>
                       <div class="official-autofill-badge">
@@ -1494,9 +2020,31 @@ function renderScreen2() {
                     </div>
                   </div>
 
+                  <div class="official-field">
+                    <label class="official-label">出生年月日<span class="official-required">*</span></label>
+                    <div class="official-input-box">
+                      <input type="text" class="official-input" value="民國 77 年 05 月 12 日" readonly>
+                      <div class="official-autofill-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>已自動帶入</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="official-field">
+                    <label class="official-label">手機號碼<span class="official-required">*</span></label>
+                    <div class="official-input-box">
+                      <input type="text" class="official-input" value="0912-345-678" readonly>
+                      <div class="official-autofill-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>已自動帶入</span>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="official-actions">
                     <div class="official-btn-primary">
-                      <span>確認</span>
+                      <span>前往官方驗證登入</span>
                       <span class="official-arrow">→</span>
                     </div>
                     <div class="official-btn-secondary">返回活動首頁</div>
@@ -1543,27 +2091,7 @@ function renderScreen2() {
             </div>
 
             <!-- Bottom Tab Bar -->
-            <div class="tab-bar-container">
-              <div class="tab-bar">
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                  <span>快速登入</span>
-                </div>
-                <div class="tab-item active">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                  <span>官方網頁</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
-                  <span>任務週程</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                  <span>帳號管理</span>
-                </div>
-              </div>
-              <div class="gesture-home-bar"></div>
-            </div>
+            ${renderTabBar('browser')}
           </div>
         </div>
       </div>
@@ -1590,77 +2118,77 @@ function renderScreen3() {
           gap: 2px;
         }
         .super-title {
-          font-size: 13px;
+          font-size: 14px;
           font-weight: 800;
           color: ${THEME.primary};
           text-transform: uppercase;
         }
         .main-title {
-          font-size: 22px;
+          font-size: 24px;
           font-weight: 900;
           color: ${THEME.text};
           letter-spacing: -0.3px;
         }
         .tasks-subtitle {
-          font-size: 12px;
+          font-size: 14px;
           color: ${THEME.textSecondary};
-          line-height: 16px;
+          line-height: 18px;
           margin-top: 1px;
         }
 
         .segment-container {
           display: flex;
           background: ${THEME.backgroundElement};
-          border-radius: 12px;
-          padding: 4px;
-          gap: 4px;
+          border-radius: 14px;
+          padding: 5px;
+          gap: 5px;
         }
         .segment-btn {
           flex: 1;
           text-align: center;
-          padding: 7px 0;
-          border-radius: 9px;
-          font-size: 13px;
-          font-weight: 700;
+          padding: 8px 0;
+          border-radius: 10px;
+          font-size: 14.5px;
+          font-weight: 800;
           color: ${THEME.textSecondary};
           background: transparent;
         }
         .segment-btn.active {
           background: #FFFFFF;
           color: ${THEME.primary};
-          font-weight: 800;
+          font-weight: 900;
           box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
 
         .section-wrapper {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 9px;
         }
         .section-title {
-          font-size: 15px;
-          font-weight: 800;
+          font-size: 17.5px;
+          font-weight: 900;
           color: ${THEME.text};
         }
         .section-subtitle {
-          font-size: 11px;
+          font-size: 13px;
           color: ${THEME.textSecondary};
-          line-height: 15px;
+          line-height: 17px;
         }
 
         .period-list {
           display: flex;
           flex-direction: column;
-          gap: 7px;
+          gap: 9px;
         }
         .period-item {
           background: ${THEME.cardBackground};
           border: 1px solid ${THEME.cardBorder};
-          border-radius: 13px;
-          padding: 9px 13px;
+          border-radius: 15px;
+          padding: 12px 15px;
           display: flex;
           flex-direction: column;
-          gap: 5px;
+          gap: 6px;
         }
         .period-item.is-current {
           border: 2px solid ${THEME.primary};
@@ -1677,11 +2205,11 @@ function renderScreen3() {
           gap: 10px;
         }
         .period-number-pill {
-          padding: 3px 8px;
-          border-radius: 7px;
+          padding: 4px 9px;
+          border-radius: 8px;
           background: ${THEME.backgroundElement};
           color: ${THEME.textSecondary};
-          font-size: 11px;
+          font-size: 12.5px;
           font-weight: 800;
         }
         .period-item.is-current .period-number-pill {
@@ -1689,8 +2217,8 @@ function renderScreen3() {
           color: #FFFFFF;
         }
         .period-date {
-          font-size: 13px;
-          font-weight: 700;
+          font-size: 15.5px;
+          font-weight: 800;
           color: ${THEME.text};
         }
         .current-status-badge {
@@ -1699,29 +2227,44 @@ function renderScreen3() {
           gap: 4px;
           background: ${THEME.primary};
           color: #FFFFFF;
-          padding: 3px 8px;
-          border-radius: 6px;
-          font-size: 10.5px;
+          padding: 4px 9px;
+          border-radius: 7px;
+          font-size: 12.5px;
           font-weight: 800;
         }
         .status-badge {
-          padding: 3px 8px;
-          border-radius: 6px;
+          padding: 4px 9px;
+          border-radius: 7px;
           background: ${THEME.backgroundElement};
           color: ${THEME.textSecondary};
-          font-size: 10.5px;
+          font-size: 12.5px;
           font-weight: 700;
         }
         .active-week-notice {
           background: ${THEME.cardBackground};
-          border-radius: 8px;
-          padding: 6px 10px;
+          border-radius: 10px;
+          padding: 8px 12px;
           display: flex;
           align-items: center;
           gap: 6px;
-          font-size: 11px;
-          font-weight: 700;
+          font-size: 13.5px;
+          font-weight: 800;
           color: ${THEME.primaryDark};
+        }
+        .schedule-notice-box {
+          background: ${THEME.cardBackground};
+          border: 1px solid ${THEME.cardBorder};
+          border-radius: 14px;
+          padding: 12px 16px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-top: 4px;
+        }
+        .schedule-notice-text {
+          font-size: 13px;
+          color: ${THEME.textSecondary};
+          line-height: 18px;
         }
       </style>
     </head>
@@ -1928,33 +2471,32 @@ function renderScreen3() {
                       <div class="status-badge">尚未開放</div>
                     </div>
                   </div>
+
+                  <!-- Period 14 -->
+                  <div class="period-item">
+                    <div class="period-item-header">
+                      <div class="period-item-title-group">
+                        <div class="period-number-pill">第 14 期</div>
+                        <div class="period-date">11/30 (一) ~ 11/30 (一) 最終期</div>
+                      </div>
+                      <div class="status-badge">尚未開放</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Schedule Tips Box from tasks.tsx -->
+                <div class="schedule-notice-box">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${THEME.primary}" stroke-width="2.2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  <div class="schedule-notice-text">
+                    每週運動截圖須於當週日 23:59 前完成上傳，審核作業約 5 個工作天，通過後即可於「我的任務」領取加碼券！
+                  </div>
                 </div>
               </div>
 
             </div>
 
             <!-- Bottom Tab Bar -->
-            <div class="tab-bar-container">
-              <div class="tab-bar">
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                  <span>快速登入</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                  <span>官方網頁</span>
-                </div>
-                <div class="tab-item active">
-                  <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
-                  <span>任務週程</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                  <span>帳號管理</span>
-                </div>
-              </div>
-              <div class="gesture-home-bar"></div>
-            </div>
+            ${renderTabBar('tasks')}
           </div>
         </div>
       </div>
@@ -1981,21 +2523,21 @@ function renderScreen4() {
           gap: 2px;
         }
         .super-title {
-          font-size: 13px;
+          font-size: 14px;
           font-weight: 800;
           color: ${THEME.primary};
           text-transform: uppercase;
         }
         .main-title {
-          font-size: 22px;
+          font-size: 24px;
           font-weight: 900;
           color: ${THEME.text};
           letter-spacing: -0.3px;
         }
         .accounts-subtitle {
-          font-size: 12px;
+          font-size: 14px;
           color: ${THEME.textSecondary};
-          line-height: 16px;
+          line-height: 18px;
           margin-top: 1px;
         }
 
@@ -2006,8 +2548,8 @@ function renderScreen4() {
           margin-top: 2px;
         }
         .section-title {
-          font-size: 15px;
-          font-weight: 800;
+          font-size: 17.5px;
+          font-weight: 900;
           color: ${THEME.text};
         }
         .add-btn {
@@ -2016,9 +2558,9 @@ function renderScreen4() {
           gap: 4px;
           background: ${THEME.primary};
           color: #FFFFFF;
-          padding: 6px 12px;
+          padding: 7px 14px;
           border-radius: 12px;
-          font-size: 12px;
+          font-size: 14px;
           font-weight: 800;
           box-shadow: 0 4px 10px rgba(255, 94, 30, 0.2);
         }
@@ -2026,16 +2568,16 @@ function renderScreen4() {
         .profiles-list {
           display: flex;
           flex-direction: column;
-          gap: 9px;
+          gap: 10px;
         }
         .profile-card {
           background: ${THEME.cardBackground};
           border: 1px solid ${THEME.cardBorder};
-          border-radius: 16px;
-          padding: 12px 16px;
+          border-radius: 18px;
+          padding: 14px 18px;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 9px;
         }
         .profile-card.is-default {
           border: 1.5px solid ${THEME.primary};
@@ -2051,27 +2593,27 @@ function renderScreen4() {
           gap: 8px;
         }
         .profile-card-name {
-          font-size: 16px;
-          font-weight: 800;
+          font-size: 19px;
+          font-weight: 900;
           color: ${THEME.text};
         }
         .label-badge {
-          padding: 2px 8px;
-          border-radius: 6px;
+          padding: 3px 9px;
+          border-radius: 7px;
           background: ${THEME.backgroundElement};
           color: ${THEME.textSecondary};
-          font-size: 11px;
-          font-weight: 600;
+          font-size: 12.5px;
+          font-weight: 700;
         }
         .default-badge {
           display: flex;
           align-items: center;
           gap: 3px;
-          padding: 2px 8px;
-          border-radius: 6px;
+          padding: 3px 9px;
+          border-radius: 7px;
           background: ${THEME.primaryLight};
           color: ${THEME.primary};
-          font-size: 11px;
+          font-size: 12.5px;
           font-weight: 800;
         }
         .actions-group {
@@ -2087,14 +2629,14 @@ function renderScreen4() {
 
         .profile-info-box {
           background: ${THEME.backgroundElement};
-          border-radius: 10px;
-          padding: 8px 12px;
+          border-radius: 12px;
+          padding: 10px 14px;
           display: flex;
           flex-direction: column;
-          gap: 3px;
+          gap: 4px;
         }
         .info-line {
-          font-size: 11.5px;
+          font-size: 13.5px;
           color: ${THEME.textSecondary};
         }
         .info-line strong {
@@ -2107,23 +2649,23 @@ function renderScreen4() {
           align-items: center;
           justify-content: center;
           gap: 5px;
-          padding: 5px;
-          border-radius: 8px;
+          padding: 7px;
+          border-radius: 9px;
           border: 1px solid ${THEME.cardBorder};
-          font-size: 11px;
+          font-size: 13px;
           color: ${THEME.textSecondary};
-          font-weight: 600;
+          font-weight: 700;
         }
 
         /* Settings Card & Biometrics */
         .settings-card {
           background: ${THEME.cardBackground};
           border: 1px solid ${THEME.cardBorder};
-          border-radius: 16px;
-          padding: 12px 16px;
+          border-radius: 18px;
+          padding: 14px 18px;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 10px;
         }
         .setting-row {
           display: flex;
@@ -2131,9 +2673,9 @@ function renderScreen4() {
           gap: 12px;
         }
         .setting-icon-wrap {
-          width: 36px;
-          height: 36px;
-          border-radius: 11px;
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
           background: ${THEME.primaryLight};
           color: ${THEME.primary};
           display: flex;
@@ -2141,28 +2683,29 @@ function renderScreen4() {
           justify-content: center;
         }
         .setting-title {
-          font-size: 14px;
+          font-size: 16.5px;
           font-weight: 800;
           color: ${THEME.text};
         }
         .setting-desc {
-          font-size: 10.5px;
+          font-size: 13.5px;
           color: ${THEME.textSecondary};
+          line-height: 18px;
           margin-top: 1px;
         }
         .switch-toggle {
-          width: 44px;
-          height: 25px;
+          width: 48px;
+          height: 28px;
           background: ${THEME.primary};
           border-radius: 20px;
-          padding: 2px;
+          padding: 2.5px;
           display: flex;
           align-items: center;
           justify-content: flex-end;
         }
         .switch-knob {
-          width: 21px;
-          height: 21px;
+          width: 23px;
+          height: 23px;
           background: #FFFFFF;
           border-radius: 50%;
           box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -2173,19 +2716,19 @@ function renderScreen4() {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 6px 0;
+          padding: 8px 0;
           border-bottom: 1px solid ${THEME.backgroundElement};
         }
         .link-row:last-child {
           border-bottom: none;
         }
         .link-row-text {
-          font-size: 12px;
-          font-weight: 700;
+          font-size: 14px;
+          font-weight: 800;
           color: ${THEME.text};
         }
         .link-subtext {
-          font-size: 10px;
+          font-size: 12px;
           color: ${THEME.textMuted};
         }
 
@@ -2195,30 +2738,30 @@ function renderScreen4() {
           justify-content: space-between;
         }
         .author-badge {
-          padding: 2px 7px;
+          padding: 3px 9px;
           border-radius: 6px;
           background: ${THEME.backgroundElement};
           border: 1px solid ${THEME.cardBorder};
           color: ${THEME.textSecondary};
-          font-size: 10.5px;
-          font-weight: 700;
+          font-size: 12.5px;
+          font-weight: 800;
         }
         .author-intro {
-          font-size: 11px;
+          font-size: 13.5px;
           color: ${THEME.textSecondary};
-          line-height: 15px;
+          line-height: 19px;
         }
         .github-btn {
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 6px;
-          padding: 7px;
-          border-radius: 10px;
+          padding: 9px 14px;
+          border-radius: 12px;
           background: ${THEME.backgroundElement};
           border: 1px solid ${THEME.cardBorder};
-          font-size: 11.5px;
-          font-weight: 700;
+          font-size: 14px;
+          font-weight: 800;
           color: ${THEME.text};
           margin-top: 2px;
         }
@@ -2416,27 +2959,7 @@ function renderScreen4() {
             </div>
 
             <!-- Bottom Tab Bar -->
-            <div class="tab-bar-container">
-              <div class="tab-bar">
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                  <span>快速登入</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                  <span>官方網頁</span>
-                </div>
-                <div class="tab-item">
-                  <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z"/></svg>
-                  <span>任務週程</span>
-                </div>
-                <div class="tab-item active">
-                  <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                  <span>帳號管理</span>
-                </div>
-              </div>
-              <div class="gesture-home-bar"></div>
-            </div>
+            ${renderTabBar('accounts')}
           </div>
         </div>
       </div>
@@ -2450,19 +2973,28 @@ function renderScreen4() {
 // -------------------------------------------------------------
 const SCREENS = [
   { id: 1, name: 'screenshot_1_quick_login.png', render: renderScreen1 },
-  { id: 2, name: 'screenshot_2_autofill.png', render: renderScreen2 },
-  { id: 3, name: 'screenshot_3_schedule.png', render: renderScreen3 },
-  { id: 4, name: 'screenshot_4_security.png', render: renderScreen4 },
+  { id: 2, name: 'screenshot_2_precheck.png', render: renderScreenPrecheck },
+  { id: 3, name: 'screenshot_3_autofill.png', render: renderScreen2 },
+  { id: 4, name: 'screenshot_4_schedule.png', render: renderScreen3 },
+  { id: 5, name: 'screenshot_5_security.png', render: renderScreen4 },
 ];
 
 function generateScreenshots() {
   console.log('🚀 開始生成 Google Play Store 1:1 實機風格截圖 (1080x1920)...\n');
 
+  // 清除舊編號之 screenshot_*.png
+  const oldScreens = fs
+    .readdirSync(OUTPUT_DIR)
+    .filter((f) => f.startsWith('screenshot_') && f.endsWith('.png'));
+  for (const f of oldScreens) {
+    fs.unlinkSync(path.join(OUTPUT_DIR, f));
+  }
+
   const tmpHtmlPath = path.join(__dirname, '..', '.tmp_screenshot.html');
 
   for (const screen of SCREENS) {
     const outFile = path.join(OUTPUT_DIR, screen.name);
-    console.log(`📸 正在渲染 [${screen.id}/4] ${screen.name}...`);
+    console.log(`📸 正在渲染 [${screen.id}/${SCREENS.length}] ${screen.name}...`);
 
     const htmlContent = screen.render();
     fs.writeFileSync(tmpHtmlPath, htmlContent, 'utf-8');
