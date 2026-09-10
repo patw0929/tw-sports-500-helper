@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,7 +12,26 @@ export default function TasksScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ tab?: string }>();
   const theme = useTheme();
-  const periods = getCalculatedPeriods();
+
+  const [currentDate, setCurrentDate] = useState(() => new Date());
+
+  useFocusEffect(
+    useCallback(() => {
+      setCurrentDate(new Date());
+      const interval = setInterval(() => {
+        setCurrentDate(new Date());
+      }, 60000);
+      return () => clearInterval(interval);
+    }, [])
+  );
+
+  const periods = useMemo(() => getCalculatedPeriods(currentDate), [currentDate]);
+
+  React.useEffect(() => {
+    if (params.tab === 'precheck') {
+      router.replace('/precheck');
+    }
+  }, [params.tab, router]);
 
   const [selectedTab, setSelectedTab] = useState<'schedule' | 'criteria' | 'perks' | null>(null);
   const activeTab: 'schedule' | 'criteria' | 'perks' =

@@ -231,7 +231,7 @@ export default function BrowserScreen() {
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.background }]}
-      edges={['top', 'left', 'right']}
+      edges={['top', 'left', 'right', 'bottom']}
     >
       {/* Top Controls Bar */}
       <View

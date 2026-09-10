@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -28,9 +28,11 @@ export default function HomeScreen() {
         ? 'moon-outline'
         : 'sunny-outline';
 
-  const currentPeriod = getCurrentPeriod();
+  const [currentDate, setCurrentDate] = useState(() => new Date());
+  const currentPeriod = useMemo(() => getCurrentPeriod(currentDate), [currentDate]);
 
   const loadData = useCallback(async () => {
+    setCurrentDate(new Date());
     const list = await getProfiles();
     setAllProfiles(list);
     const active = await getActiveProfile();
@@ -293,6 +295,22 @@ export default function HomeScreen() {
               styles.gridCard,
               { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
             ]}
+            onPress={() => router.push('/precheck')}
+          >
+            <View style={[styles.gridIconCircle, { backgroundColor: '#FFE8DF' }]}>
+              <Ionicons name="scan" size={24} color="#FF5E1E" />
+            </View>
+            <Text style={[styles.gridCardTitle, { color: theme.text }]}>截圖合格預檢</Text>
+            <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
+              上傳前搶先診斷合格度
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.gridCard,
+              { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+            ]}
             onPress={handleQuickLogin}
           >
             <View style={[styles.gridIconCircle, { backgroundColor: '#FFF0EA' }]}>
@@ -325,7 +343,7 @@ export default function HomeScreen() {
               styles.gridCard,
               { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
             ]}
-            onPress={() => router.push('/tasks')}
+            onPress={() => router.push({ pathname: '/tasks', params: { tab: 'criteria' } })}
           >
             <View style={[styles.gridIconCircle, { backgroundColor: '#ECFDF5' }]}>
               <Ionicons name="checkmark-done-circle" size={24} color="#10B981" />
@@ -341,7 +359,7 @@ export default function HomeScreen() {
               styles.gridCard,
               { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
             ]}
-            onPress={() => router.push('/tasks')}
+            onPress={() => router.push({ pathname: '/tasks', params: { tab: 'schedule' } })}
           >
             <View style={[styles.gridIconCircle, { backgroundColor: '#EFF6FF' }]}>
               <Ionicons name="calendar-outline" size={24} color="#3B82F6" />

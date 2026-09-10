@@ -20,6 +20,7 @@ export default function AppTabs() {
         default: { color: colors.tabIconDefault },
         selected: { color: colors.tabIconSelected },
       }}
+      disableTransparentOnScrollEdge={true}
     >
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>快速登入</NativeTabs.Trigger.Label>
@@ -32,12 +33,23 @@ export default function AppTabs() {
         />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="browser">
+      <NativeTabs.Trigger name="browser" disableTransparentOnScrollEdge={true}>
         <NativeTabs.Trigger.Label>官方網頁</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           sf={{ default: 'globe', selected: 'globe.americas.fill' }}
           md={{ default: 'public', selected: 'public' }}
           src={require('@/assets/images/tabIcons/globe.png')}
+          renderingMode="template"
+          selectedColor={colors.tabIconSelected}
+        />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="precheck">
+        <NativeTabs.Trigger.Label>截圖預檢</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          sf={{ default: 'checkmark.seal', selected: 'checkmark.seal.fill' }}
+          md={{ default: 'fact_check', selected: 'fact_check' }}
+          src={require('@/assets/images/tabIcons/calendar.png')}
           renderingMode="template"
           selectedColor={colors.tabIconSelected}
         />
