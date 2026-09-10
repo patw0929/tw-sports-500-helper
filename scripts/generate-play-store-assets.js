@@ -60,7 +60,7 @@ const htmlContent = `<!DOCTYPE html>
       height: 500px;
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background: #111215;
+      background: #0E0F12;
       display: flex;
       position: relative;
     }
@@ -70,9 +70,10 @@ const htmlContent = `<!DOCTYPE html>
       position: absolute;
       inset: 0;
       background: 
-        radial-gradient(circle at 82% 35%, rgba(255, 94, 30, 0.42) 0%, rgba(255, 94, 30, 0.05) 55%, transparent 70%),
-        radial-gradient(circle at 18% 75%, rgba(255, 94, 30, 0.22) 0%, transparent 45%),
-        linear-gradient(135deg, #181513 0%, #131211 50%, #0E0E0E 100%);
+        radial-gradient(circle at 82% 38%, rgba(255, 94, 30, 0.42) 0%, rgba(255, 94, 30, 0.06) 50%, transparent 68%),
+        radial-gradient(circle at 55% 85%, rgba(16, 185, 129, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 15% 75%, rgba(255, 94, 30, 0.22) 0%, transparent 45%),
+        linear-gradient(135deg, #161413 0%, #101012 50%, #090A0C 100%);
       z-index: 1;
     }
 
@@ -93,7 +94,7 @@ const htmlContent = `<!DOCTYPE html>
       z-index: 10;
       width: 1024px;
       height: 500px;
-      padding: 44px 54px;
+      padding: 38px 52px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -104,7 +105,7 @@ const htmlContent = `<!DOCTYPE html>
       width: 535px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 13px;
       z-index: 12;
     }
 
@@ -112,7 +113,7 @@ const htmlContent = `<!DOCTYPE html>
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 6px 14px;
+      padding: 5px 13px;
       background: rgba(255, 94, 30, 0.16);
       border: 1px solid rgba(255, 94, 30, 0.38);
       border-radius: 999px;
@@ -122,7 +123,7 @@ const htmlContent = `<!DOCTYPE html>
 
     .eyebrow-text {
       color: #FFA575;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.5px;
     }
@@ -131,14 +132,14 @@ const htmlContent = `<!DOCTYPE html>
     .brand-header-row {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
     }
 
     .brand-logo-img {
-      width: 66px;
-      height: 66px;
-      border-radius: 17px;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      width: 62px;
+      height: 62px;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.22);
       box-shadow: 0 10px 25px rgba(255, 94, 30, 0.45);
       flex-shrink: 0;
       object-fit: cover;
@@ -147,13 +148,13 @@ const htmlContent = `<!DOCTYPE html>
     .title-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
 
     .main-title {
-      font-size: 38px;
+      font-size: 35px;
       font-weight: 900;
-      line-height: 1.12;
+      line-height: 1.15;
       color: #FFFFFF;
       letter-spacing: -0.5px;
       text-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
@@ -167,7 +168,7 @@ const htmlContent = `<!DOCTYPE html>
     }
 
     .sub-tagline {
-      font-size: 14.5px;
+      font-size: 13.5px;
       color: #D1D5DB;
       font-weight: 500;
       line-height: 1.35;
@@ -177,19 +178,24 @@ const htmlContent = `<!DOCTYPE html>
     .features-list {
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      margin-top: 2px;
+      gap: 7.5px;
+      margin-top: 1px;
     }
 
     .feature-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.04);
+      gap: 11px;
+      background: rgba(255, 255, 255, 0.045);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 9px 16px;
-      border-radius: 12px;
+      padding: 7px 14px;
+      border-radius: 11px;
       backdrop-filter: blur(8px);
+    }
+
+    .feature-item.highlight-precheck {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.28);
     }
 
     .feature-icon-box {
@@ -201,19 +207,24 @@ const htmlContent = `<!DOCTYPE html>
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 13.5px;
       flex-shrink: 0;
+    }
+
+    .feature-icon-box.green {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(16, 185, 129, 0.1) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.5);
     }
 
     .feature-text-main {
       color: #FFFFFF;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
     }
 
     .feature-text-desc {
       color: #9CA3AF;
-      font-size: 12px;
+      font-size: 11.5px;
       margin-left: 6px;
       font-weight: 400;
     }
@@ -221,8 +232,8 @@ const htmlContent = `<!DOCTYPE html>
     .trust-footer {
       display: flex;
       align-items: center;
-      gap: 16px;
-      margin-top: 2px;
+      gap: 14px;
+      margin-top: 1px;
       color: #9CA3AF;
       font-size: 11.5px;
       font-weight: 500;
@@ -239,7 +250,7 @@ const htmlContent = `<!DOCTYPE html>
     .right-col {
       position: relative;
       width: 390px;
-      height: 430px;
+      height: 440px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -249,10 +260,10 @@ const htmlContent = `<!DOCTYPE html>
     /* Ambient Glow behind phone */
     .phone-glow {
       position: absolute;
-      width: 280px;
-      height: 280px;
+      width: 290px;
+      height: 290px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 94, 30, 0.45) 0%, rgba(255, 94, 30, 0) 70%);
+      background: radial-gradient(circle, rgba(255, 94, 30, 0.48) 0%, rgba(16, 185, 129, 0.15) 45%, rgba(255, 94, 30, 0) 72%);
       filter: blur(36px);
       z-index: 1;
     }
@@ -260,8 +271,8 @@ const htmlContent = `<!DOCTYPE html>
     /* 3D Realistic Angled Phone Container */
     .phone-frame {
       position: relative;
-      width: 226px;
-      height: 430px;
+      width: 228px;
+      height: 434px;
       background: #FFFFFF;
       border-radius: 36px;
       border: 4px solid #282A2E;
@@ -270,7 +281,7 @@ const htmlContent = `<!DOCTYPE html>
         0 0 0 1px rgba(255, 255, 255, 0.12),
         0 18px 36px rgba(255, 94, 30, 0.28);
       overflow: hidden;
-      transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
+      transform: perspective(1000px) rotateY(-7deg) rotateX(3deg);
       z-index: 5;
       display: flex;
       flex-direction: column;
@@ -283,7 +294,7 @@ const htmlContent = `<!DOCTYPE html>
       left: 50%;
       transform: translateX(-50%);
       width: 70px;
-      height: 18px;
+      height: 17px;
       background: #000;
       border-radius: 12px;
       z-index: 20;
@@ -294,10 +305,10 @@ const htmlContent = `<!DOCTYPE html>
       width: 100%;
       height: 100%;
       background: #FAF6F2;
-      padding: 34px 12px 10px 12px;
+      padding: 34px 11px 8px 11px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       color: #1F2937;
     }
 
@@ -305,24 +316,37 @@ const htmlContent = `<!DOCTYPE html>
     .mini-app-header {
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: space-between;
+    }
+    .mini-app-title-box {
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
     .mini-app-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       color: #1F2937;
     }
+    .mini-safe-badge {
+      font-size: 8.5px;
+      color: #059669;
+      background: #D1FAE5;
+      padding: 1.5px 5px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
 
-    /* Mini Countdown Card */
+    /* Mini Period Countdown Card */
     .mini-period-card {
       background: #FFFFFF;
       border: 1px solid #EFE3DA;
-      border-radius: 12px;
-      padding: 10px;
+      border-radius: 9px;
+      padding: 6px 9px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      gap: 2px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
     .mini-period-top {
       display: flex;
@@ -330,213 +354,248 @@ const htmlContent = `<!DOCTYPE html>
       align-items: center;
     }
     .mini-period-pill {
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 800;
       color: #FF5E1E;
       background: rgba(255, 94, 30, 0.1);
-      padding: 2px 6px;
-      border-radius: 6px;
+      padding: 1.5px 5px;
+      border-radius: 4px;
     }
     .mini-period-time {
-      font-size: 9px;
+      font-size: 8px;
       color: #9CA3AF;
+      font-weight: 600;
     }
     .mini-period-dates {
-      font-size: 10.5px;
+      font-size: 9px;
       font-weight: 700;
       color: #374151;
+    }
+
+    /* Mini Precheck Highlight Card */
+    .mini-precheck-card {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F4FDF8 100%);
+      border: 1.5px solid #10B981;
+      border-radius: 10px;
+      padding: 7px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 3px 8px rgba(16, 185, 129, 0.12);
+    }
+    .mini-precheck-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mini-precheck-pill {
+      font-size: 8.5px;
+      font-weight: 800;
+      color: #059669;
+      background: #E6FBF2;
+      padding: 2px 5px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .mini-precheck-metric {
+      font-size: 13px;
+      font-weight: 900;
+      color: #047857;
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+    .mini-precheck-metric span {
+      font-size: 8.5px;
+      font-weight: 600;
+      color: #6B7280;
+    }
+    .mini-precheck-dates {
+      font-size: 8.5px;
+      font-weight: 600;
+      color: #4B5563;
+      display: flex;
+      justify-content: space-between;
     }
 
     /* Mini Active User Card */
     .mini-user-card {
       background: #FFFFFF;
       border: 1px solid #EFE3DA;
-      border-radius: 12px;
-      padding: 9px 10px;
+      border-radius: 10px;
+      padding: 7px 9px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
     }
     .mini-user-left {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
     }
     .mini-user-avatar {
-      width: 28px;
-      height: 28px;
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
       background: #FFEFE8;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 10.5px;
       font-weight: 800;
       color: #FF5E1E;
     }
     .mini-user-name {
-      font-size: 11.5px;
+      font-size: 10.5px;
       font-weight: 800;
       color: #1F2937;
     }
     .mini-user-id {
-      font-size: 9.5px;
+      font-size: 8.5px;
       color: #6B7280;
     }
     .mini-user-badge {
-      font-size: 9px;
+      font-size: 8px;
       font-weight: 700;
       color: #FF5E1E;
       background: #FFF5F0;
       border: 1px solid #FFD9C7;
-      padding: 2px 6px;
-      border-radius: 6px;
+      padding: 2px 5px;
+      border-radius: 4px;
     }
 
     /* Mini Primary CTA Button */
     .mini-cta-btn {
       background: linear-gradient(135deg, #FF5E1E 0%, #E64C0E 100%);
       color: #FFFFFF;
-      border-radius: 12px;
-      padding: 10px;
+      border-radius: 10px;
+      padding: 8.5px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      font-size: 11.5px;
+      gap: 5px;
+      font-size: 10.5px;
       font-weight: 800;
       box-shadow: 0 4px 12px rgba(255, 94, 30, 0.35);
     }
 
-    /* Mini Grid 2x2 */
-    .mini-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    .mini-grid-tile {
-      background: #FFFFFF;
-      border: 1px solid #EFE3DA;
-      border-radius: 9px;
-      padding: 7px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .mini-tile-label {
-      font-size: 9px;
-      color: #9CA3AF;
-    }
-    .mini-tile-val {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: #1F2937;
-    }
-
-    /* Mini Bottom Tab Bar */
+    /* Mini Bottom Tab Bar (5 Tabs) */
     .mini-tab-bar {
       margin-top: auto;
       background: #FFFFFF;
       border-top: 1px solid #EFE3DA;
-      margin-left: -12px;
-      margin-right: -12px;
-      margin-bottom: -10px;
-      padding: 6px 12px;
+      margin-left: -11px;
+      margin-right: -11px;
+      margin-bottom: -8px;
+      padding: 6px 4px 8px 4px;
       display: flex;
       justify-content: space-around;
       align-items: center;
-      font-size: 9px;
+      font-size: 8px;
       color: #9CA3AF;
       font-weight: 600;
+    }
+    .mini-tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
     }
     .mini-tab-active {
       color: #FF5E1E;
       font-weight: 800;
     }
+    .mini-tab-precheck {
+      color: #059669;
+      font-weight: 800;
+    }
 
-    /* Floating Glassmorphism Badge 1 - Top Right */
+    /* Floating Glassmorphism Badge 1 - Top Right (Precheck) */
     .float-badge-1 {
       position: absolute;
-      top: 36px;
-      right: -20px;
-      background: rgba(28, 24, 22, 0.92);
-      border: 1px solid rgba(255, 94, 30, 0.65);
-      padding: 10px 14px;
-      border-radius: 14px;
+      top: 18px;
+      right: -32px;
+      background: rgba(18, 30, 24, 0.94);
+      border: 1px solid rgba(16, 185, 129, 0.65);
+      padding: 8px 12px;
+      border-radius: 13px;
       backdrop-filter: blur(14px);
       box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       z-index: 20;
     }
 
-    .float-badge-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
-      background: #FF5E1E;
+    .float-badge-icon-green {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #10B981;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-size: 16px;
-      box-shadow: 0 4px 10px rgba(255, 94, 30, 0.4);
+      font-size: 14px;
+      font-weight: 900;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
     }
 
     .float-badge-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       color: #FFF;
     }
 
-    .float-badge-subtitle {
-      font-size: 10.5px;
-      color: #FFA575;
+    .float-badge-subtitle-green {
+      font-size: 9.5px;
+      color: #6EE7B7;
       font-weight: 600;
     }
 
-    /* Floating Glassmorphism Badge 2 - Bottom Left */
+    /* Floating Glassmorphism Badge 2 - Bottom Left (Autofill) */
     .float-badge-2 {
       position: absolute;
-      bottom: 42px;
-      left: -24px;
-      background: rgba(24, 26, 32, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      padding: 10px 14px;
-      border-radius: 14px;
+      bottom: 50px;
+      left: -42px;
+      background: rgba(28, 22, 18, 0.94);
+      border: 1px solid rgba(255, 94, 30, 0.6);
+      padding: 8px 12px;
+      border-radius: 13px;
       backdrop-filter: blur(14px);
       box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       z-index: 20;
     }
 
     .float-badge-2-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 9px;
-      background: rgba(16, 185, 129, 0.2);
-      border: 1px solid rgba(16, 185, 129, 0.4);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #FF5E1E 0%, #E64C0E 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #34D399;
-      font-size: 15px;
+      color: #FFFFFF;
+      font-size: 13px;
+      box-shadow: 0 4px 10px rgba(255, 94, 30, 0.35);
     }
 
     .float-badge-2-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       color: #F3F4F6;
     }
 
     .float-badge-2-subtitle {
-      font-size: 10px;
-      color: #9CA3AF;
-      font-weight: 500;
+      font-size: 9.5px;
+      color: #FFA575;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -548,21 +607,29 @@ const htmlContent = `<!DOCTYPE html>
     <!-- Left Column: Branding & Value Props -->
     <div class="left-col">
       <div class="eyebrow-pill">
-        <span>🏃</span>
-        <span class="eyebrow-text">115 年揮汗有禮・全民動起來 輔助工具</span>
+        <span>⚡️</span>
+        <span class="eyebrow-text">運動部 115 年加碼活動輔助神器</span>
       </div>
 
       <div class="brand-header-row">
         <img src="${iconBase64}" class="brand-logo-img" alt="App Icon">
         <div class="title-group">
           <h1 class="main-title">
-            揮汗有禮 <span class="main-title-accent">加碼券小幫手</span>
+            揮汗有禮 <span class="main-title-accent">加碼小幫手</span>
           </h1>
-          <p class="sub-tagline">一鍵自動登入 ｜ 多人身分保險箱 ｜ 14 週任務指引</p>
+          <p class="sub-tagline">一鍵登入直達任務 ｜ 離線預檢防退件 ｜ 家庭安全保險箱</p>
         </div>
       </div>
 
       <div class="features-list">
+        <div class="feature-item highlight-precheck">
+          <div class="feature-icon-box green">🔍</div>
+          <div>
+            <span class="feature-text-main">截圖合格預檢</span>
+            <span class="feature-text-desc">純本機離線 OCR，智慧診斷步數與日期防退件</span>
+          </div>
+        </div>
+
         <div class="feature-item">
           <div class="feature-icon-box">⚡️</div>
           <div>
@@ -574,22 +641,24 @@ const htmlContent = `<!DOCTYPE html>
         <div class="feature-item">
           <div class="feature-icon-box">🛡️</div>
           <div>
-            <span class="feature-text-main">家庭多人保險箱</span>
+            <span class="feature-text-main">家庭成員保險箱</span>
             <span class="feature-text-desc">支援生物辨識保護，個資安全存於本機</span>
           </div>
         </div>
 
         <div class="feature-item">
-          <div class="feature-icon-box">🛍️</div>
+          <div class="feature-icon-box">🏪</div>
           <div>
-            <span class="feature-text-main">官方指定通路清單</span>
-            <span class="feature-text-desc">五大超商量販優惠與可兌換品項彙整</span>
+            <span class="feature-text-main">5 大通路兌換一覽</span>
+            <span class="feature-text-desc">全家 / 7-11 / 萊爾富 / 全聯 / 萬家福品項彙整</span>
           </div>
         </div>
       </div>
 
       <div class="trust-footer">
-        <span>純本機硬體加密</span>
+        <span>純本機離線處理</span>
+        <div class="trust-dot"></div>
+        <span>晶片級硬體加密</span>
         <div class="trust-dot"></div>
         <span>零第三方伺服器</span>
         <div class="trust-dot"></div>
@@ -605,18 +674,34 @@ const htmlContent = `<!DOCTYPE html>
       <div class="phone-frame">
         <div class="phone-island"></div>
         <div class="phone-content">
+          <!-- Mini App Header -->
           <div class="mini-app-header">
-            <span style="font-size: 13px;">🏃</span>
-            <span class="mini-app-title">加碼券小幫手</span>
+            <div class="mini-app-title-box">
+              <span style="font-size: 13px;">🏃</span>
+              <span class="mini-app-title">加碼券小幫手</span>
+            </div>
+            <span class="mini-safe-badge">✓ 離線安全</span>
           </div>
 
-          <!-- Mini Period Card -->
+          <!-- Mini Period Countdown Card -->
           <div class="mini-period-card">
             <div class="mini-period-top">
-              <span class="mini-period-pill">第 1 期 (進行中)</span>
+              <span class="mini-period-pill">第 1 期加碼倒數</span>
               <span class="mini-period-time">剩餘 3 天</span>
             </div>
             <div class="mini-period-dates">09/01 (二) ~ 09/06 (日)</div>
+          </div>
+
+          <!-- Mini Precheck Highlight Card -->
+          <div class="mini-precheck-card">
+            <div class="mini-precheck-top">
+              <span class="mini-precheck-pill">✓ 預檢合格</span>
+              <div class="mini-precheck-metric">8,504 <span>步</span></div>
+            </div>
+            <div class="mini-precheck-dates">
+              <span>日期：09/10 (符合當週)</span>
+              <span style="color:#059669; font-weight:700;">單日 ≥ 8000步</span>
+            </div>
           </div>
 
           <!-- Mini Active User -->
@@ -625,7 +710,7 @@ const htmlContent = `<!DOCTYPE html>
               <div class="mini-user-avatar">王</div>
               <div>
                 <div class="mini-user-name">王大明</div>
-                <div class="mini-user-id">A123****89</div>
+                <div class="mini-user-id">A123****89 ｜ 0912****78</div>
               </div>
             </div>
             <div class="mini-user-badge">本人</div>
@@ -636,43 +721,47 @@ const htmlContent = `<!DOCTYPE html>
             <span>⚡️ 一鍵快速登入「我的任務」</span>
           </div>
 
-          <!-- Mini Grid -->
-          <div class="mini-grid">
-            <div class="mini-grid-tile">
-              <span class="mini-tile-label">身分證字號</span>
-              <span class="mini-tile-val">A123456789</span>
-            </div>
-            <div class="mini-grid-tile">
-              <span class="mini-tile-label">出生年月日</span>
-              <span class="mini-tile-val">民國 85/01/01</span>
-            </div>
-          </div>
-
-          <!-- Mini Bottom Tab Bar -->
+          <!-- Mini Bottom Tab Bar (5 Tabs) -->
           <div class="mini-tab-bar">
-            <span class="mini-tab-active">● 首頁</span>
-            <span>任務</span>
-            <span>通路</span>
-            <span>帳號</span>
+            <div class="mini-tab-item mini-tab-active">
+              <span>🏠</span>
+              <span>首頁</span>
+            </div>
+            <div class="mini-tab-item">
+              <span>📋</span>
+              <span>任務</span>
+            </div>
+            <div class="mini-tab-item mini-tab-precheck">
+              <span>🔍</span>
+              <span>預檢</span>
+            </div>
+            <div class="mini-tab-item">
+              <span>🏪</span>
+              <span>通路</span>
+            </div>
+            <div class="mini-tab-item">
+              <span>👤</span>
+              <span>帳號</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Floating Toast Badge (Auto-fill notification) -->
+      <!-- Floating Toast Badge 1 (Precheck result) -->
       <div class="float-badge-1">
-        <div class="float-badge-icon">⚡️</div>
+        <div class="float-badge-icon-green">✓</div>
         <div>
-          <div class="float-badge-title">一鍵智慧填入</div>
-          <div class="float-badge-subtitle">✓ 已為 王大明 自動填妥</div>
+          <div class="float-badge-title">截圖預檢合格！</div>
+          <div class="float-badge-subtitle-green">辨識 8,504 步・符合當週標準</div>
         </div>
       </div>
 
-      <!-- Floating Security Badge -->
+      <!-- Floating Toast Badge 2 (Auto-fill notification) -->
       <div class="float-badge-2">
-        <div class="float-badge-2-icon">🛡️</div>
+        <div class="float-badge-2-icon">⚡️</div>
         <div>
-          <div class="float-badge-2-title">本機生物防護</div>
-          <div class="float-badge-2-subtitle">Face ID / 指紋鎖定</div>
+          <div class="float-badge-2-title">一鍵自動填表</div>
+          <div class="float-badge-2-subtitle">身分證・生日・手機秒速帶入</div>
         </div>
       </div>
     </div>
