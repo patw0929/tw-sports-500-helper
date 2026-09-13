@@ -216,7 +216,11 @@ describe('Precheck Engine - Full Real-world Screenshot Verification', () => {
 三 0 <
     `;
 
-    const report = evaluateFrontendEligibility(realWorldOcrText);
+    const report = evaluateFrontendEligibility(
+      realWorldOcrText,
+      null,
+      new Date('2026-09-10T12:00:00+08:00')
+    );
 
     // 1. 日期確認已識別出 9月10日
     assert.strictEqual(report.observed.dateFound, true, 'Date must be found');
@@ -251,7 +255,11 @@ describe('Precheck Engine - Full Real-world Screenshot Verification', () => {
 22 分 鐘 12 秒 1,468 步
     `;
 
-    const report = evaluateFrontendEligibility(corruptedMonthOcrText);
+    const report = evaluateFrontendEligibility(
+      corruptedMonthOcrText,
+      null,
+      new Date('2026-09-10T12:00:00+08:00')
+    );
     assert.strictEqual(
       report.observed.dateFound,
       true,

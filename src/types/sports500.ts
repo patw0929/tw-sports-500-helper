@@ -28,6 +28,7 @@ export interface TaskPeriod {
   isFuture: boolean;
   daysLeft: number;
   hoursLeft: number;
+  isUploadClosed?: boolean;
 }
 
 export type TaskType = 'time' | 'steps' | 'distance';

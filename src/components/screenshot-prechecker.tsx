@@ -155,6 +155,8 @@ export function ScreenshotPrechecker() {
             codes.push('DATE_NOT_CURRENT_PERIOD');
             if (eligibility.matchedRuleCode) {
               codes.push(eligibility.matchedRuleCode);
+            } else {
+              codes.push('BELOW_ALL_ELIGIBILITY_THRESHOLDS');
             }
           } else {
             codes.push('BELOW_ALL_ELIGIBILITY_THRESHOLDS');
@@ -401,7 +403,9 @@ export function ScreenshotPrechecker() {
                     : result.state === 'WARN'
                       ? result.eligibility.observed.periodCheck &&
                         !result.eligibility.observed.periodCheck.isCurrentPeriod
-                        ? '運動數據達標，但非當週運動紀錄（不符本期任務標準）'
+                        ? result.eligibility.matchedRuleCode
+                          ? '運動數據達標，但非當週運動紀錄（不符本期任務標準）'
+                          : '運動數據未達標，且非當週運動紀錄（不符本期任務標準）'
                         : '截圖存有疑慮（需注意退件風險）'
                       : '截圖未達合格標準'}
                 </Text>
@@ -413,11 +417,17 @@ export function ScreenshotPrechecker() {
                     : result.state === 'WARN'
                       ? result.eligibility.observed.periodCheck &&
                         !result.eligibility.observed.periodCheck.isCurrentPeriod
-                        ? `截圖日期為 ${result.eligibility.observed.periodCheck.screenshotDate}${
-                            result.eligibility.observed.periodCheck.matchedPeriodLabel
-                              ? `（屬 ${result.eligibility.observed.periodCheck.matchedPeriodLabel}）`
-                              : ''
-                          }，非當前活動期別（${result.eligibility.observed.periodCheck.currentPeriodLabel}）。依運動部規定不可跨期補傳，建議換上本週紀錄。`
+                        ? result.eligibility.matchedRuleCode
+                          ? `截圖日期為 ${result.eligibility.observed.periodCheck.screenshotDate}${
+                              result.eligibility.observed.periodCheck.matchedPeriodLabel
+                                ? `（屬 ${result.eligibility.observed.periodCheck.matchedPeriodLabel}）`
+                                : ''
+                            }，非當前活動期別（${result.eligibility.observed.periodCheck.currentPeriodLabel}）。依運動部規定不可跨期補傳，建議換上本週紀錄。`
+                          : `運動數據未達門檻，且截圖日期為 ${result.eligibility.observed.periodCheck.screenshotDate}${
+                              result.eligibility.observed.periodCheck.matchedPeriodLabel
+                                ? `（屬 ${result.eligibility.observed.periodCheck.matchedPeriodLabel}）`
+                                : ''
+                            }，非當前活動期別（${result.eligibility.observed.periodCheck.currentPeriodLabel}）。請補齊運動量並換上本週紀錄。`
                         : '請檢視下方警示項目，補正後再上傳以免遭官方退件審查。'
                       : '觀測到的各項數據均未達 115 年加碼活動任務標準。'}
                 </Text>

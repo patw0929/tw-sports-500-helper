@@ -122,6 +122,26 @@ export default function TasksScreen() {
               每週一 00:00 起至週日 24:00 止為計算週期；審核時間約 5 個工作日。
             </Text>
 
+            {/* Campaign Upload Closure Announcement Banner */}
+            <View
+              style={[
+                styles.scheduleNoticeCard,
+                { backgroundColor: theme.cardBackground, borderColor: '#EA580C' },
+              ]}
+            >
+              <View style={styles.scheduleNoticeHeader}>
+                <Ionicons name="megaphone" size={16} color="#EA580C" />
+                <Text style={[styles.scheduleNoticeTitle, { color: theme.text }]}>
+                  官方活動截止公告（300 萬筆額滿）
+                </Text>
+              </View>
+              <Text style={[styles.scheduleNoticeDesc, { color: theme.textSecondary }]}>
+                運動部公告：運動紀錄上傳已達 300
+                萬筆上限，第三期（含）起已關閉註冊及上傳運動紀錄功能。凡已成功送出並經審查通過者，加碼券仍可持續兌換至
+                12 月 31 日。
+              </Text>
+            </View>
+
             <View style={styles.periodList}>
               {periods.map((item) => (
                 <View
@@ -130,9 +150,11 @@ export default function TasksScreen() {
                     styles.periodItem,
                     { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
                     item.isCurrent && {
-                      borderColor: theme.primary,
-                      borderWidth: 2,
-                      backgroundColor: theme.primaryLight,
+                      borderColor: item.isUploadClosed ? theme.cardBorder : theme.primary,
+                      borderWidth: 1.5,
+                      backgroundColor: item.isUploadClosed
+                        ? theme.cardBackground
+                        : theme.primaryLight,
                     },
                   ]}
                 >
@@ -143,7 +165,9 @@ export default function TasksScreen() {
                           styles.periodNumberPill,
                           {
                             backgroundColor: item.isCurrent
-                              ? theme.primary
+                              ? item.isUploadClosed
+                                ? '#64748B'
+                                : theme.primary
                               : theme.backgroundElement,
                           },
                         ]}
@@ -162,25 +186,32 @@ export default function TasksScreen() {
                       </Text>
                     </View>
 
-                    {item.isCurrent && (
+                    {item.isUploadClosed && (
+                      <View style={[styles.statusBadge, { backgroundColor: '#FEE2E2' }]}>
+                        <Text style={[styles.statusText, { color: '#DC2626', fontWeight: '700' }]}>
+                          上傳已截止
+                        </Text>
+                      </View>
+                    )}
+                    {!item.isUploadClosed && item.isCurrent && (
                       <View style={[styles.currentStatusBadge, { backgroundColor: theme.primary }]}>
                         <Ionicons name="flame" size={12} color="#ffffff" />
                         <Text style={styles.currentStatusText}>本週進行中</Text>
                       </View>
                     )}
-                    {item.isPast && (
+                    {!item.isUploadClosed && item.isPast && (
                       <View
                         style={[styles.statusBadge, { backgroundColor: theme.backgroundElement }]}
                       >
                         <Text style={[styles.statusText, { color: theme.textMuted }]}>已截止</Text>
                       </View>
                     )}
-                    {item.isFuture && (
+                    {!item.isUploadClosed && item.isFuture && (
                       <View
                         style={[styles.statusBadge, { backgroundColor: theme.backgroundElement }]}
                       >
-                        <Text style={[styles.statusText, { color: theme.textSecondary }]}>
-                          尚未開放
+                        <Text style={[styles.statusText, { color: theme.textMuted }]}>
+                          即將開始
                         </Text>
                       </View>
                     )}
@@ -188,11 +219,29 @@ export default function TasksScreen() {
 
                   {item.isCurrent && (
                     <View
-                      style={[styles.activeWeekNotice, { backgroundColor: theme.cardBackground }]}
+                      style={[
+                        styles.activeWeekNotice,
+                        {
+                          backgroundColor: item.isUploadClosed
+                            ? theme.backgroundElement
+                            : theme.cardBackground,
+                        },
+                      ]}
                     >
-                      <Ionicons name="time" size={16} color={theme.primary} />
-                      <Text style={[styles.activeWeekNoticeText, { color: theme.primaryDark }]}>
-                        距離上傳截止剩餘：{item.daysLeft} 天 {item.hoursLeft} 小時，請把握時間！
+                      <Ionicons
+                        name={item.isUploadClosed ? 'information-circle' : 'time'}
+                        size={16}
+                        color={item.isUploadClosed ? '#64748B' : theme.primary}
+                      />
+                      <Text
+                        style={[
+                          styles.activeWeekNoticeText,
+                          { color: item.isUploadClosed ? theme.textSecondary : theme.primaryDark },
+                        ]}
+                      >
+                        {item.isUploadClosed
+                          ? '因全活動達 300 萬筆上限，本週起已停止受理上傳；加碼券仍可持續兌換至 12/31。'
+                          : `距離上傳截止剩餘：${item.daysLeft} 天 ${item.hoursLeft} 小時，請把握時間！`}
                       </Text>
                     </View>
                   )}
@@ -540,6 +589,25 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     marginTop: -4,
+  },
+  scheduleNoticeCard: {
+    padding: Spacing.three,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    gap: 6,
+  },
+  scheduleNoticeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  scheduleNoticeTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  scheduleNoticeDesc: {
+    fontSize: 12,
+    lineHeight: 17,
   },
   periodList: {
     gap: 10,

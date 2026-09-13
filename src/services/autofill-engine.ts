@@ -137,14 +137,25 @@ export function generateAutoFillScript(profile: UserProfile | null, isManual = f
       }
 
       function tryFillAccessPage(isManualTrigger) {
+        // Check if on registration-finished page first
+        if (document.querySelector('.registration-finished, #finished-title')) {
+          showNotice('官方公告：運動紀錄已達 300 萬筆上限，新帳號登記與上傳功能已截止。', false);
+          return false;
+        }
+
         const idInput = document.querySelector('input#idNo, input[name="idNo"]');
         if (!idInput || idInput.readOnly) return false;
 
-        // Check if there is an active error message from server
-        const hasError = !!document.querySelector('.error, .alert-danger, .form-error, .text-danger, .field__error, .notice--warning:not(noscript p)');
+        // Always fill the ID number first so user does not need to retype
+        triggerInput(idInput, user.idNo);
+
+        // Check if there is an active error message from server (excluding informational quota notices)
+        const hasError = !!document.querySelector(
+          '.error, .alert-danger, .form-error, .text-danger, .field__error, .notice--error, .is-invalid, .invalid-feedback, .notice--warning:not(noscript p):not(.quota-notice)'
+        );
         if (hasError && !isManualTrigger) {
           console.log('[Sports500Helper] Page has error message, skipping auto-submit to prevent loop');
-          showNotice('網頁顯示提示或錯誤，請確認身分證號後手動送出。', false);
+          showNotice('已為 ' + user.name + ' 填寫身分證號。網頁顯示提示，請確認後手動送出。', false);
           return false;
         }
 
@@ -167,7 +178,6 @@ export function generateAutoFillScript(profile: UserProfile | null, isManual = f
           }
         }
 
-        triggerInput(idInput, user.idNo);
         showNotice('已為 ' + user.name + ' 自動填寫身分證號！');
 
         const submitBtn = document.querySelector('form[action*="access"] button[type="submit"], button.btn--primary');
@@ -212,12 +222,19 @@ export function generateAutoFillScript(profile: UserProfile | null, isManual = f
 
         // Dropdowns for year / month / day
         const selects = document.querySelectorAll('select');
-        selects.forEach(sel => {
+        selects.forEach((sel, idx) => {
           const name = (sel.name || sel.id || '').toLowerCase();
+          const isYearAttr = sel.hasAttribute('data-date-year');
+          const isMonthAttr = sel.hasAttribute('data-date-month');
+          const isDayAttr = sel.hasAttribute('data-date-day');
+          const insideRocDate = !!sel.closest('.roc-date-input, .roc-date-input__controls');
           const options = Array.from(sel.options);
 
-          // Check for Year
-          if (name.includes('year') || sel.closest('.roc-date-input')) {
+          const isYear = isYearAttr || name.includes('year') || (insideRocDate && idx === 0 && !isMonthAttr && !isDayAttr);
+          const isMonth = isMonthAttr || name.includes('month') || (insideRocDate && idx === 1 && !isYearAttr && !isDayAttr);
+          const isDay = isDayAttr || name.includes('day') || name.includes('date') || (insideRocDate && idx === 2 && !isYearAttr && !isMonthAttr);
+
+          if (isYear) {
             const matchOpt = options.find(o => 
               o.value === String(user.rocYear) || 
               o.value === String(user.westernYear) ||
@@ -228,10 +245,7 @@ export function generateAutoFillScript(profile: UserProfile | null, isManual = f
               sel.dispatchEvent(new Event('change', { bubbles: true }));
               filledAny = true;
             }
-          }
-
-          // Check for Month
-          if (name.includes('month')) {
+          } else if (isMonth) {
             const matchOpt = options.find(o => 
               parseInt(o.value, 10) === user.month || 
               parseInt(o.text, 10) === user.month
@@ -241,10 +255,7 @@ export function generateAutoFillScript(profile: UserProfile | null, isManual = f
               sel.dispatchEvent(new Event('change', { bubbles: true }));
               filledAny = true;
             }
-          }
-
-          // Check for Day
-          if (name.includes('day') || name.includes('date')) {
+          } else if (isDay) {
             const matchOpt = options.find(o => 
               parseInt(o.value, 10) === user.day || 
               parseInt(o.text, 10) === user.day
@@ -260,7 +271,9 @@ export function generateAutoFillScript(profile: UserProfile | null, isManual = f
         if (filledAny) {
           showNotice('已自動填入 ' + user.name + ' 的登入資料！');
 
-          const hasError = !!document.querySelector('.error, .alert-danger, .form-error, .text-danger, .field__error');
+          const hasError = !!document.querySelector(
+            '.error, .alert-danger, .form-error, .text-danger, .field__error, .notice--error, .is-invalid, .invalid-feedback, .notice--warning:not(noscript p):not(.quota-notice)'
+          );
           if (hasError && !isManualTrigger) {
             console.log('[Sports500Helper] Login page has error, skipping auto-submit');
             return true;
@@ -314,6 +327,11 @@ export function generateAutoFillScript(profile: UserProfile | null, isManual = f
           } else {
             sessionStorage.removeItem('sports500_pending_login');
           }
+        }
+
+        if (document.querySelector('.registration-finished, #finished-title')) {
+          showNotice('官方公告：運動紀錄已達 300 萬筆上限，新帳號登記與上傳功能已截止。', false);
+          return;
         }
 
         if (url.includes('/access')) {

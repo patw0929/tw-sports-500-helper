@@ -101,6 +101,9 @@ export const OFFICIAL_SCHEDULE_RANGES = [
   },
 ];
 
+export const CAMPAIGN_UPLOAD_CLOSED_FROM_PERIOD = 3;
+export const IS_CAMPAIGN_UPLOAD_CLOSED = true;
+
 export function getCalculatedPeriods(nowDate = new Date()): TaskPeriod[] {
   const nowTime = nowDate.getTime();
 
@@ -132,6 +135,7 @@ export function getCalculatedPeriods(nowDate = new Date()): TaskPeriod[] {
       isFuture,
       daysLeft,
       hoursLeft,
+      isUploadClosed: item.period >= CAMPAIGN_UPLOAD_CLOSED_FROM_PERIOD,
     };
   });
 }

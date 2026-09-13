@@ -129,25 +129,112 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* Official Campaign Announcement Notice (300萬筆額滿 / 停止上傳公告) */}
+        <View
+          style={[
+            styles.noticeCard,
+            { backgroundColor: theme.cardBackground, borderColor: '#EA580C' },
+          ]}
+        >
+          <View style={styles.noticeHeaderRow}>
+            <View style={styles.noticeBadge}>
+              <Ionicons name="megaphone" size={14} color="#ffffff" />
+              <Text style={styles.noticeBadgeText}>活動重要公告</Text>
+            </View>
+            <View style={[styles.noticeStatusPill, { backgroundColor: '#FEE2E2' }]}>
+              <Text style={styles.noticeStatusText}>300 萬筆額滿截止</Text>
+            </View>
+          </View>
+
+          <Text style={[styles.noticeTitle, { color: theme.text }]}>
+            運動紀錄上傳已截止・加碼券持續兌換
+          </Text>
+
+          <Text style={[styles.noticeDesc, { color: theme.textSecondary }]}>
+            運動部官方公告：運動紀錄筆數已達 300
+            萬筆上限，目前已關閉「註冊帳號」及「上傳運動紀錄」功能，第 3 期（含）起不再受理新上傳。
+          </Text>
+
+          <View style={[styles.noticeRightsBox, { backgroundColor: theme.backgroundElement }]}>
+            <Text style={[styles.noticeRightsTitle, { color: theme.primary }]}>
+              【重要提醒與權益說明】
+            </Text>
+            <View style={styles.noticeBulletRow}>
+              <Ionicons
+                name="checkmark-circle"
+                size={15}
+                color="#10B981"
+                style={styles.noticeBulletIcon}
+              />
+              <Text style={[styles.noticeBulletText, { color: theme.text }]}>
+                <Text style={{ fontWeight: '800' }}>加碼券兌換不受影響：</Text>
+                凡成功上傳且經審查通過者即可獲得加碼券，
+                <Text style={{ fontWeight: '800', color: '#EA580C' }}>12 月 31 日前皆可兌換</Text>。
+              </Text>
+            </View>
+            <View style={styles.noticeBulletRow}>
+              <Ionicons name="time" size={15} color="#F59E0B" style={styles.noticeBulletIcon} />
+              <Text style={[styles.noticeBulletText, { color: theme.text }]}>
+                <Text style={{ fontWeight: '800' }}>審查中進度：</Text>
+                目前狀態若為「審查中」，工作人員將於上傳日起{' '}
+                <Text style={{ fontWeight: '800' }}>5 個工作天內</Text>完成審核。
+              </Text>
+            </View>
+            <View style={styles.noticeBulletRow}>
+              <Ionicons
+                name="flash"
+                size={15}
+                color={theme.primary}
+                style={styles.noticeBulletIcon}
+              />
+              <Text style={[styles.noticeBulletText, { color: theme.text }]}>
+                <Text style={{ fontWeight: '800' }}>小幫手持續服務：</Text>
+                仍可使用下方「一鍵快登」查詢審核狀態，並出示各大超商與量販店兌換條碼！
+              </Text>
+            </View>
+          </View>
+        </View>
+
         {/* Current Period Banner */}
         <View
           style={[
             styles.periodCard,
-            { backgroundColor: theme.primaryLight, borderColor: theme.primary },
+            {
+              backgroundColor: currentPeriod.isUploadClosed
+                ? theme.cardBackground
+                : theme.primaryLight,
+              borderColor: currentPeriod.isUploadClosed ? theme.cardBorder : theme.primary,
+            },
           ]}
         >
           <View style={styles.periodCardTop}>
-            <View style={[styles.periodBadge, { backgroundColor: theme.primary }]}>
+            <View
+              style={[
+                styles.periodBadge,
+                { backgroundColor: currentPeriod.isUploadClosed ? '#64748B' : theme.primary },
+              ]}
+            >
               <Text style={styles.periodBadgeText}>{currentPeriod.label}</Text>
             </View>
             <View style={styles.periodCountdown}>
-              <Ionicons name="time-outline" size={14} color={theme.primaryDark} />
-              <Text style={[styles.periodCountdownText, { color: theme.primaryDark }]}>
-                {currentPeriod.isCurrent
-                  ? `剩餘 ${currentPeriod.daysLeft} 天 ${currentPeriod.hoursLeft} 小時`
-                  : currentPeriod.isFuture
-                    ? '即將開始'
-                    : '已結束'}
+              <Ionicons
+                name={currentPeriod.isUploadClosed ? 'close-circle' : 'time-outline'}
+                size={14}
+                color={currentPeriod.isUploadClosed ? '#DC2626' : theme.primaryDark}
+              />
+              <Text
+                style={[
+                  styles.periodCountdownText,
+                  { color: currentPeriod.isUploadClosed ? '#DC2626' : theme.primaryDark },
+                ]}
+              >
+                {currentPeriod.isUploadClosed
+                  ? '已停止受理上傳'
+                  : currentPeriod.isCurrent
+                    ? `剩餘 ${currentPeriod.daysLeft} 天 ${currentPeriod.hoursLeft} 小時`
+                    : currentPeriod.isFuture
+                      ? '即將開始'
+                      : '已結束'}
               </Text>
             </View>
           </View>
@@ -155,7 +242,9 @@ export default function HomeScreen() {
             {currentPeriod.dateRangeText}
           </Text>
           <Text style={[styles.periodHintText, { color: theme.textSecondary }]}>
-            每週每人限上傳一次運動截圖，審核通過即享 50 元加碼券！
+            {currentPeriod.isUploadClosed
+              ? '本期起因全活動已達 300 萬筆上限，已截止受理上傳。審查通過之加碼券仍可持續兌換至 12/31。'
+              : '每週每人限上傳一次運動截圖，審核通過即享 50 元加碼券！'}
           </Text>
         </View>
 
@@ -282,7 +371,7 @@ export default function HomeScreen() {
           <View style={styles.loginHintBox}>
             <Ionicons name="information-circle-outline" size={14} color={theme.textMuted} />
             <Text style={[styles.loginHintText, { color: theme.textMuted }]}>
-              注意：若揮汗有禮網站載入過慢時，自動登入可能失敗，請稍後重試。
+              可一鍵登入官方「我的任務」頁面，查詢審查狀態及出示加碼券兌換條碼。
             </Text>
           </View>
         </View>
@@ -302,7 +391,7 @@ export default function HomeScreen() {
             </View>
             <Text style={[styles.gridCardTitle, { color: theme.text }]}>截圖合格預檢</Text>
             <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
-              上傳前搶先診斷合格度
+              歷史截圖規範診斷對照
             </Text>
           </TouchableOpacity>
 
@@ -316,9 +405,14 @@ export default function HomeScreen() {
             <View style={[styles.gridIconCircle, { backgroundColor: '#FFF0EA' }]}>
               <Ionicons name="cloud-upload" size={24} color="#FF5E1E" />
             </View>
-            <Text style={[styles.gridCardTitle, { color: theme.text }]}>上傳運動紀錄</Text>
+            <View style={styles.gridTitleWithBadge}>
+              <Text style={[styles.gridCardTitle, { color: theme.text }]}>審核進度查詢</Text>
+              <View style={styles.closedMiniBadge}>
+                <Text style={styles.closedMiniBadgeText}>已截止</Text>
+              </View>
+            </View>
             <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
-              截圖上傳與審核進度查詢
+              上傳已截止，點此快登查審查
             </Text>
           </TouchableOpacity>
 
@@ -550,6 +644,80 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  noticeCard: {
+    padding: Spacing.four,
+    borderRadius: 18,
+    borderWidth: 1.5,
+    gap: 10,
+    shadowColor: '#EA580C',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  noticeHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  noticeBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EA580C',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    gap: 5,
+  },
+  noticeBadgeText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  noticeStatusPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+  },
+  noticeStatusText: {
+    color: '#DC2626',
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  noticeTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: -0.2,
+    lineHeight: 22,
+  },
+  noticeDesc: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  noticeRightsBox: {
+    padding: Spacing.three,
+    borderRadius: 12,
+    gap: 8,
+    marginTop: 2,
+  },
+  noticeRightsTitle: {
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0.3,
+  },
+  noticeBulletRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  noticeBulletIcon: {
+    marginTop: 2,
+  },
+  noticeBulletText: {
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 17,
   },
   periodCard: {
     padding: Spacing.four,
@@ -783,6 +951,23 @@ const styles = StyleSheet.create({
   },
   gridCardTitle: {
     fontSize: 15,
+    fontWeight: '800',
+  },
+  gridTitleWithBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexWrap: 'wrap',
+  },
+  closedMiniBadge: {
+    backgroundColor: '#FEE2E2',
+    paddingHorizontal: 5,
+    paddingVertical: 1.5,
+    borderRadius: 6,
+  },
+  closedMiniBadgeText: {
+    color: '#DC2626',
+    fontSize: 10,
     fontWeight: '800',
   },
   gridCardDesc: {
