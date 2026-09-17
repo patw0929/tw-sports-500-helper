@@ -7,8 +7,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemePickerModal } from '@/components/theme-picker-modal';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme, useThemeContext } from '@/hooks/use-theme';
-import { getCurrentPeriod, PARTNER_PERKS } from '@/services/periods';
-import { getActiveProfile, getProfiles, setActiveProfile } from '@/services/storage';
+import { getCurrentPeriod, PARTNER_PERKS, UPCOMING_CAMPAIGN } from '@/services/periods';
+import {
+  getActiveProfile,
+  getProfiles,
+  setActiveProfile,
+  getCampaignNoticeCollapsed,
+  setCampaignNoticeCollapsed,
+} from '@/services/storage';
 import { maskId, maskPhone, UserProfile } from '@/types/sports500';
 
 export default function HomeScreen() {
@@ -20,6 +26,7 @@ export default function HomeScreen() {
   const [allProfiles, setAllProfiles] = useState<UserProfile[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
+  const [isNoticeCollapsed, setIsNoticeCollapsed] = useState(false);
 
   const themeIcon: keyof typeof Ionicons.glyphMap =
     preference === 'system'
@@ -37,6 +44,8 @@ export default function HomeScreen() {
     setAllProfiles(list);
     const active = await getActiveProfile();
     setActiveUser(active);
+    const noticeCollapsed = await getCampaignNoticeCollapsed();
+    setIsNoticeCollapsed(noticeCollapsed);
   }, []);
 
   useFocusEffect(
@@ -54,6 +63,12 @@ export default function HomeScreen() {
   const handleSelectUser = async (user: UserProfile) => {
     await setActiveProfile(user.id);
     setActiveUser(user);
+  };
+
+  const handleToggleNotice = async () => {
+    const next = !isNoticeCollapsed;
+    setIsNoticeCollapsed(next);
+    await setCampaignNoticeCollapsed(next);
   };
 
   const handleQuickLogin = () => {
@@ -129,70 +144,157 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Official Campaign Announcement Notice (300萬筆額滿 / 停止上傳公告) */}
+        {/* Official Campaign Announcement & Continuation Preview Notice (Collapsible) */}
         <View
           style={[
             styles.noticeCard,
             { backgroundColor: theme.cardBackground, borderColor: '#EA580C' },
+            isNoticeCollapsed && styles.noticeCardCollapsed,
           ]}
         >
-          <View style={styles.noticeHeaderRow}>
-            <View style={styles.noticeBadge}>
-              <Ionicons name="megaphone" size={14} color="#ffffff" />
-              <Text style={styles.noticeBadgeText}>活動重要公告</Text>
+          <TouchableOpacity
+            style={styles.noticeHeaderRow}
+            activeOpacity={0.7}
+            onPress={handleToggleNotice}
+            accessibilityRole="button"
+            accessibilityLabel={isNoticeCollapsed ? '展開官方情報' : '收合官方情報'}
+          >
+            <View style={styles.noticeHeaderBadges}>
+              <View style={styles.noticeBadge}>
+                <Ionicons name="sparkles" size={14} color="#ffffff" />
+                <Text style={styles.noticeBadgeText}>官方最新情報</Text>
+              </View>
+              <View style={[styles.noticeStatusPill, { backgroundColor: '#DCFCE7' }]}>
+                <Text style={[styles.noticeStatusText, { color: '#16A34A' }]}>
+                  9/29 延續活動重磅登場
+                </Text>
+              </View>
             </View>
-            <View style={[styles.noticeStatusPill, { backgroundColor: '#FEE2E2' }]}>
-              <Text style={styles.noticeStatusText}>300 萬筆額滿截止</Text>
-            </View>
-          </View>
 
-          <Text style={[styles.noticeTitle, { color: theme.text }]}>
-            運動紀錄上傳已截止・加碼券持續兌換
-          </Text>
-
-          <Text style={[styles.noticeDesc, { color: theme.textSecondary }]}>
-            運動部官方公告：運動紀錄筆數已達 300
-            萬筆上限，目前已關閉「註冊帳號」及「上傳運動紀錄」功能，第 3 期（含）起不再受理新上傳。
-          </Text>
-
-          <View style={[styles.noticeRightsBox, { backgroundColor: theme.backgroundElement }]}>
-            <Text style={[styles.noticeRightsTitle, { color: theme.primary }]}>
-              【重要提醒與權益說明】
-            </Text>
-            <View style={styles.noticeBulletRow}>
+            <View style={[styles.noticeToggleBtn, { backgroundColor: theme.backgroundElement }]}>
+              <Text style={[styles.noticeToggleText, { color: theme.textSecondary }]}>
+                {isNoticeCollapsed ? '展開' : '收合'}
+              </Text>
               <Ionicons
-                name="checkmark-circle"
-                size={15}
-                color="#10B981"
-                style={styles.noticeBulletIcon}
+                name={isNoticeCollapsed ? 'chevron-down' : 'chevron-up'}
+                size={14}
+                color={theme.textSecondary}
               />
-              <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                <Text style={{ fontWeight: '800' }}>加碼券兌換不受影響：</Text>
-                凡成功上傳且經審查通過者即可獲得加碼券，
-                <Text style={{ fontWeight: '800', color: '#EA580C' }}>12 月 31 日前皆可兌換</Text>。
-              </Text>
             </View>
-            <View style={styles.noticeBulletRow}>
-              <Ionicons name="time" size={15} color="#F59E0B" style={styles.noticeBulletIcon} />
-              <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                <Text style={{ fontWeight: '800' }}>審查中進度：</Text>
-                目前狀態若為「審查中」，工作人員將於上傳日起{' '}
-                <Text style={{ fontWeight: '800' }}>5 個工作天內</Text>完成審核。
+          </TouchableOpacity>
+
+          {isNoticeCollapsed ? (
+            <TouchableOpacity
+              style={styles.noticeCollapsedRow}
+              activeOpacity={0.7}
+              onPress={handleToggleNotice}
+            >
+              <Text style={[styles.noticeTitleCollapsed, { color: theme.text }]} numberOfLines={1}>
+                延續活動 9/29 開跑・首波加碼券可換至 12/31
               </Text>
-            </View>
-            <View style={styles.noticeBulletRow}>
-              <Ionicons
-                name="flash"
-                size={15}
-                color={theme.primary}
-                style={styles.noticeBulletIcon}
-              />
-              <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                <Text style={{ fontWeight: '800' }}>小幫手持續服務：</Text>
-                仍可使用下方「一鍵快登」查詢審核狀態，並出示各大超商與量販店兌換條碼！
+              <Ionicons name="chevron-forward" size={14} color={theme.textMuted} />
+            </TouchableOpacity>
+          ) : (
+            <>
+              <Text style={[styles.noticeTitle, { color: theme.text }]}>
+                延續活動 9/29 開跑・首波加碼券可換至 12/31
               </Text>
-            </View>
-          </View>
+
+              <Text style={[styles.noticeDesc, { color: theme.textSecondary }]}>
+                運動部公告：因首波 300 萬筆運動紀錄迅速額滿，官方預計於{' '}
+                <Text style={{ fontWeight: '800', color: theme.text }}>
+                  115 年 9 月 29 日（二）上午 10:00 正式推出「{UPCOMING_CAMPAIGN.name}」
+                </Text>
+                （共 10 週至 12/6），改採累積制獎勵，三大運動任務標準維持不變！
+              </Text>
+
+              <View style={[styles.noticeRightsBox, { backgroundColor: theme.backgroundElement }]}>
+                <Text style={[styles.noticeRightsTitle, { color: theme.primary }]}>
+                  【延續活動重點與權益須知】
+                </Text>
+                <View style={styles.noticeBulletRow}>
+                  <Ionicons
+                    name="person-circle"
+                    size={16}
+                    color="#0284C7"
+                    style={styles.noticeBulletIcon}
+                  />
+                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
+                    <Text style={{ fontWeight: '800' }}>舊帳號免重辦、新用戶將重啟：</Text>
+                    先前已註冊者無須重新申請，9/29
+                    開放後直接使用小幫手「一鍵快登」；新參加者將重啟註冊功能。
+                  </Text>
+                </View>
+                <View style={styles.noticeBulletRow}>
+                  <Ionicons
+                    name="trophy"
+                    size={16}
+                    color="#F59E0B"
+                    style={styles.noticeBulletIcon}
+                  />
+                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
+                    <Text style={{ fontWeight: '800' }}>全新累積制獎勵（免連續）：</Text>
+                    累積達 5 週獲銅證、7 週獲銀證、9 週以上獲金證並取得抽「116 年 500
+                    元運動幣」（限量 5 萬份）抽籤資格。
+                  </Text>
+                </View>
+                <View style={styles.noticeBulletRow}>
+                  <Ionicons
+                    name="refresh-circle"
+                    size={16}
+                    color="#8B5CF6"
+                    style={styles.noticeBulletIcon}
+                  />
+                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
+                    <Text style={{ fontWeight: '800' }}>舊紀錄不列入累積：</Text>
+                    原第 1、2 週紀錄不計入延續活動，全體參加者均自 9/29 起重新累積週數。
+                  </Text>
+                </View>
+                <View style={styles.noticeBulletRow}>
+                  <Ionicons
+                    name="checkmark-circle"
+                    size={16}
+                    color="#10B981"
+                    style={styles.noticeBulletIcon}
+                  />
+                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
+                    <Text style={{ fontWeight: '800' }}>首波加碼券兌換不受影響：</Text>
+                    首波已審查通過之 50 元加碼券，
+                    <Text style={{ fontWeight: '800', color: '#EA580C' }}>
+                      12 月 31 日前皆可折抵兌換
+                    </Text>
+                    。
+                  </Text>
+                </View>
+                <View style={styles.noticeBulletRow}>
+                  <Ionicons
+                    name="time"
+                    size={16}
+                    color={theme.primary}
+                    style={styles.noticeBulletIcon}
+                  />
+                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
+                    <Text style={{ fontWeight: '800' }}>審查時間改為 7 個工作日：</Text>
+                    延續活動上傳運動截圖後，官方審核工作天數預計為 7 個工作日內完成。
+                  </Text>
+                </View>
+
+                <TouchableOpacity
+                  style={[
+                    styles.noticeMoreButton,
+                    { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
+                  ]}
+                  onPress={() => router.push({ pathname: '/tasks', params: { tab: 'schedule' } })}
+                >
+                  <Ionicons name="calendar-outline" size={14} color={theme.primary} />
+                  <Text style={[styles.noticeMoreButtonText, { color: theme.primary }]}>
+                    查看 10 週時程預告與任務辦法
+                  </Text>
+                  <Ionicons name="chevron-forward" size={14} color={theme.primary} />
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </View>
 
         {/* Current Period Banner */}
@@ -243,7 +345,7 @@ export default function HomeScreen() {
           </Text>
           <Text style={[styles.periodHintText, { color: theme.textSecondary }]}>
             {currentPeriod.isUploadClosed
-              ? '本期起因全活動已達 300 萬筆上限，已截止受理上傳。審查通過之加碼券仍可持續兌換至 12/31。'
+              ? '首波活動已額滿截止；延續活動預計 9/29 (二) 10:00 正式起跑，小幫手將自動切換為最新 10 週時程！'
               : '每週每人限上傳一次運動截圖，審核通過即享 50 元加碼券！'}
           </Text>
         </View>
@@ -656,10 +758,47 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 3,
   },
+  noticeCardCollapsed: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    gap: 6,
+  },
   noticeHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 8,
+  },
+  noticeHeaderBadges: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flexWrap: 'wrap',
+    flex: 1,
+  },
+  noticeToggleBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    gap: 3,
+  },
+  noticeToggleText: {
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  noticeCollapsedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 6,
+  },
+  noticeTitleCollapsed: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '800',
+    lineHeight: 18,
   },
   noticeBadge: {
     flexDirection: 'row',
@@ -718,6 +857,21 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     lineHeight: 17,
+  },
+  noticeMoreButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 6,
+    gap: 6,
+  },
+  noticeMoreButtonText: {
+    fontSize: 12,
+    fontWeight: '800',
   },
   periodCard: {
     padding: Spacing.four,

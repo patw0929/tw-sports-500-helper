@@ -6,7 +6,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Spacing, MaxContentWidth } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-import { getCalculatedPeriods, TASK_CRITERIA_LIST, PARTNER_PERKS } from '@/services/periods';
+import {
+  getCalculatedPeriods,
+  TASK_CRITERIA_LIST,
+  PARTNER_PERKS,
+  UPCOMING_CAMPAIGN,
+  UPCOMING_SCHEDULE_RANGES,
+} from '@/services/periods';
 
 export default function TasksScreen() {
   const router = useRouter();
@@ -14,6 +20,7 @@ export default function TasksScreen() {
   const theme = useTheme();
 
   const [currentDate, setCurrentDate] = useState(() => new Date());
+  const [showUpcomingWeeks, setShowUpcomingWeeks] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
@@ -49,9 +56,9 @@ export default function TasksScreen() {
         {/* Header Title */}
         <View style={styles.header}>
           <Text style={[styles.superTitle, { color: theme.primary }]}>運動部 115 年揮汗有禮</Text>
-          <Text style={[styles.mainTitle, { color: theme.text }]}>任務辦法與 14 週時程</Text>
+          <Text style={[styles.mainTitle, { color: theme.text }]}>任務辦法與時程總覽</Text>
           <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-            每週完成任一項指定任務並上傳截圖，審核通過即可領取加碼好禮！
+            首波加碼券可兌換至 12/31；延續活動預計 9/29 (二) 10:00 登場，採 10 週累積制！
           </Text>
         </View>
 
@@ -71,7 +78,7 @@ export default function TasksScreen() {
                 activeTab === 'schedule' && styles.segmentTextActive,
               ]}
             >
-              14 週時程表
+              時程表與預告
             </Text>
           </TouchableOpacity>
 
@@ -112,35 +119,172 @@ export default function TasksScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Tab 1: 14 Weeks Schedule */}
+        {/* Tab 1: Schedule & Continuation Preview */}
         {activeTab === 'schedule' && (
           <View style={styles.sectionWrapper}>
-            <Text style={[styles.sectionTitle, { color: theme.text }]}>
-              全活動 14 週時程（9/1 ~ 11/30）
-            </Text>
-            <Text style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
-              每週一 00:00 起至週日 24:00 止為計算週期；審核時間約 5 個工作日。
-            </Text>
-
-            {/* Campaign Upload Closure Announcement Banner */}
+            {/* Upcoming Continuation Campaign Highlight Card */}
             <View
               style={[
-                styles.scheduleNoticeCard,
-                { backgroundColor: theme.cardBackground, borderColor: '#EA580C' },
+                styles.upcomingCampaignCard,
+                { backgroundColor: theme.cardBackground, borderColor: '#10B981' },
               ]}
             >
-              <View style={styles.scheduleNoticeHeader}>
-                <Ionicons name="megaphone" size={16} color="#EA580C" />
-                <Text style={[styles.scheduleNoticeTitle, { color: theme.text }]}>
-                  官方活動截止公告（300 萬筆額滿）
-                </Text>
+              <View style={styles.upcomingHeaderRow}>
+                <View style={[styles.upcomingBadge, { backgroundColor: '#10B981' }]}>
+                  <Ionicons name="sparkles" size={13} color="#ffffff" />
+                  <Text style={styles.upcomingBadgeText}>9/29 延續活動重磅回歸</Text>
+                </View>
+                <View style={[styles.upcomingPill, { backgroundColor: theme.primaryLight }]}>
+                  <Text style={[styles.upcomingPillText, { color: theme.primary }]}>
+                    共 10 週・累積制
+                  </Text>
+                </View>
               </View>
-              <Text style={[styles.scheduleNoticeDesc, { color: theme.textSecondary }]}>
-                運動部公告：運動紀錄上傳已達 300
-                萬筆上限，第三期（含）起已關閉註冊及上傳運動紀錄功能。凡已成功送出並經審查通過者，加碼券仍可持續兌換至
-                12 月 31 日。
+
+              <Text style={[styles.upcomingTitle, { color: theme.text }]}>
+                {UPCOMING_CAMPAIGN.name}（9/29 ~ 12/06）
               </Text>
+
+              <Text style={[styles.upcomingDesc, { color: theme.textSecondary }]}>
+                {UPCOMING_CAMPAIGN.rulesSummary}
+                三大指定運動任務標準維持相同，審查時間改為預計 7 個工作日完成。
+              </Text>
+
+              {/* Reward Milestones Grid */}
+              <View style={styles.upcomingRewardsGrid}>
+                {UPCOMING_CAMPAIGN.rewards.map((r) => (
+                  <View
+                    key={r.weeks}
+                    style={[
+                      styles.upcomingRewardItem,
+                      { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+                    ]}
+                  >
+                    <View style={[styles.rewardWeeksPill, { backgroundColor: theme.primaryLight }]}>
+                      <Text style={[styles.rewardWeeksPillText, { color: theme.primary }]}>
+                        {r.title}
+                      </Text>
+                    </View>
+                    <Text style={[styles.rewardDescText, { color: theme.text }]}>{r.desc}</Text>
+                  </View>
+                ))}
+              </View>
+
+              {/* Notice key points */}
+              <View style={[styles.upcomingNotesBox, { backgroundColor: theme.backgroundElement }]}>
+                <View style={styles.upcomingNoteRow}>
+                  <Ionicons name="person-circle" size={15} color="#0284C7" />
+                  <Text style={[styles.upcomingNoteText, { color: theme.text }]}>
+                    <Text style={{ fontWeight: '800' }}>舊帳號免重註冊：</Text>
+                    9/29 開放後直接一鍵快登；新參加者將重啟註冊。
+                  </Text>
+                </View>
+                <View style={styles.upcomingNoteRow}>
+                  <Ionicons name="alert-circle" size={15} color="#EA580C" />
+                  <Text style={[styles.upcomingNoteText, { color: theme.text }]}>
+                    <Text style={{ fontWeight: '800' }}>舊紀錄不列入累積：</Text>
+                    首波第 1、2 週紀錄不列入延續活動，均自 9/29 重新起算。
+                  </Text>
+                </View>
+                <View style={styles.upcomingNoteRow}>
+                  <Ionicons name="gift" size={15} color="#10B981" />
+                  <Text style={[styles.upcomingNoteText, { color: theme.text }]}>
+                    <Text style={{ fontWeight: '800' }}>首波加碼券正常兌換：</Text>
+                    原審核通過領取之 50 元加碼券，12 月 31 日前皆可折抵兌換。
+                  </Text>
+                </View>
+              </View>
+
+              {/* 10 Weeks Schedule Toggle */}
+              <TouchableOpacity
+                style={[
+                  styles.toggleWeeksBtn,
+                  { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+                ]}
+                onPress={() => setShowUpcomingWeeks((prev) => !prev)}
+              >
+                <Ionicons name="calendar-outline" size={15} color={theme.primary} />
+                <Text style={[styles.toggleWeeksBtnText, { color: theme.primary }]}>
+                  {showUpcomingWeeks ? '收合 10 週延續時程預告' : '展開 10 週延續時程預告'}
+                </Text>
+                <Ionicons
+                  name={showUpcomingWeeks ? 'chevron-up' : 'chevron-down'}
+                  size={15}
+                  color={theme.primary}
+                />
+              </TouchableOpacity>
+
+              {showUpcomingWeeks && (
+                <View style={styles.upcomingWeeksList}>
+                  {UPCOMING_SCHEDULE_RANGES.map((uw) => (
+                    <View
+                      key={uw.week}
+                      style={[
+                        styles.upcomingWeekRow,
+                        {
+                          backgroundColor: uw.milestone
+                            ? theme.primaryLight
+                            : theme.backgroundElement,
+                          borderColor: uw.milestone ? theme.primary : theme.cardBorder,
+                        },
+                      ]}
+                    >
+                      <View style={styles.upcomingWeekLeft}>
+                        <View
+                          style={[
+                            styles.upcomingWeekPill,
+                            { backgroundColor: uw.milestone ? theme.primary : theme.cardBorder },
+                          ]}
+                        >
+                          <Text
+                            style={[
+                              styles.upcomingWeekPillText,
+                              { color: uw.milestone ? '#ffffff' : theme.textSecondary },
+                            ]}
+                          >
+                            W{uw.week}
+                          </Text>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <Text style={[styles.upcomingWeekTitle, { color: theme.text }]}>
+                            {uw.label}
+                          </Text>
+                          <Text style={[styles.upcomingWeekDates, { color: theme.textSecondary }]}>
+                            {uw.text}
+                          </Text>
+                          {uw.milestone && (
+                            <View style={styles.upcomingMilestoneWrap}>
+                              <Ionicons name="trophy" size={13} color="#D97706" />
+                              <Text
+                                style={[styles.upcomingMilestoneText, { color: theme.primaryDark }]}
+                              >
+                                {uw.milestone}
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+                  <Text style={[styles.upcomingScheduleTip, { color: theme.textMuted }]}>
+                    * 9/29 (二) 10:00 官方正式上線後，小幫手將自動切換為最新 10 週即時時程表。
+                  </Text>
+                </View>
+              )}
             </View>
+
+            {/* First Wave Historical Schedule Header */}
+            <View style={styles.historyHeaderRow}>
+              <Text style={[styles.sectionTitle, { color: theme.text }]}>
+                首波 14 週歷史時程（9/1 ~ 11/30）
+              </Text>
+              <View style={[styles.historyBadge, { backgroundColor: '#FEE2E2' }]}>
+                <Text style={[styles.historyBadgeText, { color: '#DC2626' }]}>300 萬筆已額滿</Text>
+              </View>
+            </View>
+            <Text style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
+              第 1、2 週審核通過之 50 元加碼券可持續折抵兌換至 12/31；第 3 期起已停止受理新上傳。
+            </Text>
 
             <View style={styles.periodList}>
               {periods.map((item) => (
@@ -254,6 +398,25 @@ export default function TasksScreen() {
         {/* Tab 2: Three Tasks Criteria */}
         {activeTab === 'criteria' && (
           <View style={styles.sectionWrapper}>
+            {/* Continuation Compatibility Card */}
+            <View
+              style={[
+                styles.criteriaNoticeCard,
+                { backgroundColor: theme.primaryLight, borderColor: theme.primary },
+              ]}
+            >
+              <Ionicons name="sparkles" size={18} color={theme.primary} />
+              <View style={{ flex: 1, gap: 2 }}>
+                <Text style={[styles.criteriaNoticeTitle, { color: theme.primaryDark }]}>
+                  延續活動三大任務標準維持完全相同！
+                </Text>
+                <Text style={[styles.criteriaNoticeDesc, { color: theme.textSecondary }]}>
+                  9/29 延續活動開跑後，依然擇一完成「時間 30 分鐘」、「步數 8,000
+                  步」或「距離健走跑步 5km / 自行車 15km」即可。小幫手的「截圖預檢」演算法完全通用！
+                </Text>
+              </View>
+            </View>
+
             <Text style={[styles.sectionTitle, { color: theme.text }]}>
               三大指定運動任務（擇一達標即可）
             </Text>
@@ -349,6 +512,26 @@ export default function TasksScreen() {
         {/* Tab 3: Perks and Partners */}
         {activeTab === 'perks' && (
           <View style={styles.sectionWrapper}>
+            {/* Voucher applicability clarification banner */}
+            <View
+              style={[
+                styles.perksNoticeCard,
+                { backgroundColor: theme.cardBackground, borderColor: '#EA580C' },
+              ]}
+            >
+              <Ionicons name="information-circle" size={20} color="#EA580C" />
+              <View style={{ flex: 1, gap: 2 }}>
+                <Text style={[styles.perksNoticeTitle, { color: theme.text }]}>
+                  加碼券折抵說明（首波加碼券適用至 12/31）
+                </Text>
+                <Text style={[styles.perksNoticeDesc, { color: theme.textSecondary }]}>
+                  以下 5 大通路優惠適用於首波活動已核發之 50 元加碼券（兌換期限至 115 年 12 月 31
+                  日止）。9/29 開跑之延續活動獎勵改為累積制「數位完成證書」與「116 年 500
+                  元運動幣抽籤（限量 5 萬份）」，非每週直接發放超商加碼券。
+                </Text>
+              </View>
+            </View>
+
             <View style={styles.perksHeaderBanner}>
               <View style={[styles.perksBadgePill, { backgroundColor: theme.primaryLight }]}>
                 <Ionicons name="storefront" size={13} color={theme.primary} />
@@ -360,7 +543,7 @@ export default function TasksScreen() {
                 各商家加碼優惠與兌換商品清單
               </Text>
               <Text style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
-                審核通過後可獲得加碼券（總計 200 萬份）。點選下方商家可直接在 App
+                首波審核通過後獲得之 50 元加碼券（可折抵至 12/31）。點選下方商家可直接在 App
                 內瀏覽或以外部瀏覽器開啟官方商品明細。
               </Text>
             </View>
@@ -913,5 +1096,197 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 11,
     lineHeight: 16,
+  },
+  upcomingCampaignCard: {
+    padding: Spacing.four,
+    borderRadius: 18,
+    borderWidth: 1.5,
+    gap: 10,
+    marginBottom: Spacing.two,
+  },
+  upcomingHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  upcomingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    gap: 5,
+  },
+  upcomingBadgeText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  upcomingPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  upcomingPillText: {
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  upcomingTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: -0.2,
+  },
+  upcomingDesc: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  upcomingRewardsGrid: {
+    gap: 6,
+  },
+  upcomingRewardItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    gap: 10,
+  },
+  rewardWeeksPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+  },
+  rewardWeeksPillText: {
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  rewardDescText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  upcomingNotesBox: {
+    padding: 12,
+    borderRadius: 12,
+    gap: 8,
+  },
+  upcomingNoteRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  upcomingNoteText: {
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  toggleWeeksBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    gap: 6,
+    marginTop: 2,
+  },
+  toggleWeeksBtnText: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  upcomingWeeksList: {
+    gap: 6,
+    marginTop: 4,
+  },
+  upcomingWeekRow: {
+    padding: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    gap: 6,
+  },
+  upcomingWeekLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  upcomingWeekPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  upcomingWeekPillText: {
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  upcomingWeekTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  upcomingWeekDates: {
+    fontSize: 11,
+  },
+  upcomingMilestoneWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 4,
+  },
+  upcomingMilestoneText: {
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  upcomingScheduleTip: {
+    fontSize: 11,
+    textAlign: 'center',
+    marginTop: 4,
+  },
+  historyHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: Spacing.three,
+  },
+  historyBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  historyBadgeText: {
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  criteriaNoticeCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    padding: Spacing.three,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    gap: 10,
+    marginBottom: Spacing.two,
+  },
+  criteriaNoticeTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  criteriaNoticeDesc: {
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  perksNoticeCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    padding: Spacing.three,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    gap: 10,
+    marginBottom: Spacing.two,
+  },
+  perksNoticeTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  perksNoticeDesc: {
+    fontSize: 12,
+    lineHeight: 17,
   },
 });

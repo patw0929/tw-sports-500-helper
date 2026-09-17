@@ -104,6 +104,109 @@ export const OFFICIAL_SCHEDULE_RANGES = [
 export const CAMPAIGN_UPLOAD_CLOSED_FROM_PERIOD = 3;
 export const IS_CAMPAIGN_UPLOAD_CLOSED = true;
 
+export interface UpcomingCampaignInfo {
+  name: string;
+  startDate: string;
+  endDate: string;
+  startDateText: string;
+  endDateText: string;
+  totalWeeks: number;
+  openTimeText: string;
+  rulesSummary: string;
+  drawDateAnnouncement: string;
+  reviewWorkDays: number;
+  rewards: { weeks: number; title: string; desc: string; badge: string }[];
+  keyHighlights: { icon: string; title: string; text: string }[];
+}
+
+export const UPCOMING_CAMPAIGN: UpcomingCampaignInfo = {
+  name: '揮汗有禮・延續活動',
+  startDate: '2026-09-29T10:00:00+08:00',
+  endDate: '2026-12-06T23:59:59+08:00',
+  startDateText: '115/09/29 (二) 10:00',
+  endDateText: '115/12/06 (日) 23:59',
+  totalWeeks: 10,
+  openTimeText: '9 月 29 日（二）上午 10:00 起跑',
+  rulesSummary: '改採累積制（不需連續），首波前 2 週不計入，自 9/29 起重新累積週數。',
+  drawDateAnnouncement: '115 年 12 月 31 日前官網公告抽籤結果',
+  reviewWorkDays: 7,
+  rewards: [
+    { weeks: 5, title: '累積 5 週', desc: '銅色數位完成證書', badge: '銅證' },
+    { weeks: 7, title: '累積 7 週', desc: '銀色數位完成證書', badge: '銀證' },
+    {
+      weeks: 9,
+      title: '累積 9 週以上',
+      desc: '金色數位完成證書 ＋ 抽限量 5 萬份「116 年 500 元運動幣」',
+      badge: '金證＋抽500',
+    },
+  ],
+  keyHighlights: [
+    {
+      icon: 'sparkles',
+      title: '延續活動 9/29 重磅回歸',
+      text: '因首波反應熱烈，運動部宣布將於 9 月 29 日（二）上午 10:00 重啟延續活動，共計 10 週至 12 月 6 日止。',
+    },
+    {
+      icon: 'person-circle-outline',
+      title: '舊帳號直接登入・新用戶重啟註冊',
+      text: '先前已註冊過的使用者無需重新申請，屆時直接使用小幫手「一鍵快登」；新參加者可於 9/29 開放後註冊。',
+    },
+    {
+      icon: 'trophy-outline',
+      title: '全新累積制獎勵（免連續）',
+      text: '不需連續完成。累積滿 5 週獲銅證、7 週獲銀證、9 週以上獲金證並取得抽「116 年 500 元運動幣」（限量 5 萬份）資格。',
+    },
+    {
+      icon: 'refresh-outline',
+      title: '舊紀錄不計入・重新起算',
+      text: '首波（第 1、2 週）已上傳之運動紀錄不列入延續活動累計，所有參加者均自 9/29 重新起算週數。',
+    },
+    {
+      icon: 'checkmark-circle-outline',
+      title: '首波加碼券兌換效力不變',
+      text: '首波已審查通過領取之 50 元加碼券，115 年 12 月 31 日前皆可至四大超商與全聯正常折抵兌換。',
+    },
+    {
+      icon: 'time-outline',
+      title: '審查時間預計 7 個工作日',
+      text: '延續活動上傳運動截圖後，官方預計於 7 個工作日內完成審查。',
+    },
+  ],
+};
+
+export const UPCOMING_SCHEDULE_RANGES = [
+  { week: 1, text: '09/29 (二) 10:00 ~ 10/04 (日)', label: '延續第 1 週', milestone: null },
+  { week: 2, text: '10/05 (一) ~ 10/11 (日)', label: '延續第 2 週', milestone: null },
+  { week: 3, text: '10/12 (一) ~ 10/18 (日)', label: '延續第 3 週', milestone: null },
+  { week: 4, text: '10/19 (一) ~ 10/25 (日)', label: '延續第 4 週', milestone: null },
+  {
+    week: 5,
+    text: '10/26 (一) ~ 11/01 (日)',
+    label: '延續第 5 週',
+    milestone: '累積滿 5 週：可獲銅色數位完成證書',
+  },
+  { week: 6, text: '11/02 (一) ~ 11/08 (日)', label: '延續第 6 週', milestone: null },
+  {
+    week: 7,
+    text: '11/09 (一) ~ 11/15 (日)',
+    label: '延續第 7 週',
+    milestone: '累積滿 7 週：可獲銀色數位完成證書',
+  },
+  { week: 8, text: '11/16 (一) ~ 11/22 (日)', label: '延續第 8 週', milestone: null },
+  {
+    week: 9,
+    text: '11/23 (一) ~ 11/29 (日)',
+    label: '延續第 9 週',
+    milestone: '累積滿 9 週：可獲金色數位證書 ＋ 抽 116 年 500 元運動幣',
+  },
+  {
+    week: 10,
+    text: '11/30 (一) ~ 12/06 (日)',
+    label: '延續第 10 週',
+    milestone: '活動最終週（抽籤結果 12/31 前公布）',
+  },
+];
+
 export function getCalculatedPeriods(nowDate = new Date()): TaskPeriod[] {
   const nowTime = nowDate.getTime();
 

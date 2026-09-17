@@ -7,6 +7,7 @@ const PROFILES_KEY = 'sports500_profiles_v2';
 const ACTIVE_PROFILE_KEY = 'sports500_active_profile_id_v2';
 const BIOMETRIC_KEY = 'sports500_biometric_enabled_v2';
 const THEME_PREFERENCE_KEY = 'sports500_theme_preference_v1';
+const CAMPAIGN_NOTICE_COLLAPSED_KEY = 'sports500_campaign_notice_collapsed_v1';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 
@@ -214,4 +215,13 @@ export async function getThemePreference(): Promise<ThemePreference> {
 
 export async function saveThemePreference(pref: ThemePreference): Promise<void> {
   await setStorageItem(THEME_PREFERENCE_KEY, pref);
+}
+
+export async function getCampaignNoticeCollapsed(): Promise<boolean> {
+  const val = await getStorageItem(CAMPAIGN_NOTICE_COLLAPSED_KEY);
+  return val === 'true';
+}
+
+export async function setCampaignNoticeCollapsed(collapsed: boolean): Promise<void> {
+  await setStorageItem(CAMPAIGN_NOTICE_COLLAPSED_KEY, collapsed ? 'true' : 'false');
 }
