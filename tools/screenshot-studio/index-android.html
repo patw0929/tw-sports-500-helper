@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>揮汗有禮加碼券小幫手 — Play Store 截圖工作室</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --bg: #0F0E13;
+      --card-bg: #1A1824;
+      --card-border: #2E2B3D;
+      --primary: #FF5E1E;
+      --primary-glow: rgba(255, 94, 30, 0.35);
+      --text: #F0EFF5;
+      --text-muted: #8A8799;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(26, 24, 36, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      font-size: 22px;
+      background: linear-gradient(135deg, #FF5E1E, #FF8C42);
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .brand-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .controls-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .zoom-selector {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 3px 6px;
+      border-radius: 22px;
+      border: 1px solid var(--card-border);
+      gap: 2px;
+    }
+
+    .zoom-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .zoom-btn.active {
+      background: rgba(255, 94, 30, 0.18);
+      color: var(--primary);
+      border: 1px solid rgba(255, 94, 30, 0.35);
+    }
+
+    .batch-export-btn {
+      background: linear-gradient(135deg, #D84315, #FF5E1E);
+      color: #fff;
+      border: none;
+      padding: 9px 22px;
+      border-radius: 22px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px var(--primary-glow);
+      transition: transform 0.15s, filter 0.15s;
+    }
+
+    .batch-export-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    .batch-export-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Guide */
+    .guide-banner {
+      max-width: 1840px;
+      margin: 16px auto 0;
+      padding: 0 24px;
+      width: 100%;
+    }
+
+    .guide-box {
+      background: rgba(255, 94, 30, 0.07);
+      border: 1px solid rgba(255, 94, 30, 0.22);
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 0.85rem;
+      color: #FFB899;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .guide-box-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .save-indicator {
+      font-size: 0.78rem;
+      color: #34D399;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Stage */
+    .studio-container {
+      flex: 1;
+      padding: 20px 24px 80px;
+      overflow-x: auto;
+    }
+
+    .panorama-stage {
+      display: flex;
+      gap: 24px;
+      width: fit-content;
+      margin: 0 auto;
+      padding: 10px 24px 40px;
+      transform-origin: top center;
+      transition: transform 0.2s, margin-bottom 0.2s;
+    }
+
+    /* Frame */
+    .frame-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .screenshot-frame {
+      width: 430px;
+      height: 932px;
+      border-radius: 28px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .screenshot-frame:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 70px -10px var(--primary-glow), 0 0 0 1px rgba(255, 94, 30, 0.35);
+    }
+
+    .frame-bg-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* Editable text */
+    .frame-text-header {
+      position: relative;
+      z-index: 10;
+      padding: 36px 22px 14px;
+      text-align: center;
+    }
+
+    .frame-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(8px);
+      color: #FFD4BD;
+      margin-bottom: 10px;
+      outline: none;
+      cursor: text;
+    }
+
+    .frame-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      outline: none;
+      cursor: text;
+    }
+
+    .frame-sub {
+      font-size: 0.9rem;
+      color: #FFD4BD;
+      font-weight: 500;
+      line-height: 1.4;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+      outline: none;
+      cursor: text;
+    }
+
+    [contenteditable]:focus {
+      background: rgba(255, 94, 30, 0.15);
+      border-radius: 6px;
+    }
+
+    /* Phone mockup */
+    .phone-mockup-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 374px;
+      margin: 8px auto 0;
+      border-top-left-radius: 46px;
+      border-top-right-radius: 46px;
+      background: #141018;
+      box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.8), 0 0 0 2.5px rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 8px 8px 0;
+      flex: 1;
+    }
+
+    .phone-screen-content {
+      width: 100%;
+      height: 100%;
+      background: #F5F0EC;
+      position: relative;
+      overflow: hidden;
+      border-top-left-radius: 38px;
+      border-top-right-radius: 38px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-screenshot-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Upload overlay */
+    .upload-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      opacity: 1;
+      transition: opacity 0.2s;
+      cursor: pointer;
+      z-index: 30;
+      padding: 20px;
+      text-align: center;
+      background: #1A1824;
+    }
+
+    .phone-mockup-wrapper:has(.phone-screen-content.has-image) .upload-overlay,
+    .phone-screen-content.has-image + .upload-overlay,
+    .phone-mockup-wrapper.has-image .upload-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .phone-mockup-wrapper:hover .upload-overlay {
+      opacity: 1 !important;
+      pointer-events: auto;
+      background: rgba(20, 16, 24, 0.82);
+      backdrop-filter: blur(4px);
+    }
+
+    .upload-btn-chip {
+      background: var(--primary);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .upload-hint {
+      font-size: 0.72rem;
+      color: #FFB899;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    /* Export bar */
+    .frame-export-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .single-download-btn {
+      flex: 1;
+      background: rgba(26, 24, 36, 0.95);
+      border: 1px solid var(--card-border);
+      color: #FFB899;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .single-download-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .reset-chip-btn {
+      background: rgba(26, 24, 36, 0.95);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .reset-chip-btn:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+
+    .reset-chip-btn.danger:hover {
+      border-color: #EF4444;
+      color: #EF4444;
+    }
+
+    /* Toast */
+    .export-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(30, 28, 42, 0.97);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s;
+      z-index: 9999;
+    }
+
+    .export-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="brand-group">
+      <div class="brand-icon">🏃</div>
+      <div>
+        <div class="brand-title">揮汗有禮加碼券小幫手</div>
+        <div class="brand-sub">Play Store 截圖工作室 (1290×2796 · 6.7" 必填)</div>
+      </div>
+    </div>
+    <div class="controls-group">
+      <div class="zoom-selector">
+        <button class="zoom-btn" data-zoom="0.5" onclick="setStudioZoom(0.5)">50%</button>
+        <button class="zoom-btn" data-zoom="0.75" onclick="setStudioZoom(0.75)">75%</button>
+        <button class="zoom-btn" data-zoom="1" onclick="setStudioZoom(1)">100%</button>
+      </div>
+      <button class="batch-export-btn" id="export-all-btn" onclick="exportAllFrames()">
+        <span>📦</span> 批次匯出全部 5 張
+      </button>
+    </div>
+  </header>
+
+  <div class="guide-banner">
+    <div class="guide-box">
+      <div>
+        <div class="guide-box-header">💡 使用說明</div>
+        點擊手機畫面區域上傳實機截圖 &nbsp;·&nbsp; 點擊標題文字可直接在線編輯 &nbsp;·&nbsp; 截圖以 IndexedDB 自動保存，重開工具不會消失
+      </div>
+      <div class="save-indicator"><span>●</span> 自動儲存中</div>
+    </div>
+  </div>
+
+  <div class="studio-container">
+    <div class="panorama-stage" id="panorama-stage">
+
+      <!-- ===== 1. 快速登入 ===== -->
+      <div class="frame-column">
+        <div class="screenshot-frame" id="frame-1">
+          <div class="frame-bg-layer" style="background:linear-gradient(180deg,#2C1006 0%,#7A2800 40%,#3D1200 100%);">
+            <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 430 932"
+              preserveAspectRatio="none">
+              <circle cx="380" cy="-60" r="280" fill="none" stroke="rgba(255,94,30,0.3)" stroke-width="1.5" />
+              <circle cx="380" cy="-60" r="180" fill="rgba(255,94,30,0.12)" />
+              <path d="M0,420 Q215,390 430,420 L430,932 L0,932 Z" fill="rgba(255,94,30,0.08)" />
+              <path d="M0,480 Q215,450 430,480 L430,932 L0,932 Z" fill="rgba(245,158,11,0.07)" />
+            </svg>
+          </div>
+          <div class="frame-text-header">
+            <div class="frame-tag" contenteditable="true" id="tag-1">⚡️ 快速登入・省時神器</div>
+            <div class="frame-title" contenteditable="true" id="title-1">全家身分<br><span
+                style="color:#FFA06A;">一鍵快速切換</span></div>
+            <div class="frame-sub" contenteditable="true" id="sub-1">完美支援多帳號管理與自動登入<br>加碼券輕鬆領取！</div>
+          </div>
+          <div class="phone-mockup-wrapper">
+            <input type="file" id="file-1" class="file-input" accept="image/*" onchange="handleImageUpload(event,1)">
+            <div class="upload-overlay" onclick="triggerUpload(1)">
+              <span class="upload-btn-chip">📷 上傳實機截圖</span>
+              <span class="upload-hint">點擊更換真實截圖</span>
+            </div>
+            <div class="phone-screen-content" id="screen-content-1"></div>
+          </div>
+        </div>
+        <div class="frame-export-bar">
+          <button class="single-download-btn" onclick="exportSingleFrame(1)"><span>📥</span> 匯出此張</button>
+          <button class="reset-chip-btn" onclick="triggerUpload(1)">換圖</button>
+          <button class="reset-chip-btn danger" onclick="resetScreen(1)">清除</button>
+        </div>
+      </div>
+
+      <!-- ===== 2. 截圖預檢 ===== -->
+      <div class="frame-column">
+        <div class="screenshot-frame" id="frame-2">
+          <div class="frame-bg-layer" style="background:linear-gradient(180deg,#071A14 0%,#0D4C34 42%,#052215 100%);">
+            <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 430 932"
+              preserveAspectRatio="none">
+              <circle cx="50" cy="120" r="220" fill="rgba(16,185,129,0.1)" />
+              <path d="M0,400 Q215,370 430,400 L430,932 L0,932 Z" fill="rgba(16,185,129,0.07)" />
+              <circle cx="350" cy="800" r="160" fill="rgba(16,185,129,0.06)" />
+            </svg>
+          </div>
+          <div class="frame-text-header">
+            <div class="frame-tag" contenteditable="true" id="tag-2">🔍 AI 前端合格診斷</div>
+            <div class="frame-title" contenteditable="true" id="title-2">截圖合格預先檢查<br><span
+                style="color:#6EE7B7;">不怕官方退件</span></div>
+            <div class="frame-sub" contenteditable="true" id="sub-2">上傳只有一次機會！純本機離線 OCR<br>智慧分析步數、時長與日期</div>
+          </div>
+          <div class="phone-mockup-wrapper">
+            <input type="file" id="file-2" class="file-input" accept="image/*" onchange="handleImageUpload(event,2)">
+            <div class="upload-overlay" onclick="triggerUpload(2)">
+              <span class="upload-btn-chip">📷 上傳實機截圖</span>
+              <span class="upload-hint">點擊更換真實截圖</span>
+            </div>
+            <div class="phone-screen-content" id="screen-content-2"></div>
+          </div>
+        </div>
+        <div class="frame-export-bar">
+          <button class="single-download-btn" onclick="exportSingleFrame(2)"><span>📥</span> 匯出此張</button>
+          <button class="reset-chip-btn" onclick="triggerUpload(2)">換圖</button>
+          <button class="reset-chip-btn danger" onclick="resetScreen(2)">清除</button>
+        </div>
+      </div>
+
+      <!-- ===== 3. 自動登入瀏覽器 ===== -->
+      <div class="frame-column">
+        <div class="screenshot-frame" id="frame-3">
+          <div class="frame-bg-layer" style="background:linear-gradient(180deg,#0D0D2B 0%,#1A1A7E 42%,#0A0A1A 100%);">
+            <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 430 932"
+              preserveAspectRatio="none">
+              <circle cx="215" cy="100" r="200" fill="rgba(99,102,241,0.12)" />
+              <path d="M0,380 Q215,350 430,380 L430,932 L0,932 Z" fill="rgba(99,102,241,0.07)" />
+              <path d="M0,440 Q215,410 430,440 L430,932 L0,932 Z" fill="rgba(139,92,246,0.06)" />
+            </svg>
+          </div>
+          <div class="frame-text-header">
+            <div class="frame-tag" contenteditable="true" id="tag-3">✨ 內建專屬瀏覽器</div>
+            <div class="frame-title" contenteditable="true" id="title-3">身分資料<br><span
+                style="color:#A5B4FC;">一秒自動帶入</span></div>
+            <div class="frame-sub" contenteditable="true" id="sub-3">一鍵自動填入身分證字號、生日<br>與手機號碼，直達我的任務</div>
+          </div>
+          <div class="phone-mockup-wrapper">
+            <input type="file" id="file-3" class="file-input" accept="image/*" onchange="handleImageUpload(event,3)">
+            <div class="upload-overlay" onclick="triggerUpload(3)">
+              <span class="upload-btn-chip">📷 上傳實機截圖</span>
+              <span class="upload-hint">點擊更換真實截圖</span>
+            </div>
+            <div class="phone-screen-content" id="screen-content-3"></div>
+          </div>
+        </div>
+        <div class="frame-export-bar">
+          <button class="single-download-btn" onclick="exportSingleFrame(3)"><span>📥</span> 匯出此張</button>
+          <button class="reset-chip-btn" onclick="triggerUpload(3)">換圖</button>
+          <button class="reset-chip-btn danger" onclick="resetScreen(3)">清除</button>
+        </div>
+      </div>
+
+      <!-- ===== 4. 任務週程 ===== -->
+      <div class="frame-column">
+        <div class="screenshot-frame" id="frame-4">
+          <div class="frame-bg-layer" style="background:linear-gradient(180deg,#1A1000 0%,#5C3A00 42%,#2A1C00 100%);">
+            <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 430 932"
+              preserveAspectRatio="none">
+              <circle cx="60" cy="80" r="220" fill="rgba(245,158,11,0.1)" />
+              <path d="M0,400 Q215,380 430,400 L430,932 L0,932 Z" fill="rgba(245,158,11,0.07)" />
+              <path d="M0,450 Q215,430 430,450 L430,932 L0,932 Z" fill="rgba(255,94,30,0.06)" />
+              <circle cx="370" cy="820" r="180" fill="rgba(245,158,11,0.06)" />
+            </svg>
+          </div>
+          <div class="frame-text-header">
+            <div class="frame-tag" contenteditable="true" id="tag-4">📅 10 週完整時程</div>
+            <div class="frame-title" contenteditable="true" id="title-4">活動週程<br><span
+                style="color:#FCD34D;">重要日程不漏接</span></div>
+            <div class="frame-sub" contenteditable="true" id="sub-4">即時倒數各期剩餘時間<br>掌握 9/29～12/6 全 10 期任務</div>
+          </div>
+          <div class="phone-mockup-wrapper">
+            <input type="file" id="file-4" class="file-input" accept="image/*" onchange="handleImageUpload(event,4)">
+            <div class="upload-overlay" onclick="triggerUpload(4)">
+              <span class="upload-btn-chip">📷 上傳實機截圖</span>
+              <span class="upload-hint">點擊更換真實截圖</span>
+            </div>
+            <div class="phone-screen-content" id="screen-content-4"></div>
+          </div>
+        </div>
+        <div class="frame-export-bar">
+          <button class="single-download-btn" onclick="exportSingleFrame(4)"><span>📥</span> 匯出此張</button>
+          <button class="reset-chip-btn" onclick="triggerUpload(4)">換圖</button>
+          <button class="reset-chip-btn danger" onclick="resetScreen(4)">清除</button>
+        </div>
+      </div>
+
+      <!-- ===== 5. 帳號安全保險箱 ===== -->
+      <div class="frame-column">
+        <div class="screenshot-frame" id="frame-5">
+          <div class="frame-bg-layer" style="background:linear-gradient(180deg,#0A1520 0%,#0F3460 42%,#060E18 100%);">
+            <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 430 932"
+              preserveAspectRatio="none">
+              <circle cx="215" cy="150" r="250" fill="rgba(14,165,233,0.09)" />
+              <path d="M0,380 Q215,355 430,380 L430,932 L0,932 Z" fill="rgba(14,165,233,0.07)" />
+              <path d="M0,440 Q215,415 430,440 L430,932 L0,932 Z" fill="rgba(99,102,241,0.06)" />
+            </svg>
+          </div>
+          <div class="frame-text-header">
+            <div class="frame-tag" contenteditable="true" id="tag-5">🛡️ 本機安全加密</div>
+            <div class="frame-title" contenteditable="true" id="title-5">純本機保護<br><span
+                style="color:#7DD3FC;">個資絕不上傳</span></div>
+            <div class="frame-sub" contenteditable="true" id="sub-5">生物辨識解鎖保護<br>資料僅存手機的安全加密空間
+            </div>
+          </div>
+          <div class="phone-mockup-wrapper">
+            <input type="file" id="file-5" class="file-input" accept="image/*" onchange="handleImageUpload(event,5)">
+            <div class="upload-overlay" onclick="triggerUpload(5)">
+              <span class="upload-btn-chip">📷 上傳實機截圖</span>
+              <span class="upload-hint">點擊更換真實截圖</span>
+            </div>
+            <div class="phone-screen-content" id="screen-content-5"></div>
+          </div>
+        </div>
+        <div class="frame-export-bar">
+          <button class="single-download-btn" onclick="exportSingleFrame(5)"><span>📥</span> 匯出此張</button>
+          <button class="reset-chip-btn" onclick="triggerUpload(5)">換圖</button>
+          <button class="reset-chip-btn danger" onclick="resetScreen(5)">清除</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="export-toast" id="export-toast">
+    <span id="toast-icon">✨</span>
+    <span id="toast-msg"></span>
+  </div>
+
+  <script>
+    /* IndexedDB */
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open('tw-sports-studio', 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore('images');
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function saveImageToDB(i, dataUrl) {
+      try { const db = await openDB(); db.transaction('images', 'readwrite').objectStore('images').put(dataUrl, `screen_${i}`); }
+      catch (e) { console.warn(e); }
+    }
+    async function loadImageFromDB(i) {
+      try {
+        const db = await openDB();
+        const req = db.transaction('images', 'readonly').objectStore('images').get(`screen_${i}`);
+        return new Promise(r => { req.onsuccess = () => r(req.result); req.onerror = () => r(null); });
+      } catch { return null; }
+    }
+
+    /* Zoom */
+    function setStudioZoom(zoom) {
+      document.querySelectorAll('.zoom-btn').forEach(b => b.classList.toggle('active', parseFloat(b.dataset.zoom) === zoom));
+      const stage = document.getElementById('panorama-stage');
+      stage.style.transform = `scale(${zoom})`;
+      stage.style.marginBottom = `-${(932 + 80) * (1 - zoom)}px`;
+    }
+
+    /* Init */
+    window.addEventListener('DOMContentLoaded', async () => {
+      setStudioZoom(0.75);
+      for (let i = 1; i <= 5; i++) {
+        const cached = await loadImageFromDB(i);
+        if (cached) applyImage(i, cached);
+      }
+    });
+
+    function applyImage(i, dataUrl) {
+      const c = document.getElementById(`screen-content-${i}`);
+      c.innerHTML = `<img src="${dataUrl}" class="user-screenshot-img" alt="Screen ${i}">`;
+      c.classList.add('has-image');
+      c.closest('.phone-mockup-wrapper')?.classList.add('has-image');
+    }
+
+    /* Upload */
+    function triggerUpload(i) { document.getElementById(`file-${i}`).click(); }
+
+    function handleImageUpload(e, i) {
+      const file = e.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        applyImage(i, ev.target.result);
+        await saveImageToDB(i, ev.target.result);
+        showToast(`✅ 第 ${i} 張截圖已更新並自動儲存！`);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function resetScreen(i) {
+      const c = document.getElementById(`screen-content-${i}`);
+      c.innerHTML = ''; c.classList.remove('has-image');
+      c.closest('.phone-mockup-wrapper')?.classList.remove('has-image');
+      document.getElementById(`file-${i}`).value = '';
+      try { const db = await openDB(); db.transaction('images', 'readwrite').objectStore('images').delete(`screen_${i}`); } catch { }
+      showToast(`第 ${i} 張截圖已清除`, '🗑️');
+    }
+
+    /* Toast */
+    function showToast(msg, icon = '✨') {
+      const t = document.getElementById('export-toast');
+      document.getElementById('toast-icon').textContent = icon;
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    /* Export single */
+    async function exportSingleFrame(i) {
+      const frame = document.getElementById(`frame-${i}`);
+      const overlay = frame.querySelector('.upload-overlay');
+      const stage = document.getElementById('panorama-stage');
+      const prevT = stage.style.transform, prevM = stage.style.marginBottom;
+      if (overlay) overlay.style.display = 'none';
+      stage.style.transform = 'none'; stage.style.marginBottom = '0';
+      const origR = frame.style.borderRadius, origS = frame.style.boxShadow, origT = frame.style.transform;
+      frame.style.borderRadius = '0'; frame.style.boxShadow = 'none'; frame.style.transform = 'none';
+      try {
+        showToast(`正在渲染第 ${i} 張截圖 (1290×2796)...`, '⏳');
+        const rendered = await html2canvas(frame, { scale: 3, width: 430, height: 932, useCORS: true, backgroundColor: '#0F0E13', logging: false });
+        let fc = rendered;
+        if (rendered.width !== 1290 || rendered.height !== 2796) {
+          const n = document.createElement('canvas'); n.width = 1290; n.height = 2796;
+          const ctx = n.getContext('2d'); ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(rendered, 0, 0, 1290, 2796); fc = n;
+        }
+        const a = document.createElement('a');
+        a.download = `twsports_screenshot_0${i}_1290x2796.png`;
+        a.href = fc.toDataURL('image/png'); a.click();
+        showToast(`第 ${i} 張截圖已下載！`, '📥');
+      } catch (err) {
+        console.error(err); alert(`匯出第 ${i} 張失敗：` + err.message);
+      } finally {
+        if (overlay) overlay.style.display = '';
+        frame.style.borderRadius = origR; frame.style.boxShadow = origS; frame.style.transform = origT;
+        stage.style.transform = prevT; stage.style.marginBottom = prevM;
+      }
+    }
+
+    /* Batch export */
+    async function exportAllFrames() {
+      const btn = document.getElementById('export-all-btn');
+      const orig = btn.innerHTML; btn.disabled = true;
+      try {
+        for (let i = 1; i <= 5; i++) {
+          btn.innerHTML = `<span>⏳</span> 正在匯出第 ${i}/5 張...`;
+          await exportSingleFrame(i);
+          await new Promise(r => setTimeout(r, 800));
+        }
+        showToast('🎉 5 張截圖全數下載完成！', '✅');
+      } catch (err) { alert('批次匯出發生異常：' + err.message); }
+      finally { btn.innerHTML = orig; btn.disabled = false; }
+    }
+  </script>
+</body>
+
+</html>

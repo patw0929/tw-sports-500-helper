@@ -13,6 +13,8 @@ const ICON_PATH = path.join(PROJECT_ROOT, 'assets/images/icon.png');
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
+const SCREENSHOTS_DIR = path.join(PROJECT_ROOT, 'tools/screenshot-studio/screenshots/android');
+
 // Find Chrome/Edge
 function findBrowser() {
   const candidates = [
@@ -27,6 +29,26 @@ function findBrowser() {
   return null;
 }
 
+// Find Python with edge_tts installed
+function findPython() {
+  const candidates = [
+    '/opt/homebrew/opt/python@3.13/bin/python3.13',
+    '/opt/homebrew/opt/python@3.14/bin/python3.14',
+    '/opt/homebrew/opt/python@3.11/bin/python3.11',
+    'python3',
+  ];
+  for (const p of candidates) {
+    try {
+      execSync(`"${p}" -c "import edge_tts"`, { stdio: 'ignore' });
+      return p;
+    } catch {
+      // ignore
+    }
+  }
+  return 'python3';
+}
+
+const pythonPath = findPython();
 const browserPath = findBrowser();
 if (!browserPath) {
   console.error('❌ 找不到可用的 Chromium 核心瀏覽器 (Edge/Chrome)');
@@ -42,7 +64,7 @@ const SCENES = [
     badgeBorder: 'rgba(239, 68, 68, 0.4)',
     title: '還在手動選民國生日？',
     subtitle: '運動截圖傳錯審核不通過！',
-    bgImage: path.join(PROJECT_ROOT, 'play-store-assets/screenshot_3_autofill.png'),
+    bgImage: path.join(SCREENSHOTS_DIR, 'twsports_screenshot_03_1290x2796.png'),
     scriptText:
       '你也在領運動部的揮汗有禮加碼券嗎？每次登入身分證、生日選單點到手痠？更怕運動截圖傳錯審核不通過？',
     motion: 'pan_down',
@@ -74,7 +96,7 @@ const SCENES = [
     badgeBorder: 'rgba(255, 94, 30, 0.4)',
     title: '一鍵自動填表直達！',
     subtitle: '免反覆輸入・秒進「我的任務」',
-    bgImage: path.join(PROJECT_ROOT, 'play-store-assets/screenshot_1_quick_login.png'),
+    bgImage: path.join(SCREENSHOTS_DIR, 'twsports_screenshot_01_1290x2796.png'),
     scriptText:
       '試試這款超實用的加碼券小幫手 App！點擊一鍵登入，身分證、出生年月日秒速自動填入，直接進入我的任務，省去大半繁瑣步驟！',
     motion: 'pan_up',
@@ -106,7 +128,7 @@ const SCENES = [
     badgeBorder: 'rgba(16, 185, 129, 0.4)',
     title: '基於揮汗有禮網站演算法改良',
     subtitle: '上傳前先把關・降低審核失敗風險！',
-    bgImage: path.join(PROJECT_ROOT, 'play-store-assets/screenshot_2_precheck.png'),
+    bgImage: path.join(SCREENSHOTS_DIR, 'twsports_screenshot_02_1290x2796.png'),
     scriptText:
       '內建超實用的合格預檢功能！官方上傳只有一次機會，採用基於揮汗有禮網站演算法改良的檢核機制，上傳前先幫你把關，大幅降低審核不通過的風險！',
     motion: 'pan_down',
@@ -139,7 +161,7 @@ const SCENES = [
     badgeBorder: 'rgba(59, 130, 246, 0.4)',
     title: '幫不熟手機的家人快速確認',
     subtitle: '本機硬體安全晶片加密・個資絕不上傳',
-    bgImage: path.join(PROJECT_ROOT, 'play-store-assets/screenshot_5_security.png'),
+    bgImage: path.join(SCREENSHOTS_DIR, 'twsports_screenshot_05_1290x2796.png'),
     scriptText:
       '支援家庭多成員管理，你可以幫不熟悉操作的家人快速切換身分確認任務！所有資料都存在手機硬體晶片，絕不上傳雲端，安全又放心！',
     motion: 'pan_down',
@@ -170,24 +192,29 @@ const SCENES = [
     badge: '🎁 亮點四・週程提醒與超商加碼',
     badgeBg: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
     badgeBorder: 'rgba(139, 92, 246, 0.4)',
-    title: '14 週倒數提醒・五大超商優惠',
+    title: '最新 10 週延續時程・首波 14 週指引',
     subtitle: '完全免費・無廣告・立即下載體驗！',
-    bgImage: path.join(PROJECT_ROOT, 'play-store-assets/screenshot_4_schedule.png'),
+    bgImage: path.join(SCREENSHOTS_DIR, 'twsports_screenshot_04_1290x2796.png'),
     scriptText:
-      '還有 14 週倒數提醒與五大超商兌換清單！完全免費、沒有廣告，現在就到留言區或資訊欄下載體驗吧！',
+      '還有最新 10 週延續時程與首波 14 週倒數指引，五大超商兌換清單！完全免費、沒有廣告，現在就點資訊欄連結下載吧！',
     motion: 'pan_down',
     subtitles: [
       {
         relStart: 0.1,
-        relEnd: 3.9,
-        text: '還有 14 週倒數提醒與五大超商兌換清單！',
-        highlight: '14 週倒數提醒',
+        relEnd: 5.81,
+        text: '還有最新 10 週延續時程與首波 14 週倒數指引，五大超商兌換清單！',
+        highlight: '最新 10 週延續時程與首波 14 週倒數指引',
       },
-      { relStart: 3.9, relEnd: 6.5, text: '完全免費、沒有廣告，', highlight: '完全免費、沒有廣告' },
       {
-        relStart: 6.5,
-        relEnd: 9.24,
-        text: '現在就到留言區或資訊欄下載體驗吧！',
+        relStart: 5.76,
+        relEnd: 8.5,
+        text: '完全免費、沒有廣告，',
+        highlight: '完全免費、沒有廣告',
+      },
+      {
+        relStart: 8.5,
+        relEnd: 11.08,
+        text: '現在就到資訊欄下載體驗吧！',
         highlight: '立即下載體驗',
       },
     ],
@@ -199,7 +226,7 @@ console.log('🎙️ [1/6] 正在生成高品質台灣繁體中文旁白語音 (
 for (let i = 0; i < SCENES.length; i++) {
   const s = SCENES[i];
   const audioPath = path.join(TEMP_DIR, `${s.id}.mp3`);
-  const cmd = `python3 -m edge_tts --voice "zh-TW-HsiaoChenNeural" --rate "+18%" --text "${s.scriptText}" --write-media "${audioPath}"`;
+  const cmd = `"${pythonPath}" -m edge_tts --voice "zh-TW-HsiaoChenNeural" --rate "+18%" --text "${s.scriptText}" --write-media "${audioPath}"`;
   execSync(cmd, { stdio: 'pipe' });
   const dur = parseFloat(
     execSync(
@@ -217,7 +244,7 @@ console.log('🎵 [2/6] 正在合成溫暖輕快背景音樂 (BGM)...');
 const bgmPath = path.join(TEMP_DIR, 'bgm.wav');
 const totalDuration = SCENES.reduce((acc, s) => acc + s.duration, 0);
 execSync(
-  `python3 -c '
+  `"${pythonPath}" -c '
 import wave, math, struct
 def gen(path, dur):
     rate, bpm = 44100, 114
@@ -418,7 +445,7 @@ const outroHtml = `<!DOCTYPE html>
     <div class="feature-item">🔍 官方演算法改良預檢，降低審核失敗風險</div>
     <div class="feature-item">👨‍👩‍👧‍👦 家庭多成員管理，晶片硬體加密絕不上傳</div>
   </div>
-  <div class="cta-btn">立即到留言區下載體驗！</div>
+  <div class="cta-btn">立即點選連結下載體驗！</div>
 </body>
 </html>`;
 fs.writeFileSync(outroHtmlPath, outroHtml, 'utf8');
@@ -491,23 +518,14 @@ for (let i = 0; i < SCENES.length; i++) {
   sceneVideos.push(sceneVideoFile);
 
   const dur = s.duration;
-  let motionFilter = '';
-
-  if (s.motion === 'pan_down') {
-    // Silky-smooth 60fps cosine ease-in-out pan downwards from top
-    motionFilter = `scale=1280:2276:flags=lanczos,crop=1080:1920:'(in_w-1080)/2':'(in_h-1920)*(0.5-0.5*cos(PI*t/${dur}))',fps=60`;
-  } else if (s.motion === 'pan_up') {
-    // Silky-smooth 60fps cosine ease-in-out pan upwards from bottom
-    motionFilter = `scale=1280:2276:flags=lanczos,crop=1080:1920:'(in_w-1080)/2':'(in_h-1920)*(0.5+0.5*cos(PI*t/${dur}))',fps=60`;
-  } else {
-    // Silky-smooth 60fps cosine ease-in-out subtle zoom
-    motionFilter = `scale=1280:2276:flags=lanczos,crop='1080+(1280-1080)*(0.5+0.5*cos(PI*t/${dur}))':'1920+(2276-1920)*(0.5+0.5*cos(PI*t/${dur}))':'(in_w-out_w)/2':'(in_h-out_h)/2',scale=1080:1920:flags=lanczos,fps=60`;
-  }
+  // Preserve screenshot's original 1290:2796 aspect ratio (scale to fit 1080x1920 with pillarbox padding)
+  const motionFilter =
+    'scale=1080:1920:force_original_aspect_ratio=decrease:flags=lanczos,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=60';
 
   let cmd = '';
   if (s.id === 'scene5') {
-    // Scene 5 transitions from schedule screenshot to the outro CTA card at 5.2s
-    const splitTime = 5.2;
+    // Scene 5 transitions from schedule screenshot to the outro CTA card at 5.8s
+    const splitTime = 5.8;
     cmd = `ffmpeg -loop 1 -i "${s.bgImage}" -loop 1 -i "${outroPngPath}" -i "${s.overlayImage}" -i "${audioFile}" -filter_complex "[0:v]${motionFilter},settb=1/60[v0];[1:v]scale=1080:1920,fps=60,settb=1/60[v1];[v0][v1]xfade=transition=fade:duration=0.5:offset=${splitTime}[vbg];[vbg][2:v]overlay=0:0:enable='between(t,0,${splitTime})'[vout]" -map "[vout]" -map 3:a -c:v libx264 -preset fast -crf 20 -r 60 -t ${dur} -pix_fmt yuv420p -y "${sceneVideoFile}"`;
   } else {
     cmd = `ffmpeg -loop 1 -i "${s.bgImage}" -i "${s.overlayImage}" -i "${audioFile}" -filter_complex "[0:v]${motionFilter}[vbg];[vbg][1:v]overlay=0:0[vout]" -map "[vout]" -map 2:a -c:v libx264 -preset fast -crf 20 -r 60 -t ${dur} -pix_fmt yuv420p -y "${sceneVideoFile}"`;
