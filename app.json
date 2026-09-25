@@ -10,7 +10,7 @@
     "ios": {
       "bundleIdentifier": "me.patw.twsports500helper",
       "icon": "./assets/images/icon.png",
-      "buildNumber": "3",
+      "buildNumber": "4",
       "supportsTablet": false,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -18,7 +18,7 @@
     },
     "android": {
       "package": "me.patw.twsports500helper",
-      "versionCode": 3,
+      "versionCode": 4,
       "usesCleartextTraffic": true,
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
