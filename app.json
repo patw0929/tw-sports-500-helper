@@ -10,7 +10,8 @@
     "ios": {
       "bundleIdentifier": "me.patw.twsports500helper",
       "icon": "./assets/images/icon.png",
-      "buildNumber": "2"
+      "buildNumber": "2",
+      "supportsTablet": false
     },
     "android": {
       "package": "me.patw.twsports500helper",
