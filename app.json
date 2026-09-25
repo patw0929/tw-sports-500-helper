@@ -2,7 +2,7 @@
   "expo": {
     "name": "揮汗有禮加碼券小幫手",
     "slug": "tw-sports-500-helper",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "twsports500helper",
@@ -10,12 +10,15 @@
     "ios": {
       "bundleIdentifier": "me.patw.twsports500helper",
       "icon": "./assets/images/icon.png",
-      "buildNumber": "2",
-      "supportsTablet": false
+      "buildNumber": "3",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "me.patw.twsports500helper",
-      "versionCode": 2,
+      "versionCode": 3,
       "usesCleartextTraffic": true,
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
