@@ -2,7 +2,7 @@
   "expo": {
     "name": "揮汗有禮加碼券小幫手",
     "slug": "tw-sports-500-helper",
-    "version": "1.2.4",
+    "version": "1.2.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "twsports500helper",
