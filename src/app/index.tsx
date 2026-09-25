@@ -233,9 +233,9 @@ export default function HomeScreen() {
                     style={styles.noticeBulletIcon}
                   />
                   <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                    <Text style={{ fontWeight: '800' }}>全新累積制獎勵（免連續）：</Text>
-                    累積達 5 週獲銅證、7 週獲銀證、9 週以上獲金證並取得抽「116 年 500
-                    元運動幣」（限量 5 萬份）抽籤資格。
+                    <Text style={{ fontWeight: '800' }}>全新「揮汗任務卡」集滿 9 點達標：</Text>共
+                    10 週機會，每週審核通過集 1 點（免連續）。集滿 5 點獲銅證、7 點獲銀證、9
+                    點達標獲金證並取得抽「116 年 500 元運動幣」（限量 5 萬份）資格。
                   </Text>
                 </View>
                 <View style={styles.noticeBulletRow}>

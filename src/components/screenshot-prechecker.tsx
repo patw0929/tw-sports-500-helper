@@ -265,6 +265,24 @@ export function ScreenshotPrechecker() {
             <Text style={[styles.criterionVal, { color: theme.primary }]}>≥ 15.0 km</Text>
           </View>
         </View>
+
+        {/* 官方上傳重要規範 */}
+        <View style={[styles.officialUploadRulesBox, { borderColor: theme.cardBorder }]}>
+          <View style={styles.officialUploadRulesHead}>
+            <Ionicons name="alert-circle" size={15} color="#EA580C" />
+            <Text style={[styles.officialUploadRulesTitle, { color: theme.text }]}>
+              官方最新上傳防雷提醒
+            </Text>
+          </View>
+          <Text style={[styles.officialUploadRuleItem, { color: theme.textSecondary }]}>
+            • <Text style={{ fontWeight: '700' }}>不得裁切頂部狀態列</Text>
+            ：截圖須為完整全螢幕畫面，日期與數據不可遮蔽。
+          </Text>
+          <Text style={[styles.officialUploadRuleItem, { color: theme.textSecondary }]}>
+            • <Text style={{ fontWeight: '700' }}>嚴禁翻拍與 AI 生成</Text>：須為運動 APP
+            原始截圖或完賽證明，送出後無法補件修改。
+          </Text>
+        </View>
       </View>
 
       {/* 方案 B：可視化 HTML5 檔案選取卡片（無選圖時可見；選圖後作為背景 Runner 運作） */}
@@ -977,6 +995,26 @@ const styles = StyleSheet.create({
   criterionVal: {
     fontSize: 12,
     fontWeight: '700',
+  },
+  officialUploadRulesBox: {
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    gap: 4,
+  },
+  officialUploadRulesHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginBottom: 2,
+  },
+  officialUploadRulesTitle: {
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  officialUploadRuleItem: {
+    fontSize: 11,
+    lineHeight: 16,
   },
   imagePreviewCard: {
     width: '100%',

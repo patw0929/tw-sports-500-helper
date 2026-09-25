@@ -147,8 +147,78 @@ export default function TasksScreen() {
 
               <Text style={[styles.upcomingDesc, { color: theme.textSecondary }]}>
                 {UPCOMING_CAMPAIGN.rulesSummary}
-                三大指定運動任務標準維持相同，審查時間改為預計 7 個工作日完成。
+                三大指定運動任務標準維持相同，審查時間改為約 7 個工作日完成。
               </Text>
+
+              {/* 官方「揮汗任務卡」集點機制說明 */}
+              <View
+                style={[
+                  styles.stampCardContainer,
+                  { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+                ]}
+              >
+                <View style={styles.stampCardHead}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <Ionicons name="card-outline" size={16} color={theme.primary} />
+                    <Text style={[styles.stampCardTitle, { color: theme.text }]}>
+                      官方「揮汗任務卡」機制
+                    </Text>
+                  </View>
+                  <View style={[styles.stampGoalPill, { backgroundColor: '#FEF3C7' }]}>
+                    <Text style={[styles.stampGoalPillText, { color: '#B45309' }]}>
+                      集滿 9 點達標
+                    </Text>
+                  </View>
+                </View>
+                <Text style={[styles.stampCardSub, { color: theme.textSecondary }]}>
+                  共 10 週參加機會；每週審核通過官網系統集 1
+                  點（不需連續）。點數進度與審查結果請至官網「我的任務」查看。
+                </Text>
+
+                <View style={styles.stampMechanismList}>
+                  <View style={styles.stampMechanismRow}>
+                    <View style={[styles.stampDotIconCircle, { backgroundColor: '#CD7F32' }]}>
+                      <Text style={styles.stampDotIconText}>5</Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={[styles.stampMechanismTitle, { color: theme.text }]}>
+                        集滿 5 點：獲銅色數位完成證書
+                      </Text>
+                      <Text style={[styles.stampMechanismDesc, { color: theme.textSecondary }]}>
+                        於 10 週內累計 5 週審核通過即可取得。
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.stampMechanismRow}>
+                    <View style={[styles.stampDotIconCircle, { backgroundColor: '#94A3B8' }]}>
+                      <Text style={styles.stampDotIconText}>7</Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={[styles.stampMechanismTitle, { color: theme.text }]}>
+                        集滿 7 點：獲銀色數位完成證書
+                      </Text>
+                      <Text style={[styles.stampMechanismDesc, { color: theme.textSecondary }]}>
+                        於 10 週內累計 7 週審核通過即可取得。
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.stampMechanismRow}>
+                    <View style={[styles.stampDotIconCircle, { backgroundColor: '#F59E0B' }]}>
+                      <Text style={styles.stampDotIconText}>9</Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={[styles.stampMechanismTitle, { color: theme.text }]}>
+                        集滿 9 點（達標）：金色數位證書 ＋ 抽 116 年 500 元運動幣
+                      </Text>
+                      <Text style={[styles.stampMechanismDesc, { color: theme.textSecondary }]}>
+                        限量 5 萬份（超過電腦抽籤），抽籤結果 115/12/31 前公布。
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
 
               {/* Reward Milestones Grid */}
               <View style={styles.upcomingRewardsGrid}>
@@ -166,6 +236,31 @@ export default function TasksScreen() {
                       </Text>
                     </View>
                     <Text style={[styles.rewardDescText, { color: theme.text }]}>{r.desc}</Text>
+                  </View>
+                ))}
+              </View>
+
+              {/* Official Upload Rules Box */}
+              <View
+                style={[
+                  styles.officialRulesBox,
+                  { backgroundColor: theme.backgroundElement, borderColor: theme.cardBorder },
+                ]}
+              >
+                <View style={styles.officialRulesHead}>
+                  <Ionicons name="shield-checkmark-outline" size={16} color={theme.primary} />
+                  <Text style={[styles.officialRulesTitle, { color: theme.text }]}>
+                    官方最新上傳提醒
+                  </Text>
+                </View>
+                {UPCOMING_CAMPAIGN.officialUploadRules.map((rule, idx) => (
+                  <View key={idx} style={styles.officialRuleRow}>
+                    <Text style={[styles.officialRuleNum, { color: theme.primary }]}>
+                      {idx + 1}.
+                    </Text>
+                    <Text style={[styles.officialRuleText, { color: theme.textSecondary }]}>
+                      {rule}
+                    </Text>
                   </View>
                 ))}
               </View>
@@ -848,14 +943,17 @@ const styles = StyleSheet.create({
   },
   activeWeekNotice: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 8,
+    alignItems: 'flex-start',
+    padding: 10,
     borderRadius: 10,
-    gap: 6,
+    gap: 8,
   },
   activeWeekNoticeText: {
+    flex: 1,
+    flexShrink: 1,
     fontSize: 12,
     fontWeight: '700',
+    lineHeight: 18,
   },
   criteriaGrid: {
     gap: 12,
@@ -1227,13 +1325,17 @@ const styles = StyleSheet.create({
   },
   upcomingMilestoneWrap: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 4,
     marginTop: 4,
+    flexWrap: 'wrap',
   },
   upcomingMilestoneText: {
+    flex: 1,
+    flexShrink: 1,
     fontSize: 11,
     fontWeight: '800',
+    lineHeight: 16,
   },
   upcomingScheduleTip: {
     fontSize: 11,
@@ -1286,6 +1388,96 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   perksNoticeDesc: {
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  stampCardContainer: {
+    padding: Spacing.three,
+    borderRadius: 14,
+    borderWidth: 1,
+    gap: 8,
+  },
+  stampCardHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  stampCardTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  stampGoalPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+  },
+  stampGoalPillText: {
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  stampCardSub: {
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  stampMechanismList: {
+    gap: 8,
+    marginTop: 4,
+  },
+  stampMechanismRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  stampDotIconCircle: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+  },
+  stampDotIconText: {
+    color: '#ffffff',
+    fontSize: 11,
+    fontWeight: '900',
+  },
+  stampMechanismTitle: {
+    fontSize: 12,
+    fontWeight: '800',
+    lineHeight: 16,
+  },
+  stampMechanismDesc: {
+    fontSize: 11,
+    lineHeight: 15,
+    marginTop: 1,
+  },
+  officialRulesBox: {
+    padding: Spacing.three,
+    borderRadius: 14,
+    borderWidth: 1,
+    gap: 8,
+  },
+  officialRulesHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  officialRulesTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  officialRuleRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 6,
+  },
+  officialRuleNum: {
+    fontSize: 12,
+    fontWeight: '800',
+    lineHeight: 17,
+  },
+  officialRuleText: {
+    flex: 1,
     fontSize: 12,
     lineHeight: 17,
   },

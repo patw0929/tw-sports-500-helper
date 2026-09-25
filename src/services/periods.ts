@@ -113,9 +113,11 @@ export interface UpcomingCampaignInfo {
   totalWeeks: number;
   openTimeText: string;
   rulesSummary: string;
+  stampGoalText: string;
   drawDateAnnouncement: string;
   reviewWorkDays: number;
   rewards: { weeks: number; title: string; desc: string; badge: string }[];
+  officialUploadRules: string[];
   keyHighlights: { icon: string; title: string; text: string }[];
 }
 
@@ -127,24 +129,33 @@ export const UPCOMING_CAMPAIGN: UpcomingCampaignInfo = {
   endDateText: '115/12/06 (日) 23:59',
   totalWeeks: 10,
   openTimeText: '9 月 29 日（二）上午 10:00 起跑',
-  rulesSummary: '改採累積制（不需連續），首波前 2 週不計入，自 9/29 起重新累積週數。',
+  rulesSummary:
+    '全新「揮汗任務卡」共 10 週機會，每週審核通過集 1 點，集滿 9 點達標！首波前 2 週不計入，自 9/29 重新起算。',
+  stampGoalText: '揮汗任務卡・集滿 9 點達標',
   drawDateAnnouncement: '115 年 12 月 31 日前官網公告抽籤結果',
   reviewWorkDays: 7,
   rewards: [
-    { weeks: 5, title: '累積 5 週', desc: '銅色數位完成證書', badge: '銅證' },
-    { weeks: 7, title: '累積 7 週', desc: '銀色數位完成證書', badge: '銀證' },
+    { weeks: 5, title: '集滿 5 點', desc: '銅色數位完成證書', badge: '銅證' },
+    { weeks: 7, title: '集滿 7 點', desc: '銀色數位完成證書', badge: '銀證' },
     {
       weeks: 9,
-      title: '累積 9 週以上',
+      title: '集滿 9 點達標',
       desc: '金色數位完成證書 ＋ 抽限量 5 萬份「116 年 500 元運動幣」',
       badge: '金證＋抽500',
     },
   ],
+  officialUploadRules: [
+    '所上傳之截圖須為運動 APP 原始截圖（不得為 AI 生成、重製、翻拍螢幕或相機拍攝）或路跑賽完賽證明。',
+    '截圖須保留完整畫面，嚴禁裁切狀態列、日期或運動數據。',
+    '截圖一經送出不得要求修改、更換或補件；缺漏或不清致無法判定將不予通過。',
+    '上傳資料須屬實且為本人實際運動，冒用造假將取消後續活動及明年運動幣資格。',
+    '審查時間約 7 個工作日，請耐心等候。',
+  ],
   keyHighlights: [
     {
       icon: 'sparkles',
-      title: '延續活動 9/29 重磅回歸',
-      text: '因首波反應熱烈，運動部宣布將於 9 月 29 日（二）上午 10:00 重啟延續活動，共計 10 週至 12 月 6 日止。',
+      title: '延續活動「揮汗任務卡」9/29 開跑',
+      text: '因首波反應熱烈，運動部推出 10 週「揮汗任務卡」，每週審查通過可集 1 點，集滿 9 點達標！',
     },
     {
       icon: 'person-circle-outline',
@@ -153,8 +164,8 @@ export const UPCOMING_CAMPAIGN: UpcomingCampaignInfo = {
     },
     {
       icon: 'trophy-outline',
-      title: '全新累積制獎勵（免連續）',
-      text: '不需連續完成。累積滿 5 週獲銅證、7 週獲銀證、9 週以上獲金證並取得抽「116 年 500 元運動幣」（限量 5 萬份）資格。',
+      title: '集點制累積獎勵（免連續）',
+      text: '不需連續完成。集滿 5 點獲銅證、7 點獲銀證、9 點以上達標獲金證並取得抽「116 年 500 元運動幣」（限量 5 萬份）資格。',
     },
     {
       icon: 'refresh-outline',
@@ -168,7 +179,7 @@ export const UPCOMING_CAMPAIGN: UpcomingCampaignInfo = {
     },
     {
       icon: 'time-outline',
-      title: '審查時間預計 7 個工作日',
+      title: '審查時間約 7 個工作日',
       text: '延續活動上傳運動截圖後，官方預計於 7 個工作日內完成審查。',
     },
   ],
