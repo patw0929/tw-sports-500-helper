@@ -49,6 +49,10 @@ export default function AccountsScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const formScrollRef = useRef<ScrollView>(null);
+  const rocYearInputRef = useRef<TextInput>(null);
+  const monthInputRef = useRef<TextInput>(null);
+  const dayInputRef = useRef<TextInput>(null);
+  const phoneInputRef = useRef<TextInput>(null);
   const { preference, colorScheme, setThemePreference } = useThemeContext();
 
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
@@ -881,6 +885,8 @@ export default function AccountsScreen() {
                   placeholderTextColor={theme.textMuted}
                   value={formName}
                   onChangeText={setFormName}
+                  selectTextOnFocus
+                  clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
                       formScrollRef.current?.scrollTo({ y: 0, animated: true });
@@ -936,6 +942,8 @@ export default function AccountsScreen() {
                   maxLength={10}
                   value={formIdNo}
                   onChangeText={(t) => setFormIdNo(t.toUpperCase())}
+                  selectTextOnFocus
+                  clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
                       formScrollRef.current?.scrollTo({ y: 80, animated: true });
@@ -958,6 +966,7 @@ export default function AccountsScreen() {
                       民國年
                     </Text>
                     <TextInput
+                      ref={rocYearInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -970,9 +979,15 @@ export default function AccountsScreen() {
                       keyboardType="number-pad"
                       placeholder="85"
                       placeholderTextColor={theme.textMuted}
-                      maxLength={3}
+                      maxLength={2}
                       value={formRocYear}
-                      onChangeText={setFormRocYear}
+                      onChangeText={(t) => {
+                        setFormRocYear(t);
+                        if (t.length === 2) {
+                          monthInputRef.current?.focus();
+                        }
+                      }}
+                      selectTextOnFocus
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -984,6 +999,7 @@ export default function AccountsScreen() {
                   <View style={styles.dateInputCol}>
                     <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>月份</Text>
                     <TextInput
+                      ref={monthInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -998,7 +1014,13 @@ export default function AccountsScreen() {
                       placeholderTextColor={theme.textMuted}
                       maxLength={2}
                       value={formMonth}
-                      onChangeText={setFormMonth}
+                      onChangeText={(t) => {
+                        setFormMonth(t);
+                        if (t.length === 2) {
+                          dayInputRef.current?.focus();
+                        }
+                      }}
+                      selectTextOnFocus
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -1010,6 +1032,7 @@ export default function AccountsScreen() {
                   <View style={styles.dateInputCol}>
                     <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>日期</Text>
                     <TextInput
+                      ref={dayInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -1024,7 +1047,13 @@ export default function AccountsScreen() {
                       placeholderTextColor={theme.textMuted}
                       maxLength={2}
                       value={formDay}
-                      onChangeText={setFormDay}
+                      onChangeText={(t) => {
+                        setFormDay(t);
+                        if (t.length === 2) {
+                          phoneInputRef.current?.focus();
+                        }
+                      }}
+                      selectTextOnFocus
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -1044,6 +1073,7 @@ export default function AccountsScreen() {
                   手機號碼 <Text style={{ color: theme.primary }}>*</Text>
                 </Text>
                 <TextInput
+                  ref={phoneInputRef}
                   style={[
                     styles.input,
                     {
@@ -1058,6 +1088,8 @@ export default function AccountsScreen() {
                   maxLength={10}
                   value={formPhone}
                   onChangeText={setFormPhone}
+                  selectTextOnFocus
+                  clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
                       formScrollRef.current?.scrollToEnd({ animated: true });
