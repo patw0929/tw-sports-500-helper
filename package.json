@@ -77,7 +77,6 @@
     "build:aab": "eas build -p android --profile production",
     "update:preview": "eas update --channel preview --auto",
     "update:prod": "eas update --channel production --auto",
-    "assets:play-store": "node scripts/generate-play-store-assets.js",
     "video:promo": "node scripts/generate-promo-video.js"
   },
   "private": true

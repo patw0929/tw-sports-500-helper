@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>揮汗有禮加碼券小幫手 - Google Play 置頂宣傳大圖工作室 (Feature Graphic Studio)</title>
+  <style>
+    :root {
+      --bg: #0D0E12;
+      --card-bg: #171821;
+      --card-border: #2A2C3C;
+      --primary: #FF5E1E;
+      --primary-hover: #FF7A45;
+      --primary-glow: rgba(255, 94, 30, 0.4);
+      --accent-green: #10B981;
+      --accent-gold: #F59E0B;
+      --text: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang TC", "Noto Sans TC", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 60px;
+      overflow-x: hidden;
+    }
+
+    header {
+      width: 100%;
+      background: rgba(23, 24, 33, 0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 32px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      font-size: 22px;
+      background: linear-gradient(135deg, #FF5E1E, #D84315);
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .offset-group {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      gap: 4px;
+    }
+
+    .offset-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .offset-btn:hover {
+      color: #FF9E59;
+      background: rgba(255, 94, 30, 0.15);
+    }
+
+    .sync-btn {
+      background: rgba(255, 94, 30, 0.15);
+      border: 1px solid rgba(255, 94, 30, 0.4);
+      color: #FF9E59;
+      padding: 7px 15px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .sync-btn:hover {
+      background: rgba(255, 94, 30, 0.25);
+      border-color: #FF5E1E;
+      color: #FFF;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, #FF5E1E, #E64A19);
+      color: #FFFFFF;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 4px 16px var(--primary-glow);
+      transition: all 0.2s ease;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255, 94, 30, 0.55);
+    }
+
+    .tip-box {
+      width: 1024px;
+      max-width: 95vw;
+      margin-top: 18px;
+      background: rgba(23, 24, 33, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 0.82rem;
+      color: #D1D5DB;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stage-wrapper {
+      margin-top: 20px;
+      width: 1024px;
+      height: 500px;
+      max-width: 95vw;
+      box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 1024 x 500 Banner Canvas */
+    #feature-banner {
+      width: 1024px;
+      height: 500px;
+      position: relative;
+      background: #0E0F13;
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Background Dynamic Sports Waves & Grid Layer */
+    .bg-waves-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .grid-layer {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Left Copy Area (52% width) */
+    .banner-left {
+      width: 52%;
+      height: 100%;
+      padding: 44px 36px 44px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .banner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 94, 30, 0.15);
+      border: 1px solid rgba(255, 94, 30, 0.4);
+      color: #FFA06A;
+      padding: 5px 13px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      width: fit-content;
+      margin-bottom: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-header-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .brand-logo-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 8px 24px var(--primary-glow);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .banner-title {
+      font-size: 2.35rem;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
+    }
+
+    .banner-title-accent {
+      color: #ff6a00;
+      display: inline-block;
+    }
+
+    .banner-sub {
+      font-size: 0.95rem;
+      color: #E2E8F0;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .banner-features {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .feature-chip {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: #FFFFFF;
+      padding: 7px 13px;
+      border-radius: 11px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .feature-chip.highlight-green {
+      background: rgba(16, 185, 129, 0.09);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .feature-chip-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255, 94, 30, 0.35) 0%, rgba(255, 94, 30, 0.1) 100%);
+      border: 1px solid rgba(255, 94, 30, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .feature-chip-icon.green {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(16, 185, 129, 0.1) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+    }
+
+    .feature-chip-main {
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .feature-chip-desc {
+      color: #9CA3AF;
+      font-size: 0.75rem;
+      margin-left: 4px;
+    }
+
+    /* Right Showcase Area (48% width) */
+    .banner-right {
+      width: 48%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      padding-right: 20px;
+    }
+
+    /* Ambient Glow Behind Phone */
+    .phone-glow {
+      position: absolute;
+      width: 320px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(255, 94, 30, 0.45) 0%, rgba(16, 185, 129, 0.18) 50%, transparent 75%);
+      filter: blur(38px);
+      z-index: 5;
+    }
+
+    /* 3D Angled Phone Frame (Main Screen) */
+    .phone-frame-main {
+      width: 218px;
+      height: 462px;
+      background: #0F0E13;
+      border-radius: 34px;
+      box-shadow: -15px 25px 50px rgba(0, 0, 0, 0.8), 0 0 0 2.5px rgba(255, 255, 255, 0.22);
+      position: relative;
+      z-index: 10;
+      overflow: hidden;
+      transform: perspective(1000px) rotateY(-11deg) rotateX(3deg);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      padding: 5px;
+    }
+
+    .phone-frame-main:hover {
+      transform: perspective(1000px) rotateY(-5deg) rotateX(1deg) scale(1.02);
+    }
+
+    /* Second Background Phone Frame (Precheck / Tasks) */
+    .phone-frame-secondary {
+      width: 182px;
+      height: 386px;
+      background: #07090D;
+      border-radius: 28px;
+      box-shadow: -10px 20px 40px rgba(0, 0, 0, 0.65), 0 0 0 2px rgba(255, 255, 255, 0.14);
+      position: absolute;
+      right: 18px;
+      top: 50px;
+      z-index: 8;
+      overflow: hidden;
+      opacity: 0.88;
+      transform: perspective(1000px) rotateY(-15deg) rotateX(5deg);
+      padding: 4px;
+      cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .phone-frame-secondary:hover {
+      opacity: 1;
+      transform: perspective(1000px) rotateY(-9deg) rotateX(3deg) scale(1.03);
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #FAF6F2;
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .phone-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center top;
+      display: block;
+      transform: translateY(var(--phone-offset-y, 0px)) scale(var(--phone-scale, 1));
+      transition: transform 0.15s ease;
+    }
+
+    .secondary-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center top;
+      display: block;
+    }
+
+    /* Floating Badges */
+    .floating-pill-badge {
+      position: absolute;
+      left: -20px;
+      bottom: 60px;
+      background: rgba(18, 20, 26, 0.94);
+      border: 1.5px solid rgba(16, 185, 129, 0.5);
+      border-radius: 12px;
+      padding: 7px 13px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      z-index: 22;
+      pointer-events: none;
+      animation: floatBadge 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatBadge {
+      0% {
+        transform: translateY(0px);
+      }
+
+      100% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .floating-pill-badge .pill-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #10B981;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .floating-pill-badge .pill-title {
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .floating-pill-badge .pill-desc {
+      color: #34D399;
+      font-size: 9.5px;
+      font-weight: 600;
+    }
+
+    /* Upload Hint Overlay */
+    .upload-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 14, 19, 0.88);
+      backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      text-align: center;
+      padding: 10px;
+      z-index: 20;
+    }
+
+    .phone-frame-main:hover .upload-overlay,
+    .phone-frame-secondary:hover .upload-overlay {
+      opacity: 1;
+    }
+
+    .upload-chip {
+      background: var(--primary);
+      color: #FFFFFF;
+      padding: 5px 12px;
+      border-radius: 14px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      box-shadow: 0 2px 10px var(--primary-glow);
+    }
+
+    .file-input {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="brand-group">
+      <div class="brand-icon">🏃</div>
+      <div>
+        <div class="brand-title">Google Play 置頂宣傳大圖工作室 (1024 x 500)</div>
+        <div class="brand-sub">揮汗有禮加碼券小幫手 • 雙機 3D 透視展示 • 向量運動科技漸層</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="sync-btn" onclick="importFromScreenshotStudio()" title="一鍵同步帶入截圖工作室之第 1 張（快速登入）與第 2 張（截圖預檢）截圖">
+        <span>⚡</span> 帶入工作室截圖
+      </button>
+
+      <div class="offset-group" title="畫面微調工具">
+        <button class="offset-btn" onclick="adjustPhoneOffset(-4)" title="主圖往上微調">⬆️ 往上</button>
+        <button class="offset-btn" onclick="adjustPhoneOffset(4)" title="主圖往下微調">⬇️ 往下</button>
+        <button class="offset-btn" onclick="toggleFitMode()" id="fit-mode-btn" title="切換顯示比例模式">📱 完整顯示</button>
+        <button class="offset-btn" onclick="triggerSecondaryPhoneUpload()" title="上傳第二支手機畫面 (背景)">🖼️ 換背景圖</button>
+        <button class="offset-btn" onclick="resetPhoneTransform()" title="重設位置與比例">🔄 重設</button>
+      </div>
+
+      <button class="download-btn" id="export-btn" onclick="exportFeatureGraphic()">
+        <span>💾</span> 下載 1024x500 PNG
+      </button>
+    </div>
+  </header>
+
+  <div class="tip-box">
+    <span>💡</span>
+    <span><strong>使用方式</strong>：點選右側<strong>兩支手機</strong>皆可自訂上傳截圖（前為主畫面/快速登入、後為截圖預檢/週程），亦可點擊「⚡ 帶入工作室截圖」一鍵雙機同步！完美支援
+      1024×500 官方尺寸規範。</span>
+  </div>
+
+  <div class="stage-wrapper">
+    <!-- 1024 x 500 Banner Stage -->
+    <div id="feature-banner">
+
+      <!-- Dynamic Ambient Sports Waves & Tech Matrix Background -->
+      <svg class="bg-waves-svg" viewBox="0 0 1024 500" preserveAspectRatio="none">
+        <defs>
+          <radialGradient id="mesh-warm" cx="82%" cy="38%" r="65%">
+            <stop offset="0%" stop-color="#FF5E1E" stop-opacity="0.45" />
+            <stop offset="50%" stop-color="#FF5E1E" stop-opacity="0.08" />
+            <stop offset="100%" stop-color="#FF5E1E" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="mesh-green" cx="55%" cy="85%" r="45%">
+            <stop offset="0%" stop-color="#10B981" stop-opacity="0.22" />
+            <stop offset="100%" stop-color="#10B981" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="mesh-corner" cx="15%" cy="75%" r="45%">
+            <stop offset="0%" stop-color="#FF5E1E" stop-opacity="0.25" />
+            <stop offset="100%" stop-color="#FF5E1E" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="wave-grad-sports" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#FF5E1E" stop-opacity="0.28" />
+            <stop offset="50%" stop-color="#F59E0B" stop-opacity="0.18" />
+            <stop offset="100%" stop-color="#10B981" stop-opacity="0.22" />
+          </linearGradient>
+        </defs>
+
+        <!-- Mesh Glow Base -->
+        <rect width="1024" height="500" fill="#0E0F13" />
+        <rect width="1024" height="500" fill="url(#mesh-warm)" />
+        <rect width="1024" height="500" fill="url(#mesh-green)" />
+        <rect width="1024" height="500" fill="url(#mesh-corner)" />
+
+        <!-- Dynamic Running Wave Curves -->
+        <path d="M0,320 C260,260 480,390 760,310 C900,270 980,300 1024,330 L1024,500 L0,500 Z"
+          fill="url(#wave-grad-sports)" opacity="0.6" />
+        <path d="M-20,440 Q280,390 560,450 T1040,430" fill="none" stroke="#FF5E1E" stroke-width="2.5"
+          stroke-dasharray="10 8" opacity="0.4" />
+      </svg>
+      <div class="grid-layer"></div>
+
+      <!-- Left Content: App Branding & Selling Points -->
+      <div class="banner-left">
+        <div class="banner-badge" id="banner-badge">
+          <span>🏃</span>
+          <span>運動部 115 年加碼活動輔助神器</span>
+        </div>
+
+        <div class="brand-header-row">
+          <img src="../../assets/images/icon.png" class="brand-logo-img" alt="App Icon"
+            onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'><rect width=\'56\' height=\'56\' rx=\'14\' fill=\'%23FF5E1E\'/><text x=\'50%25\' y=\'55%25\' font-size=\'28\' dominant-baseline=\'middle\' text-anchor=\'middle\'>🏃</text></svg>'">
+          <div>
+            <h1 class="banner-title">
+              揮汗有禮 <span class="banner-title-accent">加碼券小幫手</span>
+            </h1>
+          </div>
+        </div>
+
+        <p class="banner-sub" id="banner-sub">一鍵登入直達任務 ｜ 事先預檢 ｜ 家庭帳號切換</p>
+
+        <div class="banner-features">
+          <div class="feature-chip highlight-green">
+            <div class="feature-chip-icon green">🔍</div>
+            <div>
+              <span class="feature-chip-main">截圖預檢合格</span>
+              <span class="feature-chip-desc">上傳前先檢查基本規則</span>
+            </div>
+          </div>
+          <div class="feature-chip">
+            <div class="feature-chip-icon">⚡️</div>
+            <div>
+              <span class="feature-chip-main">一鍵自動登入</span>
+              <span class="feature-chip-desc">身分證・生日・驗證碼自動帶入</span>
+            </div>
+          </div>
+          <div class="feature-chip">
+            <div class="feature-chip-icon">👨‍👩‍👧‍👦</div>
+            <div>
+              <span class="feature-chip-main">家庭帳號切換</span>
+              <span class="feature-chip-desc">全家身分切換無縫，加碼輕鬆領</span>
+            </div>
+          </div>
+          <div class="feature-chip">
+            <div class="feature-chip-icon">📅</div>
+            <div>
+              <span class="feature-chip-main">10 週日程倒數</span>
+              <span class="feature-chip-desc">9/29～12/6 全新 10 週時程掌控</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Content: 3D Phones Showcasing REAL App Screens -->
+      <div class="banner-right">
+        <div class="phone-glow"></div>
+
+        <!-- Floating Chip Toast -->
+        <div class="floating-pill-badge">
+          <div class="pill-icon">✓</div>
+          <div>
+            <div class="pill-title">截圖預檢合格！</div>
+            <div class="pill-desc">辨識 8,504 步・符合當週標準</div>
+          </div>
+        </div>
+
+        <!-- Secondary Phone (Precheck / Screen 2) -->
+        <div class="phone-frame-secondary" onclick="triggerSecondaryPhoneUpload()" title="點選更換第二支手機截圖 (如截圖預檢或週程)">
+          <input type="file" id="secondary-phone-file" class="file-input" accept="image/*"
+            onchange="handleSecondaryPhoneUpload(event)">
+          <div class="upload-overlay">
+            <span class="upload-chip">📷 上傳第 2 張截圖</span>
+            <span style="font-size: 0.68rem; color: #FFA06A;">支援 PNG / JPG (預檢畫面)</span>
+          </div>
+
+          <div class="phone-screen" id="secondary-screen">
+            <img src="../screenshot-studio/screenshots/android/twsports_screenshot_02_1290x2796.png"
+              class="secondary-img" alt="Screen 2" onerror="this.style.display='none'">
+          </div>
+        </div>
+
+        <!-- Main Phone (Quick Login / Screen 1) -->
+        <div class="phone-frame-main" onclick="triggerMainPhoneUpload()" title="點選更換主手機截圖 (如首頁/快速登入)">
+          <input type="file" id="main-phone-file" class="file-input" accept="image/*"
+            onchange="handleMainPhoneUpload(event)">
+          <div class="upload-overlay">
+            <span class="upload-chip">📷 點擊上傳主截圖</span>
+            <span style="font-size: 0.68rem; color: #FFA06A;">支援 PNG / JPG (首頁畫面)</span>
+          </div>
+
+          <div class="phone-screen" id="main-screen">
+            <img src="../screenshot-studio/screenshots/android/twsports_screenshot_01_1290x2796.png" class="phone-img"
+              alt="Screen 1" onerror="this.style.display='none'">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    let currentOffsetY = 0;
+    let currentScale = 1;
+    let currentFitMode = 'contain';
+
+    // IndexedDB setup sharing store with tw-sports screenshot-studio
+    const DB_NAME = 'tw-sports-studio';
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore('images');
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function saveImageToDB(key, dataUrl) {
+      try {
+        const db = await openDB();
+        const tx = db.transaction('images', 'readwrite');
+        tx.objectStore('images').put(dataUrl, key);
+      } catch (err) {
+        console.warn('Failed to cache image in IndexedDB', err);
+      }
+    }
+
+    async function loadImageFromDB(key) {
+      try {
+        const db = await openDB();
+        const tx = db.transaction('images', 'readonly');
+        const req = tx.objectStore('images').get(key);
+        return new Promise(resolve => {
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        });
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function setMainPhoneImage(dataUrl, shouldSave = true) {
+      const container = document.getElementById('main-screen');
+      container.innerHTML = `<img src="${dataUrl}" class="phone-img" style="object-fit: ${currentFitMode}; transform: translateY(${currentOffsetY}px) scale(${currentScale});" alt="Main Screen">`;
+      if (shouldSave) {
+        saveImageToDB('feature_main_phone', dataUrl);
+      }
+    }
+
+    function setSecondaryPhoneImage(dataUrl, shouldSave = true) {
+      const container = document.getElementById('secondary-screen');
+      container.innerHTML = `<img src="${dataUrl}" class="secondary-img" alt="Secondary Screen">`;
+      if (shouldSave) {
+        saveImageToDB('feature_secondary_phone', dataUrl);
+      }
+    }
+
+    function triggerMainPhoneUpload() {
+      document.getElementById('main-phone-file').click();
+    }
+
+    function handleMainPhoneUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        setMainPhoneImage(e.target.result, true);
+        showNotice('✅ 已成功載入主畫面截圖！');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function triggerSecondaryPhoneUpload() {
+      document.getElementById('secondary-phone-file').click();
+    }
+
+    function handleSecondaryPhoneUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        setSecondaryPhoneImage(e.target.result, true);
+        showNotice('✅ 已成功載入背景手機截圖！');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function importFromScreenshotStudio() {
+      let importedCount = 0;
+      const imgData1 = await loadImageFromDB('screen_1');
+      if (imgData1) {
+        setMainPhoneImage(imgData1, true);
+        importedCount++;
+      }
+      const imgData2 = await loadImageFromDB('screen_2');
+      if (imgData2) {
+        setSecondaryPhoneImage(imgData2, true);
+        importedCount++;
+      }
+
+      if (importedCount > 0) {
+        showNotice(`⚡ 已成功從工作室帶入 ${importedCount} 張截圖（快速登入、截圖預檢）！`);
+      } else {
+        alert('尚未在「截圖工作室」上傳截圖，請先於截圖工作室上傳，或直接點選手機框上傳圖片！');
+      }
+    }
+
+    function adjustPhoneOffset(delta) {
+      currentOffsetY += delta;
+      applyPhoneTransform();
+    }
+
+    function toggleFitMode() {
+      currentFitMode = currentFitMode === 'contain' ? 'cover' : 'contain';
+      const img = document.querySelector('.phone-img');
+      const btn = document.getElementById('fit-mode-btn');
+      if (img) {
+        img.style.objectFit = currentFitMode;
+      }
+      if (btn) {
+        btn.textContent = currentFitMode === 'contain' ? '📱 完整顯示' : '📱 填滿螢幕';
+      }
+      persistSettings();
+    }
+
+    function resetPhoneTransform() {
+      currentOffsetY = 0;
+      currentScale = 1;
+      currentFitMode = 'contain';
+      applyPhoneTransform();
+      const img = document.querySelector('.phone-img');
+      const btn = document.getElementById('fit-mode-btn');
+      if (img) img.style.objectFit = 'contain';
+      if (btn) btn.textContent = '📱 完整顯示';
+      persistSettings();
+    }
+
+    function applyPhoneTransform() {
+      const img = document.querySelector('.phone-img');
+      if (img) {
+        img.style.transform = `translateY(${currentOffsetY}px) scale(${currentScale})`;
+      }
+      persistSettings();
+    }
+
+    function persistSettings() {
+      try {
+        localStorage.setItem('twsports_feature_transform', JSON.stringify({
+          offsetY: currentOffsetY,
+          scale: currentScale,
+          fitMode: currentFitMode
+        }));
+      } catch (e) { }
+    }
+
+    function showNotice(msg) {
+      let toast = document.getElementById('studio-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'studio-toast';
+        toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(255,94,30,0.95);color:#FFF;padding:8px 18px;border-radius:20px;font-weight:700;font-size:0.85rem;box-shadow:0 4px 16px rgba(0,0,0,0.4);z-index:9999;transition:opacity 0.3s ease;';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+      }, 2500);
+    }
+
+    function exportFeatureGraphic() {
+      const banner = document.getElementById('feature-banner');
+      const exportBtn = document.getElementById('export-btn');
+      if (exportBtn) {
+        exportBtn.disabled = true;
+        exportBtn.innerHTML = '<span>⏳</span> 處理中...';
+      }
+
+      html2canvas(banner, {
+        width: 1024,
+        height: 500,
+        scale: 2, // 2x retina clarity
+        useCORS: true,
+        backgroundColor: '#0E0F13',
+        logging: false
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `google_play_feature_graphic_1024x500.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showNotice('✅ 1024x500 宣傳大圖已匯出下載！');
+      }).catch(err => {
+        console.error('Export error:', err);
+        alert("匯出提示：匯出功能無法在檔案模式使用，請在根目錄底下啟動 http server，例如使用 python3 -m http.server");
+      }).finally(() => {
+        if (exportBtn) {
+          exportBtn.disabled = false;
+          exportBtn.innerHTML = '<span>💾</span> 下載 1024x500 PNG';
+        }
+      });
+    }
+
+    // Auto-restore on load
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const saved = localStorage.getItem('twsports_feature_transform');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          currentOffsetY = parsed.offsetY || 0;
+          currentScale = parsed.scale || 1;
+          currentFitMode = parsed.fitMode || 'contain';
+          const btn = document.getElementById('fit-mode-btn');
+          if (btn) {
+            btn.textContent = currentFitMode === 'contain' ? '📱 完整顯示' : '📱 填滿螢幕';
+          }
+        }
+      } catch (e) { }
+
+      // Check if feature_main_phone exists, else screen_1 from studio
+      const featureImg = await loadImageFromDB('feature_main_phone');
+      if (featureImg) {
+        setMainPhoneImage(featureImg, false);
+      } else {
+        const studioImg1 = await loadImageFromDB('screen_1');
+        if (studioImg1) {
+          setMainPhoneImage(studioImg1, false);
+        }
+      }
+
+      // Check if feature_secondary_phone exists, else screen_2 from studio
+      const featureSecondaryImg = await loadImageFromDB('feature_secondary_phone');
+      if (featureSecondaryImg) {
+        setSecondaryPhoneImage(featureSecondaryImg, false);
+      } else {
+        const studioImg2 = await loadImageFromDB('screen_2');
+        if (studioImg2) {
+          setSecondaryPhoneImage(studioImg2, false);
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
