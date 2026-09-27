@@ -1,5 +1,5 @@
 <p align="center">
-<img width="1024" height="500" alt="feature_graphic_1024x500" src="./play-store-assets/feature_graphic_1024x500.png" />
+<img width="1024" height="500" alt="feature_graphic_1024x500" src="./tools/feature-graphic-studio/screenshots/google_play_feature_graphic_1024x500.png" />
 </p>
 
 # 🏃 揮汗有禮・加碼券小幫手 (Taiwan Sports 500 Helper)
