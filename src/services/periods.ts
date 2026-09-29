@@ -1,6 +1,6 @@
 import { TaskPeriod, TaskCriteria, PartnerPerk } from '@/types/sports500';
 
-export const OFFICIAL_SCHEDULE_RANGES = [
+export const FIRST_WAVE_SCHEDULE_RANGES = [
   {
     period: 1,
     start: '2026-09-01T10:00:00+08:00',
@@ -101,8 +101,81 @@ export const OFFICIAL_SCHEDULE_RANGES = [
   },
 ];
 
-export const CAMPAIGN_UPLOAD_CLOSED_FROM_PERIOD = 3;
-export const IS_CAMPAIGN_UPLOAD_CLOSED = true;
+export const OFFICIAL_SCHEDULE_RANGES = [
+  {
+    period: 1,
+    start: '2026-09-29T10:00:00+08:00',
+    end: '2026-10-04T23:59:59+08:00',
+    label: '延續第 1 週',
+    text: '09/29 (二) 10:00 ~ 10/04 (日)',
+  },
+  {
+    period: 2,
+    start: '2026-10-05T00:00:00+08:00',
+    end: '2026-10-11T23:59:59+08:00',
+    label: '延續第 2 週',
+    text: '10/05 (一) ~ 10/11 (日)',
+  },
+  {
+    period: 3,
+    start: '2026-10-12T00:00:00+08:00',
+    end: '2026-10-18T23:59:59+08:00',
+    label: '延續第 3 週',
+    text: '10/12 (一) ~ 10/18 (日)',
+  },
+  {
+    period: 4,
+    start: '2026-10-19T00:00:00+08:00',
+    end: '2026-10-25T23:59:59+08:00',
+    label: '延續第 4 週',
+    text: '10/19 (一) ~ 10/25 (日)',
+  },
+  {
+    period: 5,
+    start: '2026-10-26T00:00:00+08:00',
+    end: '2026-11-01T23:59:59+08:00',
+    label: '延續第 5 週',
+    text: '10/26 (一) ~ 11/01 (日)',
+  },
+  {
+    period: 6,
+    start: '2026-11-02T00:00:00+08:00',
+    end: '2026-11-08T23:59:59+08:00',
+    label: '延續第 6 週',
+    text: '11/02 (一) ~ 11/08 (日)',
+  },
+  {
+    period: 7,
+    start: '2026-11-09T00:00:00+08:00',
+    end: '2026-11-15T23:59:59+08:00',
+    label: '延續第 7 週',
+    text: '11/09 (一) ~ 11/15 (日)',
+  },
+  {
+    period: 8,
+    start: '2026-11-16T00:00:00+08:00',
+    end: '2026-11-22T23:59:59+08:00',
+    label: '延續第 8 週',
+    text: '11/16 (一) ~ 11/22 (日)',
+  },
+  {
+    period: 9,
+    start: '2026-11-23T00:00:00+08:00',
+    end: '2026-11-29T23:59:59+08:00',
+    label: '延續第 9 週',
+    text: '11/23 (一) ~ 11/29 (日)',
+  },
+  {
+    period: 10,
+    start: '2026-11-30T00:00:00+08:00',
+    end: '2026-12-06T23:59:59+08:00',
+    label: '延續第 10 週',
+    text: '11/30 (一) ~ 12/06 (日)',
+  },
+];
+
+export const CAMPAIGN_UPLOAD_CLOSED_FROM_PERIOD = 99;
+export const IS_CAMPAIGN_UPLOAD_CLOSED = false;
 
 export interface UpcomingCampaignInfo {
   name: string;
@@ -250,6 +323,42 @@ export function getCalculatedPeriods(nowDate = new Date()): TaskPeriod[] {
       daysLeft,
       hoursLeft,
       isUploadClosed: item.period >= CAMPAIGN_UPLOAD_CLOSED_FROM_PERIOD,
+    };
+  });
+}
+
+export function getCalculatedFirstWavePeriods(nowDate = new Date()): TaskPeriod[] {
+  const nowTime = nowDate.getTime();
+
+  return FIRST_WAVE_SCHEDULE_RANGES.map((item) => {
+    const startTime = new Date(item.start).getTime();
+    const endTime = new Date(item.end).getTime();
+
+    const isCurrent = nowTime >= startTime && nowTime <= endTime;
+    const isPast = nowTime > endTime;
+    const isFuture = nowTime < startTime;
+
+    let daysLeft = 0;
+    let hoursLeft = 0;
+
+    if (isCurrent) {
+      const diffMs = endTime - nowTime;
+      daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      hoursLeft = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    }
+
+    return {
+      period: item.period,
+      startDate: item.start,
+      endDate: item.end,
+      label: item.label,
+      dateRangeText: item.text,
+      isCurrent,
+      isPast,
+      isFuture,
+      daysLeft,
+      hoursLeft,
+      isUploadClosed: item.period >= 3,
     };
   });
 }

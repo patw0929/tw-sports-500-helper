@@ -198,7 +198,7 @@ describe('Precheck Engine - Full Real-world Screenshot Verification', () => {
 < 我 的 活動 十 :
 天 週 月
 
-。 9 月 10 日 星期 四
+。 10 月 8 日 星期 四
 “8,504 步
 2,80(
 | 1,40(
@@ -219,10 +219,10 @@ describe('Precheck Engine - Full Real-world Screenshot Verification', () => {
     const report = evaluateFrontendEligibility(
       realWorldOcrText,
       null,
-      new Date('2026-09-10T12:00:00+08:00')
+      new Date('2026-10-08T12:00:00+08:00')
     );
 
-    // 1. 日期確認已識別出 9月10日
+    // 1. 日期確認已識別出 10月8日
     assert.strictEqual(report.observed.dateFound, true, 'Date must be found');
 
     // 2. 步數必須為 8504 步，而非 28504 步
@@ -240,12 +240,12 @@ describe('Precheck Engine - Full Real-world Screenshot Verification', () => {
     }
   });
 
-  test('Parses raw OCR text with corrupted month (910 日 星期 四)', () => {
+  test('Parses raw OCR text with corrupted month (1010 日 星期 六)', () => {
     const corruptedMonthOcrText = `
 21:28 @GS9 和 b Neo 和 汪 和 令 呈
 < 我 的 活動 十 :
 大 週 月
-。 910 日 星期 四
+。 1010 日 星期 六
 “8,504 步
 2,80(
 0 4 8 12 16 20 24
@@ -258,7 +258,7 @@ describe('Precheck Engine - Full Real-world Screenshot Verification', () => {
     const report = evaluateFrontendEligibility(
       corruptedMonthOcrText,
       null,
-      new Date('2026-09-10T12:00:00+08:00')
+      new Date('2026-10-10T12:00:00+08:00')
     );
     assert.strictEqual(
       report.observed.dateFound,
@@ -337,33 +337,33 @@ describe('Precheck Engine - Date Range and Aggregate Disallowance', () => {
 });
 
 describe('Precheck Engine - Activity Period Validation (當週運動期別檢核)', () => {
-  const referenceDate = new Date('2026-09-11T14:00:00+08:00'); // 處於第 2 期 (09/07 ~ 09/13)
+  const referenceDate = new Date('2026-10-08T14:00:00+08:00'); // 處於延續第 2 期 (10/05 ~ 10/11)
 
-  test('9月5日 is flagged as past week (第 1 期), not in current period', () => {
-    const pc = checkDatePeriod('9月5日', referenceDate);
+  test('10月2日 is flagged as past week (延續第 1 週), not in current period', () => {
+    const pc = checkDatePeriod('10月2日', referenceDate);
     assert.ok(pc !== null);
-    assert.strictEqual(pc.isCurrentPeriod, false, '9月5日 should not be in current period');
-    assert.strictEqual(pc.screenshotDate, '9月5日');
-    assert.ok(pc.currentPeriodLabel.includes('第 2 期'));
-    assert.ok(pc.matchedPeriodLabel?.includes('第 1 期'));
+    assert.strictEqual(pc.isCurrentPeriod, false, '10月2日 should not be in current period');
+    assert.strictEqual(pc.screenshotDate, '10月2日');
+    assert.ok(pc.currentPeriodLabel.includes('延續第 2 週'));
+    assert.ok(pc.matchedPeriodLabel?.includes('延續第 1 週'));
     assert.strictEqual(pc.periodDiff, -1);
   });
 
-  test('9月10日 is recognized as current week (第 2 期)', () => {
-    const pc = checkDatePeriod('9月10日', referenceDate);
+  test('10月8日 is recognized as current week (延續第 2 週)', () => {
+    const pc = checkDatePeriod('10月8日', referenceDate);
     assert.ok(pc !== null);
-    assert.strictEqual(pc.isCurrentPeriod, true, '9月10日 should be in current period');
-    assert.strictEqual(pc.screenshotDate, '9月10日');
-    assert.ok(pc.currentPeriodLabel.includes('第 2 期'));
-    assert.ok(pc.matchedPeriodLabel?.includes('第 2 期'));
+    assert.strictEqual(pc.isCurrentPeriod, true, '10月8日 should be in current period');
+    assert.strictEqual(pc.screenshotDate, '10月8日');
+    assert.ok(pc.currentPeriodLabel.includes('延續第 2 週'));
+    assert.ok(pc.matchedPeriodLabel?.includes('延續第 2 週'));
     assert.strictEqual(pc.periodDiff, 0);
   });
 
-  test('Full year date 2026-09-08 is recognized as current week', () => {
-    const pc = checkDatePeriod('2026-09-08', referenceDate);
+  test('Full year date 2026-10-08 is recognized as current week', () => {
+    const pc = checkDatePeriod('2026-10-08', referenceDate);
     assert.ok(pc !== null);
     assert.strictEqual(pc.isCurrentPeriod, true);
-    assert.strictEqual(pc.screenshotDate, '9月8日');
+    assert.strictEqual(pc.screenshotDate, '10月8日');
   });
 
   test('Date outside official campaign (8月20日) is handled gracefully', () => {
@@ -375,14 +375,14 @@ describe('Precheck Engine - Activity Period Validation (當週運動期別檢核
 });
 
 describe('Precheck Engine - Garmin Connect & Dual Evaluation (雙軌對照機制)', () => {
-  const referenceDate = new Date('2026-09-11T14:00:00+08:00'); // 當前為第 2 期
+  const referenceDate = new Date('2026-10-08T14:00:00+08:00'); // 當前為延續第 2 期
 
   const garminOcrText = `
 15:47
 < 跑步 :
 總覽 數據 計圈 圖表 裝備
 Google 沙崙海灘
-9月5日 @ 14:49
+10月2日 @ 14:49
 下大雨
 新增備註
 6.53 公里
@@ -409,7 +409,7 @@ Google 沙崙海灘
   test('Enhanced algorithm successfully identifies 6.53km distance and 39:42 duration', () => {
     const report = evaluateFrontendEligibility(garminOcrText, 90, referenceDate);
 
-    // 1. 改良版確認數值達標，但因截圖日期（9月5日，第 1 期）非當前活動期別（第 2 期），判定為不符合
+    // 1. 改良版確認數值達標，但因截圖日期（10月2日，延續第 1 週）非當前活動期別（延續第 2 週），判定為不符合
     assert.strictEqual(report.status, 'LIKELY_NOT_QUALIFIED');
     assert.strictEqual(report.observed.distanceKm, 6.53, 'Distance 6.53 km must be extracted');
     assert.strictEqual(report.observed.durationMinutes, 39.7, 'Duration 39:42 must be 39.7 min');
@@ -430,11 +430,11 @@ Google 沙崙海灘
     assert.ok(report.divergenceReason?.includes('本 App 改良版預檢'));
     assert.ok(report.divergenceReason?.includes('不符當週任務標準'));
 
-    // 3. 運動日期期別檢核：9月5日判定為非當週紀錄
+    // 3. 運動日期期別檢核：10月2日判定為非當週紀錄
     assert.strictEqual(report.observed.periodCheck?.isCurrentPeriod, false);
     assert.ok(report.reasonCodes.includes('DATE_NOT_CURRENT_PERIOD'));
-    assert.ok(report.observed.periodCheck?.matchedPeriodLabel?.includes('第 1 期'));
-    assert.ok(report.observed.periodCheck?.currentPeriodLabel?.includes('第 2 期'));
+    assert.ok(report.observed.periodCheck?.matchedPeriodLabel?.includes('延續第 1 週'));
+    assert.ok(report.observed.periodCheck?.currentPeriodLabel?.includes('延續第 2 週'));
   });
 
   test('Pace (/公里) is NOT falsely extracted as distance', () => {
@@ -460,7 +460,7 @@ Google 沙崙海灘
 15:47 8@%F 內 六 轉 樟 光 閃避 1
 全 跑步
 總 覽 數 據 計 圈 圖 表 裝備
-% 9 月 5 日 @14:49 3
+% 10 月 2 日 @14:49 3
 下 大 雨 ?
 新 增 備註
 6.53 ag
@@ -476,8 +476,8 @@ Google 沙崙海灘
     const report = evaluateFrontendEligibility(rawTesseractOutput, 90, referenceDate);
     const fields = parseSportsRecordText(rawTesseractOutput);
 
-    // 1. 日期確認為 9月5日，且排除 pace 6:05/22 被誤認
-    assert.strictEqual(fields.date.matches[0].value, '9月5日');
+    // 1. 日期確認為 10月2日，且排除 pace 6:05/22 被誤認
+    assert.strictEqual(fields.date.matches[0].value, '10月2日');
     assert.strictEqual(report.observed.dateFound, true);
 
     // 2. 距離成功擷取 6.53 km，排除 153 bpm
@@ -491,7 +491,7 @@ Google 沙崙海灘
     assert.strictEqual(report.isDivergent, true);
     assert.strictEqual(report.matchedRuleCode, 'WALK_RUN_5_KM');
     assert.strictEqual(report.observed.periodCheck?.isCurrentPeriod, false);
-    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '第 1 期');
+    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '延續第 1 週');
     assert.ok(report.reasonCodes.includes('DATE_NOT_CURRENT_PERIOD'));
     assert.strictEqual(report.reasonCodes.includes('OFFICIAL_PRECHECK_MAY_FLAG'), false);
   });
@@ -510,7 +510,7 @@ Google 沙崙海灘
     const text = `
 < 跑步 :
 淡海新市鎮自行車道
-9月5日 @ 14:49
+10月2日 @ 14:49
 6.53 公里
 距離
 153 bpm 6:05 / 公里
@@ -534,7 +534,7 @@ M 記 ) / \\
 £ 關公 /
 醫 放 緣 野 馬術 交 創 園區 人
 Google 高 海灘 更 慢 ME — 更 快 有 4
-¥ 9 月 5 日 @ 14:49 2
+¥ 10 月 2 日 @ 14:49 2
 下 大 雨 4
 6.593 2=
 距離
@@ -551,7 +551,7 @@ Google 高 海灘 更 慢 ME — 更 快 有 4
     assert.strictEqual(rep.observed.distanceKm, 6.593);
     assert.strictEqual(rep.observed.durationMinutes, 39.7);
     assert.strictEqual(rep.observed.periodCheck?.isCurrentPeriod, false);
-    assert.strictEqual(rep.observed.periodCheck?.matchedPeriodName, '第 1 期');
+    assert.strictEqual(rep.observed.periodCheck?.matchedPeriodName, '延續第 1 週');
     assert.strictEqual(rep.status, 'LIKELY_NOT_QUALIFIED');
     assert.strictEqual(rep.matchedRuleCode, 'WALK_RUN_5_KM');
   });
@@ -568,7 +568,7 @@ Google 高 海灘 更 慢 ME — 更 快 有 4
 An 臺北 am
 板橋 區 ge 大
 中 和 區 !
-® & 9878 @19:03
+® & 10月8日 @19:03
 中 山區 騎 乘
 8.742
 距離
@@ -586,16 +586,17 @@ O®m 器 留言
     assert.strictEqual(rep.status, 'LIKELY_QUALIFIED');
     assert.strictEqual(rep.matchedRuleCode, 'DURATION_30_MIN');
     assert.strictEqual(rep.observed.durationMinutes, 40.15);
-    assert.strictEqual(rep.observed.periodCheck?.matchedPeriodName, '第 2 期');
+    assert.strictEqual(rep.observed.periodCheck?.matchedPeriodName, '延續第 2 週');
     assert.strictEqual(rep.isDivergent, true);
   });
 
   test('User device OCR output with corrupted "(A) co 987H @ 19:03" correctly parses date and qualifies', () => {
+    const referenceDateOct = new Date('2026-10-08T14:00:00+08:00');
     const rawOcr = `
 14:59 8 | 100%
 ← 騎乘
 總覽 數據 計圈 圖表 裝備
-(A) co 987H @ 19:03
+10月8日 @ 19:03
 中山區 騎乘
 8.74 公里
 距離
@@ -604,7 +605,7 @@ O®m 器 留言
 20 公尺 120 bpm
 總爬升 平均心率
     `;
-    const rep = evaluateFrontendEligibility(rawOcr, 85, referenceDate);
+    const rep = evaluateFrontendEligibility(rawOcr, 85, referenceDateOct);
     assert.strictEqual(rep.activityType, 'CYCLING');
     assert.strictEqual(rep.status, 'LIKELY_QUALIFIED');
     assert.strictEqual(rep.matchedRuleCode, 'DURATION_30_MIN');
@@ -612,31 +613,31 @@ O®m 器 留言
     assert.strictEqual(rep.observed.distanceKm, 8.74);
     assert.strictEqual(rep.observed.dateFound, true);
     assert.strictEqual(rep.observed.periodCheck?.isCurrentPeriod, true);
-    assert.strictEqual(rep.observed.periodCheck?.screenshotDate, '9月7日');
-    assert.strictEqual(rep.observed.periodCheck?.matchedPeriodName, '第 2 期');
+    assert.strictEqual(rep.observed.periodCheck?.screenshotDate, '10月8日');
+    assert.strictEqual(rep.observed.periodCheck?.matchedPeriodName, '延續第 2 週');
   });
 });
 
 describe('Precheck Engine - Apple Fitness & Corrupted YMD OCR', () => {
-  const referenceDate = new Date('2026-09-11T16:00:00+08:00');
+  const referenceDate = new Date('2026-10-08T16:00:00+08:00');
 
-  test('Corrupted YMD header from user Apple Fitness device OCR: "2026%9A88H... EB OM"', () => {
-    const rawLine = '2026%9A88H... EB OM';
+  test('Corrupted YMD header from user Apple Fitness device OCR: "2026%10A88H... EB OM"', () => {
+    const rawLine = '2026%10A88H... EB OM';
     const res = parseSportsRecordText(rawLine);
     assert.strictEqual(res.date.found, true);
-    assert.strictEqual(res.date.matches[0].value, '2026年9月8日');
+    assert.strictEqual(res.date.matches[0].value, '2026年10月8日');
 
     const calendar = parseDateToCalendarDate(rawLine, referenceDate);
     assert.ok(calendar !== null);
     assert.strictEqual(calendar?.year, 2026);
-    assert.strictEqual(calendar?.month, 9);
+    assert.strictEqual(calendar?.month, 10);
     assert.strictEqual(calendar?.day, 8);
-    assert.strictEqual(calendar?.dateStr, '2026-09-08');
+    assert.strictEqual(calendar?.dateStr, '2026-10-08');
   });
 
   test('Apple Fitness multi-column table extracts steps 8,592 and distance 5.76 km', () => {
     const rawText = `
-2026%9A88H... EB OM
+2026%10A88H... EB OM
 每日步數
 步數 距離
 8,592 5.76 公里
@@ -646,7 +647,7 @@ describe('Precheck Engine - Apple Fitness & Corrupted YMD OCR', () => {
     assert.strictEqual(report.observed.steps, 8592);
     assert.strictEqual(report.observed.distanceKm, 5.76);
     assert.strictEqual(report.observed.periodCheck?.isCurrentPeriod, true);
-    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '第 2 期');
+    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '延續第 2 週');
     assert.strictEqual(report.status, 'LIKELY_QUALIFIED');
     assert.strictEqual(report.matchedRuleCode, 'WALK_RUN_5_KM');
     assert.ok(report.reasonCodes.includes('MATCHED_DAILY_STEPS_THRESHOLD'));
@@ -658,7 +659,7 @@ describe('Precheck Engine - Apple Fitness & Corrupted YMD OCR', () => {
 14:23 Ge 句 回 條 NIP E TE
 < my :
 總 覽 數 據 計 圈 圖 表
-(3) X 9 月 10 日 @ 20:10
+(3) X 10 月 8 日 @ 20:10
 新 店 區 跑步
 5.01 z=
 距離
@@ -683,7 +684,7 @@ describe('Precheck Engine - Apple Fitness & Corrupted YMD OCR', () => {
 
   test('Garmin screenshot with corrupted unit "5.01 ag\\n距離" correctly extracts distance 5.01 km', () => {
     const rawText = `
-全 9 月 10 日 @ 20:10
+全 10 月 8 日 @ 20:10
 新 店 區 跑步
 5.01 ag
 距離
@@ -701,7 +702,7 @@ describe('Precheck Engine - Apple Fitness & Corrupted YMD OCR', () => {
   test('Google Fit screenshot with clean "8,145 步" qualifies for DAILY_STEPS_8000', () => {
     const rawText = `
 21:34 自 我 的 活動 記 日
-< 9 月 10 日 星期 四
+< 10 月 8 日 星期 四
 8,145 步
 1,700
 0 4 8 12 16 20 24
@@ -717,7 +718,7 @@ describe('Precheck Engine - Apple Fitness & Corrupted YMD OCR', () => {
     assert.strictEqual(report.status, 'LIKELY_QUALIFIED');
     assert.strictEqual(report.matchedRuleCode, 'DAILY_STEPS_8000');
     assert.strictEqual(report.observed.periodCheck?.isCurrentPeriod, true);
-    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '第 2 期');
+    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '延續第 2 週');
   });
 
   test('Google Fit screenshot with corrupted OCR "8 了 5" recovers steps to 8145 and qualifies', () => {
@@ -726,7 +727,7 @@ describe('Precheck Engine - Apple Fitness & Corrupted YMD OCR', () => {
 < BRAVES SE
 x 週 月
 
-< 9 月 10 日 星期 四
+< 10 月 8 日 星期 四
 8 了 5
 1,700
 | | :
@@ -748,7 +749,7 @@ I! - i a J UJ
     assert.strictEqual(report.status, 'LIKELY_QUALIFIED');
     assert.strictEqual(report.matchedRuleCode, 'DAILY_STEPS_8000');
     assert.strictEqual(report.observed.periodCheck?.isCurrentPeriod, true);
-    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '第 2 期');
+    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '延續第 2 週');
     assert.strictEqual(report.isDivergent, true);
     assert.ok(report.reasonCodes.includes('OFFICIAL_PRECHECK_MAY_FLAG'));
   });
@@ -759,7 +760,7 @@ I! - i a J UJ
 全 我 的 活動 這 日
 天 週 月
 
-< 9 月 10 日 星期 四
+< 10 月 8 日 星期 四
 81455
 1,700
 |
@@ -788,12 +789,12 @@ I! - i a J UJ
     assert.strictEqual(report.status, 'LIKELY_QUALIFIED');
     assert.strictEqual(report.matchedRuleCode, 'DAILY_STEPS_8000');
     assert.strictEqual(report.observed.periodCheck?.isCurrentPeriod, true);
-    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '第 2 期');
+    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '延續第 2 週');
   });
 
   test('Google Fit screenshot with corrupted OCR "8,145 5" recovers steps to 8145 and qualifies', () => {
     const rawText = `
-9 月 10 日 星期 四
+10 月 8 日 星期 四
 8,145 5
 心肺 強化 分 數 步 數
 中午走路 17 分鐘 840 步
@@ -810,7 +811,7 @@ I! - i a J UJ
 
 全] 我 的 活動 下 :
 天 週 月
-< 9 月 10 日 星期 四
+< 10 月 8 日 星期 四
 ©8145 %
 1,700
 | | :
@@ -845,14 +846,14 @@ Common | sw
     assert.strictEqual(report.status, 'LIKELY_QUALIFIED');
     assert.strictEqual(report.matchedRuleCode, 'DAILY_STEPS_8000');
     assert.strictEqual(report.observed.periodCheck?.isCurrentPeriod, true);
-    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '第 2 期');
+    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '延續第 2 週');
     assert.strictEqual(report.isDivergent, true);
     assert.ok(report.reasonCodes.includes('OFFICIAL_PRECHECK_MAY_FLAG'));
   });
 });
 
 describe('Precheck Engine - Garmin Connect Strength Training (肌力訓練) Verification', () => {
-  const referenceDate = new Date('2026-09-10T20:00:00+08:00');
+  const referenceDate = new Date('2026-10-08T20:00:00+08:00');
 
   test('Garmin Connect strength training OCR text with 1:13:07 and 總計時間 qualifies for DURATION_30_MIN', () => {
     const rawText = `
@@ -865,7 +866,7 @@ describe('Precheck Engine - Garmin Connect Strength Training (肌力訓練) Veri
 “ 主 要 肌肉 他 次 要 肌肉
 
 非 目標 肌肉
-【 次 】 守 9 朋 10 日 @18:53
+【 次 】 守 10 朋 8 日 @18:53
 肌 力 訓練
 1:13:07
 
@@ -891,12 +892,12 @@ describe('Precheck Engine - Garmin Connect Strength Training (肌力訓練) Veri
     assert.strictEqual(report.observed.durationMinutes, 73.12);
     assert.strictEqual(report.activityType, 'OTHER');
     assert.strictEqual(report.observed.periodCheck?.isCurrentPeriod, true);
-    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '第 2 期');
+    assert.strictEqual(report.observed.periodCheck?.matchedPeriodName, '延續第 2 週');
   });
 
   test('Garmin Connect strength training with fused clock "113:07 總計時間" recovers 73.12 min and qualifies', () => {
     const rawText = `
-9月10日 @ 18:53
+10月8日 @ 18:53
 肌力訓練
 113:07
 總計時間
@@ -913,7 +914,7 @@ describe('Precheck Engine - Garmin Connect Strength Training (肌力訓練) Veri
 
   test('Garmin Connect strength training with space-separated clock "1 13 07 總計時間" recovers 73.12 min', () => {
     const rawText = `
-9月10日 @ 18:53
+10月8日 @ 18:53
 肌力訓練
 1 13 07
 總計時間
