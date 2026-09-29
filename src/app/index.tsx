@@ -7,14 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemePickerModal } from '@/components/theme-picker-modal';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme, useThemeContext } from '@/hooks/use-theme';
-import { getCurrentPeriod, PARTNER_PERKS, UPCOMING_CAMPAIGN } from '@/services/periods';
-import {
-  getActiveProfile,
-  getProfiles,
-  setActiveProfile,
-  getCampaignNoticeCollapsed,
-  setCampaignNoticeCollapsed,
-} from '@/services/storage';
+import { getCurrentPeriod, PARTNER_PERKS } from '@/services/periods';
+import { getActiveProfile, getProfiles, setActiveProfile } from '@/services/storage';
 import { maskId, maskPhone, UserProfile } from '@/types/sports500';
 
 export default function HomeScreen() {
@@ -26,7 +20,6 @@ export default function HomeScreen() {
   const [allProfiles, setAllProfiles] = useState<UserProfile[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
-  const [isNoticeCollapsed, setIsNoticeCollapsed] = useState(false);
 
   const themeIcon: keyof typeof Ionicons.glyphMap =
     preference === 'system'
@@ -44,8 +37,6 @@ export default function HomeScreen() {
     setAllProfiles(list);
     const active = await getActiveProfile();
     setActiveUser(active);
-    const noticeCollapsed = await getCampaignNoticeCollapsed();
-    setIsNoticeCollapsed(noticeCollapsed);
   }, []);
 
   useFocusEffect(
@@ -63,12 +54,6 @@ export default function HomeScreen() {
   const handleSelectUser = async (user: UserProfile) => {
     await setActiveProfile(user.id);
     setActiveUser(user);
-  };
-
-  const handleToggleNotice = async () => {
-    const next = !isNoticeCollapsed;
-    setIsNoticeCollapsed(next);
-    await setCampaignNoticeCollapsed(next);
   };
 
   const handleQuickLogin = () => {
@@ -144,159 +129,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Official Campaign Announcement & Continuation Preview Notice (Collapsible) */}
-        <View
-          style={[
-            styles.noticeCard,
-            { backgroundColor: theme.cardBackground, borderColor: '#EA580C' },
-            isNoticeCollapsed && styles.noticeCardCollapsed,
-          ]}
-        >
-          <TouchableOpacity
-            style={styles.noticeHeaderRow}
-            activeOpacity={0.7}
-            onPress={handleToggleNotice}
-            accessibilityRole="button"
-            accessibilityLabel={isNoticeCollapsed ? '展開官方情報' : '收合官方情報'}
-          >
-            <View style={styles.noticeHeaderBadges}>
-              <View style={styles.noticeBadge}>
-                <Ionicons name="sparkles" size={14} color="#ffffff" />
-                <Text style={styles.noticeBadgeText}>官方最新情報</Text>
-              </View>
-              <View style={[styles.noticeStatusPill, { backgroundColor: '#DCFCE7' }]}>
-                <Text style={[styles.noticeStatusText, { color: '#16A34A' }]}>
-                  9/29 延續活動重磅登場
-                </Text>
-              </View>
-            </View>
-
-            <View style={[styles.noticeToggleBtn, { backgroundColor: theme.backgroundElement }]}>
-              <Text style={[styles.noticeToggleText, { color: theme.textSecondary }]}>
-                {isNoticeCollapsed ? '展開' : '收合'}
-              </Text>
-              <Ionicons
-                name={isNoticeCollapsed ? 'chevron-down' : 'chevron-up'}
-                size={14}
-                color={theme.textSecondary}
-              />
-            </View>
-          </TouchableOpacity>
-
-          {isNoticeCollapsed ? (
-            <TouchableOpacity
-              style={styles.noticeCollapsedRow}
-              activeOpacity={0.7}
-              onPress={handleToggleNotice}
-            >
-              <Text style={[styles.noticeTitleCollapsed, { color: theme.text }]} numberOfLines={1}>
-                延續活動 9/29 開跑・首波加碼券可換至 12/31
-              </Text>
-              <Ionicons name="chevron-forward" size={14} color={theme.textMuted} />
-            </TouchableOpacity>
-          ) : (
-            <>
-              <Text style={[styles.noticeTitle, { color: theme.text }]}>
-                延續活動 9/29 開跑・首波加碼券可換至 12/31
-              </Text>
-
-              <Text style={[styles.noticeDesc, { color: theme.textSecondary }]}>
-                運動部公告：因首波 300 萬筆運動紀錄迅速額滿，官方預計於{' '}
-                <Text style={{ fontWeight: '800', color: theme.text }}>
-                  115 年 9 月 29 日（二）上午 10:00 正式推出「{UPCOMING_CAMPAIGN.name}」
-                </Text>
-                （共 10 週至 12/6），改採累積制獎勵，三大運動任務標準維持不變！
-              </Text>
-
-              <View style={[styles.noticeRightsBox, { backgroundColor: theme.backgroundElement }]}>
-                <Text style={[styles.noticeRightsTitle, { color: theme.primary }]}>
-                  【延續活動重點與權益須知】
-                </Text>
-                <View style={styles.noticeBulletRow}>
-                  <Ionicons
-                    name="person-circle"
-                    size={16}
-                    color="#0284C7"
-                    style={styles.noticeBulletIcon}
-                  />
-                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                    <Text style={{ fontWeight: '800' }}>舊帳號免重辦、新用戶將重啟：</Text>
-                    先前已註冊者無須重新申請，9/29
-                    開放後直接使用小幫手「一鍵快登」；新參加者將重啟註冊功能。
-                  </Text>
-                </View>
-                <View style={styles.noticeBulletRow}>
-                  <Ionicons
-                    name="trophy"
-                    size={16}
-                    color="#F59E0B"
-                    style={styles.noticeBulletIcon}
-                  />
-                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                    <Text style={{ fontWeight: '800' }}>全新「揮汗任務卡」集滿 9 點達標：</Text>共
-                    10 週機會，每週審核通過集 1 點（免連續）。集滿 5 點獲銅證、7 點獲銀證、9
-                    點達標獲金證並取得抽「116 年 500 元運動幣」（限量 5 萬份）資格。
-                  </Text>
-                </View>
-                <View style={styles.noticeBulletRow}>
-                  <Ionicons
-                    name="refresh-circle"
-                    size={16}
-                    color="#8B5CF6"
-                    style={styles.noticeBulletIcon}
-                  />
-                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                    <Text style={{ fontWeight: '800' }}>舊紀錄不列入累積：</Text>
-                    原第 1、2 週紀錄不計入延續活動，全體參加者均自 9/29 起重新累積週數。
-                  </Text>
-                </View>
-                <View style={styles.noticeBulletRow}>
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={16}
-                    color="#10B981"
-                    style={styles.noticeBulletIcon}
-                  />
-                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                    <Text style={{ fontWeight: '800' }}>首波加碼券兌換不受影響：</Text>
-                    首波已審查通過之 50 元加碼券，
-                    <Text style={{ fontWeight: '800', color: '#EA580C' }}>
-                      12 月 31 日前皆可折抵兌換
-                    </Text>
-                    。
-                  </Text>
-                </View>
-                <View style={styles.noticeBulletRow}>
-                  <Ionicons
-                    name="time"
-                    size={16}
-                    color={theme.primary}
-                    style={styles.noticeBulletIcon}
-                  />
-                  <Text style={[styles.noticeBulletText, { color: theme.text }]}>
-                    <Text style={{ fontWeight: '800' }}>審查時間改為 7 個工作日：</Text>
-                    延續活動上傳運動截圖後，官方審核工作天數預計為 7 個工作日內完成。
-                  </Text>
-                </View>
-
-                <TouchableOpacity
-                  style={[
-                    styles.noticeMoreButton,
-                    { backgroundColor: theme.cardBackground, borderColor: theme.cardBorder },
-                  ]}
-                  onPress={() => router.push({ pathname: '/tasks', params: { tab: 'schedule' } })}
-                >
-                  <Ionicons name="calendar-outline" size={14} color={theme.primary} />
-                  <Text style={[styles.noticeMoreButtonText, { color: theme.primary }]}>
-                    查看 10 週時程預告與任務辦法
-                  </Text>
-                  <Ionicons name="chevron-forward" size={14} color={theme.primary} />
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-        </View>
-
         {/* Current Period Banner */}
         <View
           style={[
@@ -345,8 +177,8 @@ export default function HomeScreen() {
           </Text>
           <Text style={[styles.periodHintText, { color: theme.textSecondary }]}>
             {currentPeriod.isUploadClosed
-              ? '首波活動已額滿截止；延續活動預計 9/29 (二) 10:00 正式起跑，小幫手將自動切換為最新 10 週時程！'
-              : '每週每人限上傳一次運動截圖，審核通過即享 50 元加碼券！'}
+              ? '本期活動已結束受理上傳。'
+              : '全新 10 週「揮汗任務卡」集點活動！每週審核通過集 1 點，集滿 9 點達標！每週每人限上傳一次。'}
           </Text>
         </View>
 
@@ -507,14 +339,9 @@ export default function HomeScreen() {
             <View style={[styles.gridIconCircle, { backgroundColor: '#FFF0EA' }]}>
               <Ionicons name="cloud-upload" size={24} color="#FF5E1E" />
             </View>
-            <View style={styles.gridTitleWithBadge}>
-              <Text style={[styles.gridCardTitle, { color: theme.text }]}>審核進度查詢</Text>
-              <View style={styles.closedMiniBadge}>
-                <Text style={styles.closedMiniBadgeText}>已截止</Text>
-              </View>
-            </View>
+            <Text style={[styles.gridCardTitle, { color: theme.text }]}>審核進度與上傳</Text>
             <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
-              上傳已截止，點此快登查審查
+              快登官方「我的任務」頁面
             </Text>
           </TouchableOpacity>
 
@@ -560,9 +387,9 @@ export default function HomeScreen() {
             <View style={[styles.gridIconCircle, { backgroundColor: '#EFF6FF' }]}>
               <Ionicons name="calendar-outline" size={24} color="#3B82F6" />
             </View>
-            <Text style={[styles.gridCardTitle, { color: theme.text }]}>14 週任務時程</Text>
+            <Text style={[styles.gridCardTitle, { color: theme.text }]}>10 週任務時程</Text>
             <Text style={[styles.gridCardDesc, { color: theme.textSecondary }]}>
-              查看全活動各期起迄日
+              查看延續活動各週起迄日
             </Text>
           </TouchableOpacity>
         </View>

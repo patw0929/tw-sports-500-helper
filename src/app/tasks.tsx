@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Spacing, MaxContentWidth } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import {
-  getCalculatedPeriods,
+  getCalculatedFirstWavePeriods,
   TASK_CRITERIA_LIST,
   PARTNER_PERKS,
   UPCOMING_CAMPAIGN,
@@ -32,7 +32,7 @@ export default function TasksScreen() {
     }, [])
   );
 
-  const periods = useMemo(() => getCalculatedPeriods(currentDate), [currentDate]);
+  const firstWavePeriods = useMemo(() => getCalculatedFirstWavePeriods(currentDate), [currentDate]);
 
   React.useEffect(() => {
     if (params.tab === 'precheck') {
@@ -58,7 +58,8 @@ export default function TasksScreen() {
           <Text style={[styles.superTitle, { color: theme.primary }]}>運動部 115 年揮汗有禮</Text>
           <Text style={[styles.mainTitle, { color: theme.text }]}>任務辦法與時程總覽</Text>
           <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-            首波加碼券可兌換至 12/31；延續活動預計 9/29 (二) 10:00 登場，採 10 週累積制！
+            延續活動 9/29 (二) 10:00 已正式登場！採 10 週累積制「揮汗任務卡」，首波加碼券可兌換至
+            12/31。
           </Text>
         </View>
 
@@ -78,7 +79,7 @@ export default function TasksScreen() {
                 activeTab === 'schedule' && styles.segmentTextActive,
               ]}
             >
-              時程表與預告
+              10 週延續時程
             </Text>
           </TouchableOpacity>
 
@@ -382,7 +383,7 @@ export default function TasksScreen() {
             </Text>
 
             <View style={styles.periodList}>
-              {periods.map((item) => (
+              {firstWavePeriods.map((item) => (
                 <View
                   key={item.period}
                   style={[
