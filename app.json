@@ -10,10 +10,12 @@
     "ios": {
       "bundleIdentifier": "me.patw.twsports500helper",
       "icon": "./assets/images/icon.png",
-      "buildNumber": "4",
+      "buildNumber": "5",
       "supportsTablet": false,
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "此 App 需要使用相機拍攝運動紀錄照片，以便進行資格預檢與文字辨識分析。",
+        "NSPhotoLibraryUsageDescription": "此 App 需要存取相片圖庫以選取運動紀錄截圖，以便進行資格預檢與文字辨識分析。"
       }
     },
     "android": {
