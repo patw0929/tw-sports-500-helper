@@ -4,19 +4,23 @@
 
 # 🏃 揮汗有禮・加碼券小幫手 (Taiwan Sports 500 Helper)
 
+[![Version](https://img.shields.io/badge/Version-v1.2.5-orange.svg)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Expo](https://img.shields.io/badge/Expo-SDK%2057-black.svg)](https://expo.dev)
 [![React Native](https://img.shields.io/badge/React%20Native-0.86-61dafb.svg)](https://reactnative.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue.svg)](https://www.typescriptlang.org)
+[![Privacy Policy](https://img.shields.io/badge/Privacy_Policy-隱私權政策-green.svg)](https://patw0929.github.io/tw-sports-500-helper/)
 [![YouTube Shorts](https://img.shields.io/badge/YouTube_Shorts-宣傳短片-FF0000?logo=youtube&logoColor=white)](https://youtube.com/shorts/gA_AoGdcRIU)
+[![App Store](https://img.shields.io/badge/App_Store-立即下載-black?logo=apple&logoColor=white)](https://apps.apple.com/app/id6815931194)
 [![Google Play](https://img.shields.io/badge/Google_Play-立即下載-414141?logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=me.patw.twsports500helper)
 
 專為中華民國運動部「**115 年揮汗有禮・全民動起來**」（活動官網：[https://500.gov.tw/registrant/](https://500.gov.tw/registrant/)）加碼活動開發的輔助工具 App。
 
-解決繁瑣的登入步驟與多帳號切換痛點，提供家庭多成員個資安全保險箱、一鍵自動填表登入「我的任務」、14 週各期任務倒數指引，以及官方 5 大合作通路（全家、7-ELEVEN、萊爾富、全聯、萬家福）優惠與兌換品項清單。
+解決繁瑣的登入步驟與多帳號切換痛點，提供家庭多成員個資安全保險箱、一鍵自動填表登入「我的任務」、運動紀錄截圖合格預檢、最新 10 週延續時程（9/29 起跑）與首波 14 週倒數指引、雲端更新檢視，以及官方 5 大合作通路（全家、7-ELEVEN、萊爾富、全聯、萬家福）加碼福利與兌換品項清單。
 
-> 📺 **宣傳短片**：[觀看 YouTube Shorts 快速導覽（約 55 秒）](https://youtube.com/shorts/gA_AoGdcRIU)
-> 📲 **商店下載**：[Google Play 商店立即下載](https://play.google.com/store/apps/details?id=me.patw.twsports500helper)
+> 📺 **宣傳短片**：[觀看 YouTube Shorts 快速導覽（約 55 秒）](https://youtube.com/shorts/gA_AoGdcRIU)  
+> 📲 **商店下載**：[App Store (iOS)](https://apps.apple.com/app/id6815931194) ｜ [Google Play (Android)](https://play.google.com/store/apps/details?id=me.patw.twsports500helper)  
+> 🛡️ **隱私權政策**：[線上閱讀隱私權政策](https://patw0929.github.io/tw-sports-500-helper/)
 
 ---
 
@@ -27,56 +31,65 @@
 > 💡 **注意**：若揮汗有禮網站載入過慢時，自動登入可能失敗，請稍後重試。
 
 - **跨步驟自動辨識與填表**：
-  - 第一步（`/registrant/access`）：自動填入身分證字號並自動送出。
-  - 第二步（會員登入頁）：自動選取民國出生年月日（年、月、日選單）、自動填入手機號碼，並自動觸發登入。
-  - 直達「我的任務」快速上傳運動紀錄截圖或出示加碼券條碼。
+  - 第一步（`/registrant/access`）：自動填入身分證字號並送出。
+  - 第二步（會員登入頁）：自動選取民國出生年月日（年、月、日選單）、填入手機號碼，並觸發登入。
+  - 直達「我的任務」上傳運動紀錄截圖或出示加碼券條碼。
 - **深層 Spring Security CSRF 自動登出/重新登入**：
-  - 首頁或瀏覽器內切換不同家庭成員時，自動取得 `_csrf` Token 進行背景安全登出，無縫重新登入新身分。
+  - 首頁或瀏覽器內切換不同家庭成員時，自動取得 `_csrf` Token 進行背景登出，重新登入新身分。
 - **友善狀態浮動提示**：登入時於網頁頂部顯示 5 秒自動淡出提示，亦附帶關閉按鈕。
 
 ### 2. 🛡️ 帳號保險箱與多身分管理
 
-- **支援家庭多成員管理**：可儲存「本人」、「配偶」、「長輩」、「子女」等多組身分，一鍵快速切換。
+- **支援家庭多成員管理**：可儲存「本人」、「配偶」、「長輩」、「子女」等多組身分，快速切換。
 - **欄位格式防呆檢驗**：
   - 身分證字號檢查碼演算法驗證（防止輸入無效身分證）。
   - 民國出生年月份下拉（符合官方年滿 16 歲資格限制）。
   - 手機號碼格式防呆（09xxxxxxxx）。
 - **硬體級純本機加密儲存**：
-  - 使用 `expo-secure-store` 儲存於裝置本機硬體晶片（Keychain / Keystore），**絕不上傳任何第三方伺服器**。
-  - 支援 Face ID / Touch ID / 指紋辨識生物防護鎖定；若裝置不具備或未錄入特徵則智慧自適應隱藏，避免困惑。
+  - 使用 `expo-secure-store` 儲存於裝置本機硬體晶片（Keychain / Keystore），不上傳任何第三方伺服器。
+  - 支援 Face ID / Touch ID / 指紋辨識生物防護鎖定；若裝置不具備或未錄入特徵則自動隱藏。
 
 ### 3. 🔍 運動紀錄截圖合格預檢（前端 OCR 診斷）
 
-- **上傳只有一次機會，先幫您做基本檢查**：
-  - 官方各期審核嚴格且上傳後無法自行抽換，透過預檢診斷在送出前先確認截圖是否合規，大幅降低遭官方退件風險。
+- **上傳前預先檢查**：
+  - 官方各期審核嚴格且上傳後無法自行抽換，透過預檢診斷在送出前確認截圖是否合規，降低退件風險。
 - **純前端本機 OCR 引擎（零原生依賴）**：
-  - 透過輕量隱形 WebView 結合 Tesseract.js (chi_tra + eng) 於本機端執行光學字元辨識，不需引入龐大或版本衝突的原生二進位模組，截圖絕不上傳外部伺服器。
+  - 透過輕量隱形 WebView 結合 Tesseract.js (chi_tra + eng) 於本機端執行光學字元辨識，不需引入原生二進位模組，截圖不上傳外部伺服器。
 - **智慧畫布影像優化（深色模式反轉與圖示淡化）**：
-  - 自動偵測手機深色模式截圖並反轉為白底黑字，大幅提升中英文辨識度。
-  - 自動淡化飽和彩色圖標（例如 Google Fit 的藍色跑鞋），根絕圖示被誤判為數字黏連至步數的問題。
-- **基於運動部官方審核演算法改良與規則防退件**：
+  - 自動偵測手機深色模式截圖並反轉為白底黑字，提升中英文辨識度。
+  - 自動淡化飽和彩色圖標（例如 Google Fit 的藍色跑鞋），避免圖示被誤判為數字黏連至步數。
+- **對齊運動部官方審核規則與防退件演算法**：
   - **精準排除非單日週期**：自動識別「每週目標」、「9月6日至12日」等週/月區間統計，標記日期錯誤並提醒官方僅接受當週單日或單次紀錄。
-  - **防止小數點衝突**：智慧排除小數距離（如 5.17 公里）被誤判為日期的情形。
+  - **防止小數點衝突**：排除小數距離（如 5.17 公里）被誤判為日期的情形。
+  - **三大指標比對**：單次時間 30 分鐘以上、單日累積 8,000 步以上、距離健走跑步 5km 或自行車 15km。
 
 ### 4. 📅 最新延續時程與三大任務指引儀表板
 
-- **最新延續時程與歷史回溯倒數**：即時掌握 9/29 起跑之全新 10 週延續時程（9/29 ~ 12/06），支援首波 14 週歷史期程回溯，動態顯示各期上傳剩餘時間。
-- **全新累積制獎勵提示**：提醒滿 5 週（銅證）、滿 7 週（銀證）、滿 9 週（金證＋抽 116 年 500 元運動幣）各階段門檻。
+- **最新延續時程與歷史回溯倒數**：
+  - 即時掌握 9/29 起跑之全新 10 週延續時程（2026/09/29 ~ 2026/12/06），動態顯示各週上傳剩餘時間。
+  - 保留首波 14 週歷史期程回溯，方便隨時核對歷史進度。
+- **全新累積制獎勵提示**：
+  - 提醒滿 5 週（銅證）、滿 7 週（銀證）、滿 9 週（金證＋獲得 116 年 500 元運動幣抽獎資格）各階段門檻。
 - **三大任務標準解析**：
-  1. 時間型：單次 30 分鐘以上（Apple 健身、Google Fit、Garmin 等）
-  2. 步數型：單日累積 8,000 步以上（Pikmin Bloom、小米運動健康等）
-  3. 距離型：健走/跑步 5km 或自行車 15km
+  1. **時間型**：單次 30 分鐘以上（Apple 健身、Google Fit、Garmin 等）
+  2. **步數型**：單日累積 8,000 步以上（Pikmin Bloom、小米運動健康等）
+  3. **距離型**：健走/跑步 5km 或自行車 15km
 - **截圖審核標準 Checklist**：提醒保留手機狀態列（時間、電量）與運動日期，減少退件風險。
 
-### 5. 🛍️ 官方 5 大合作通路兌換商品清單
+### 5. 🛍️ 官方 5 大合作通路兌換品項與福利
 
-- 完整彙整官方指定通路之商品明細與加碼福利：
-  - **全家便利商店**：308 項可兌換商品（50+3元加碼券，熱門：FMC茶飲、大冰拿鐵等）
-  - **7-ELEVEN**：473 項可兌換商品（50+5元加碼券享10%購物金，熱門：鮮切水果、溫泉蛋、舒肥雞胸等）
+- 完整彙整官方指定通路之加碼福利與兌換品項清單：
+  - **全家便利商店**：308 項可兌換商品（50+3 元加碼券，熱門：FMC 茶飲、大冰拿鐵等）
+  - **7-ELEVEN**：473 項可兌換商品（50+5 元加碼券享 10% 購物金，熱門：鮮切水果、溫泉蛋、舒肥雞胸等）
   - **萊爾富**：168 項可兌換商品與超值商品券
   - **全聯福利中心**：9 大類健康生鮮運動補給（鮮乳、機能蛋、青花菜等）
   - **萬家福 / 樂家康**：18 大類運動器材與運動補給
-- 支援「App 內瀏覽」與「外部瀏覽器開啟」雙模式，瀏覽器內亦提供橫向滑動快捷標籤。
+- 支援「App 內瀏覽」與「外部瀏覽器開啟」雙模式，瀏覽器內提供橫向滑動快捷標籤。
+
+### 6. 🚀 雲端更新與版本資訊 (EAS Update)
+
+- **版本與 Commit 資訊**：於「帳號管理」頁面顯示目前 App 版本、最新 Commit Hash、運作模式與更新渠道。
+- **手動檢查更新**：支援手動檢查 EAS Update 雲端更新，新版本下載後可重啟生效。
 
 ---
 
@@ -86,6 +99,7 @@
 2. **硬體安全儲存**：所有身分證字號、電話號碼與生日資訊僅存放於使用者本機裝置的安全加密空間（iOS Keychain / Android Keystore）。
 3. **截圖分析純本地執行**：運動紀錄預檢功能使用隱形 WebView 於本地端進行 OCR 文字辨識與診斷，截圖影像與文字絕不上傳至任何外部伺服器。
 4. **官網直接連線**：所有登入核驗與條碼出示，皆由 In-App 瀏覽器直接連線運動部官方伺服器（`500.gov.tw`）。
+5. **隱私權政策全文**：請參閱 [PRIVACY_POLICY.md](PRIVACY_POLICY.md) 或 [線上隱私權政策網頁](https://patw0929.github.io/tw-sports-500-helper/)。
 
 ---
 
@@ -115,12 +129,13 @@ npm install
 
 ```bash
 # 啟動 Expo 開發伺服器（終端會顯示 QR Code 供 Expo Go 掃描）
-npx expo start
+npm start
+# 或 npx expo start
 
-# 或直接在 iOS 模擬器開啟
+# 在 iOS 模擬器開啟
 npm run ios
 
-# 或直接在 Android 模擬器開啟
+# 在 Android 模擬器開啟
 npm run android
 ```
 
@@ -136,8 +151,25 @@ npm run typecheck
 # Expo ESLint 代碼風格檢查
 npm run lint
 
-# Prettier 排版格式檢查
+# Prettier 排版格式檢查與自動格式化
 npm run format:check
+npm run format
+```
+
+### 建置與發布 (EAS Build & Update)
+
+```bash
+# 建置 Android Preview APK
+npm run build:apk
+
+# 建置 Android 正式發布版 AAB (Google Play)
+npm run build:aab
+
+# 發布 EAS 熱更新至 preview 渠道
+npm run update:preview
+
+# 發布 EAS 熱更新至 production 渠道
+npm run update:prod
 ```
 
 ---
