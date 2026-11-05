@@ -72,7 +72,7 @@
       }
     },
     "owner": "patw",
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": "1.3.0",
     "updates": {
       "url": "https://u.expo.dev/912c3037-6f60-4da0-a62b-e39659febab4",
       "fallbackToCacheTimeout": 3000
