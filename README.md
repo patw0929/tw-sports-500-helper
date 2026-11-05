@@ -4,7 +4,7 @@
 
 # 🏃 揮汗有禮・加碼券小幫手 (Taiwan Sports 500 Helper)
 
-[![Version](https://img.shields.io/badge/Version-v1.2.5-orange.svg)](package.json)
+[![Version](https://img.shields.io/badge/Version-v1.3.0-orange.svg)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Expo](https://img.shields.io/badge/Expo-SDK%2057-black.svg)](https://expo.dev)
 [![React Native](https://img.shields.io/badge/React%20Native-0.86-61dafb.svg)](https://reactnative.dev)
