@@ -58,6 +58,7 @@
         }
       ],
       "expo-image",
+      "expo-sharing",
       "expo-web-browser"
     ],
     "experiments": {

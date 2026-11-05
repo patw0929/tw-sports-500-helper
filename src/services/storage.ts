@@ -8,6 +8,7 @@ const ACTIVE_PROFILE_KEY = 'sports500_active_profile_id_v2';
 const BIOMETRIC_KEY = 'sports500_biometric_enabled_v2';
 const THEME_PREFERENCE_KEY = 'sports500_theme_preference_v1';
 const CAMPAIGN_NOTICE_COLLAPSED_KEY = 'sports500_campaign_notice_collapsed_v1';
+const ANDROID_DOWNLOAD_DIR_KEY = 'sports500_android_download_dir_v1';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 
@@ -224,4 +225,12 @@ export async function getCampaignNoticeCollapsed(): Promise<boolean> {
 
 export async function setCampaignNoticeCollapsed(collapsed: boolean): Promise<void> {
   await setStorageItem(CAMPAIGN_NOTICE_COLLAPSED_KEY, collapsed ? 'true' : 'false');
+}
+
+export async function getSavedDownloadDirUri(): Promise<string | null> {
+  return await getStorageItem(ANDROID_DOWNLOAD_DIR_KEY);
+}
+
+export async function setSavedDownloadDirUri(uri: string): Promise<void> {
+  await setStorageItem(ANDROID_DOWNLOAD_DIR_KEY, uri);
 }

@@ -1,8 +1,517 @@
-import { UserProfile, rocToWesternYear, formatIsoDate } from '@/types/sports500';
+import { UserProfile, formatIsoDate, rocToWesternYear } from '@/types/sports500';
+
+export function isBase64HtmlContent(base64Data: string): boolean {
+  try {
+    let headerSample = '';
+    const cleanBase64 = base64Data.includes(',') ? base64Data.split(',')[1] : base64Data;
+    if (typeof atob === 'function') {
+      headerSample = atob(cleanBase64.slice(0, 300)).toLowerCase();
+    } else if (typeof (globalThis as any).Buffer !== 'undefined') {
+      headerSample = (globalThis as any).Buffer.from(cleanBase64.slice(0, 300), 'base64')
+        .toString('utf8')
+        .toLowerCase();
+    }
+    if (!headerSample) return false;
+    return (
+      headerSample.includes('<!doctype') ||
+      headerSample.includes('<html') ||
+      headerSample.includes('<head') ||
+      headerSample.includes('<body') ||
+      headerSample.includes('502 bad gateway') ||
+      headerSample.includes('504 gateway time-out') ||
+      headerSample.includes('系統忙碌') ||
+      headerSample.includes('系統壅塞')
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function generateDownloadInterceptorScript(): string {
+  return `
+    (function() {
+      if (window._sports500_download_interceptors_installed) return;
+      window._sports500_download_interceptors_installed = true;
+
+      function postToRN(msg) {
+        if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+          try {
+            window.ReactNativeWebView.postMessage(JSON.stringify(msg));
+          } catch(e) {
+            console.error('[Sports500Helper] postToRN error', e);
+          }
+        }
+      }
+
+      function isVerificationLink(url, text) {
+        const u = (url || '').toLowerCase();
+        const t = (text || '').toLowerCase();
+        return (
+          u.includes('/verify') ||
+          u.includes('/check') ||
+          u.includes('verification') ||
+          t.includes('查驗') ||
+          t.includes('防偽') ||
+          t.includes('驗證') ||
+          t.includes('核對') ||
+          t.includes('回任務')
+        );
+      }
+
+      function isHtmlPayload(base64Data, filename, contentType) {
+        if (filename) {
+          const fn = filename.toLowerCase();
+          if (fn.endsWith('.html') || fn.endsWith('.htm')) return true;
+        }
+        if (contentType) {
+          const ct = contentType.toLowerCase();
+          if (ct.includes('text/html') || ct.includes('application/xhtml')) return true;
+        }
+        if (base64Data && typeof atob === 'function') {
+          try {
+            const sample = atob(base64Data.slice(0, 300)).trim().toLowerCase();
+            if (
+              sample.startsWith('<!doctype') ||
+              sample.startsWith('<html') ||
+              sample.startsWith('<head') ||
+              sample.startsWith('<body') ||
+              sample.startsWith('<!--') ||
+              sample.includes('502 bad gateway') ||
+              sample.includes('504 gateway time-out') ||
+              sample.includes('系統忙碌') ||
+              sample.includes('系統壅塞')
+            ) {
+              return true;
+            }
+          } catch(e) {}
+        }
+        return false;
+      }
+
+      // 1. Authenticated in-webview certificate download
+      window.downloadCertificateWithAuth = function(url, defaultTitle) {
+        if (!url) return;
+        if (isVerificationLink(url, defaultTitle)) {
+          window.location.href = url;
+          return;
+        }
+
+        postToRN({
+          type: 'CERT_FETCH_START',
+          title: defaultTitle || '數位完成證書',
+        });
+
+        var controller = null;
+        var timeoutId = null;
+        if (typeof AbortController !== 'undefined') {
+          try {
+            controller = new AbortController();
+            timeoutId = setTimeout(function() {
+              controller.abort();
+            }, 25000);
+          } catch(e) {}
+        }
+
+        fetch(url, {
+          credentials: 'include',
+          signal: controller ? controller.signal : undefined
+        })
+          .then(async function(res) {
+            if (timeoutId) clearTimeout(timeoutId);
+            if (!res.ok) {
+              if (res.status === 429 || res.status === 502 || res.status === 503 || res.status === 504 || res.status === 500) {
+                throw new Error('官網目前流量過大或系統塞車中 (HTTP ' + res.status + ')');
+              }
+              throw new Error('HTTP ' + res.status);
+            }
+            const contentType = (res.headers.get('content-type') || '').toLowerCase();
+            if (contentType.includes('text/html') || contentType.includes('application/xhtml')) {
+              console.warn('[Sports500Helper] URL returned HTML instead of cert file (possible site congestion):', url);
+              postToRN({
+                type: 'CERT_FETCH_ERROR',
+                url: url,
+                error: '官網目前流量過大或系統塞車，伺服器回傳了網頁錯誤訊息而非證書檔案。',
+                isHtmlResponse: true,
+              });
+              return;
+            }
+
+            const disposition = res.headers.get('content-disposition') || '';
+            let filename = '';
+            if (disposition) {
+              const match = disposition.match(/filename\\*?=(?:UTF-8'')?["']?([^;"']+)["']?/i);
+              if (match && match[1]) {
+                try {
+                  filename = decodeURIComponent(match[1].trim());
+                } catch(e) {
+                  filename = match[1].trim();
+                }
+              }
+            }
+
+            if (filename) {
+              const lowerFn = filename.toLowerCase();
+              if (lowerFn.endsWith('.html') || lowerFn.endsWith('.htm')) {
+                postToRN({
+                  type: 'CERT_FETCH_ERROR',
+                  url: url,
+                  error: '官網伺服器壅塞，回傳了 HTML 網頁錯誤檔案而非證書。',
+                  isHtmlResponse: true,
+                });
+                return;
+              }
+            }
+
+            if (!filename) {
+              filename = contentType.includes('pdf') ? '115年揮汗有禮數位完成證書.pdf' : '115年揮汗有禮數位完成證書.png';
+            }
+
+            const blob = await res.blob();
+            const reader = new FileReader();
+            reader.onloadend = function() {
+              const resultStr = String(reader.result || '');
+              const commaIdx = resultStr.indexOf(',');
+              const base64Data = commaIdx >= 0 ? resultStr.slice(commaIdx + 1) : resultStr;
+
+              if (isHtmlPayload(base64Data, filename, contentType || blob.type)) {
+                postToRN({
+                  type: 'CERT_FETCH_ERROR',
+                  url: url,
+                  error: '官網伺服器目前流量過大或塞車，檔案內容為網頁錯誤訊息而非有效證書。',
+                  isHtmlResponse: true,
+                });
+                return;
+              }
+
+              postToRN({
+                type: 'CERT_DOWNLOADED',
+                dataUrl: reader.result,
+                filename: filename,
+                contentType: contentType || blob.type || (filename.endsWith('.pdf') ? 'application/pdf' : 'image/png'),
+                size: blob.size,
+                title: defaultTitle || '數位完成證書',
+              });
+            };
+            reader.readAsDataURL(blob);
+          })
+          .catch(function(err) {
+            if (timeoutId) clearTimeout(timeoutId);
+            console.error('[Sports500Helper] Certificate fetch failed:', err);
+            var isTimeout = err && (err.name === 'AbortError' || err.message === 'Timeout');
+            var errMsg = isTimeout
+              ? '官網伺服器回應逾時（可能目前系統壅塞中），請稍後再試。'
+              : (err.message || '連線錯誤');
+            postToRN({
+              type: 'CERT_FETCH_ERROR',
+              url: url,
+              error: errMsg,
+            });
+          });
+      };
+
+      // 2. Intercept window.open
+      const originalWindowOpen = window.open;
+      window.open = function(url, target, features) {
+        if (url) {
+          try {
+            const absUrl = new URL(url, window.location.href).href;
+            if (isVerificationLink(absUrl, '')) {
+              window.location.href = absUrl;
+              return null;
+            }
+            if (!isVerificationLink(absUrl, '') && (absUrl.includes('/download') || /\\.(pdf|png|jpe?g)($|\\?)/i.test(absUrl))) {
+              window.downloadCertificateWithAuth(absUrl, '數位完成證書');
+              return null;
+            }
+            postToRN({
+              type: 'DOWNLOAD_OR_LINK',
+              url: absUrl,
+              title: '開啟新視窗連結',
+              source: 'window.open',
+            });
+            return null;
+          } catch(e) {}
+        }
+        return originalWindowOpen ? originalWindowOpen.apply(this, arguments) : null;
+      };
+
+      // 3. Intercept window.print (for Save as PDF or print cert)
+      window.print = function() {
+        postToRN({
+          type: 'WINDOW_PRINT',
+          url: window.location.href,
+        });
+      };
+
+      // 4. Intercept programmatic HTMLAnchorElement.prototype.click
+      const origAnchorClick = HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click = function() {
+        const href = this.getAttribute('href') || this.href || '';
+        const downloadAttr = this.getAttribute('download');
+        const hasDownload = this.hasAttribute('download');
+        const text = (this.innerText || this.textContent || '').trim();
+
+        if (isVerificationLink(href, text)) {
+          return origAnchorClick.apply(this, arguments);
+        }
+
+        if (href) {
+          if (href.startsWith('blob:')) {
+            fetch(href)
+              .then(r => r.blob())
+              .then(blob => {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                  const resultStr = String(reader.result || '');
+                  const commaIdx = resultStr.indexOf(',');
+                  const base64Data = commaIdx >= 0 ? resultStr.slice(commaIdx + 1) : resultStr;
+                  const finalFilename = downloadAttr || '115年揮汗有禮數位完成證書.pdf';
+                  const finalType = blob.type || 'application/pdf';
+
+                  if (isHtmlPayload(base64Data, finalFilename, finalType)) {
+                    postToRN({
+                      type: 'CERT_FETCH_ERROR',
+                      url: href,
+                      error: '官網目前流量過大或塞車，回傳為網頁錯誤訊息而非有效證書。',
+                      isHtmlResponse: true,
+                    });
+                    return;
+                  }
+
+                  postToRN({
+                    type: 'CERT_DOWNLOADED',
+                    dataUrl: reader.result,
+                    filename: finalFilename,
+                    contentType: finalType,
+                    size: blob.size,
+                    title: text || '數位完成證書',
+                  });
+                };
+                reader.readAsDataURL(blob);
+              })
+              .catch(err => {
+                console.error('[Sports500Helper] Blob read error:', err);
+              });
+            return;
+          }
+
+          if (href.startsWith('data:')) {
+            const dataFilename = downloadAttr || '115年揮汗有禮數位完成證書.png';
+            const dataType = href.includes('application/pdf') ? 'application/pdf' : 'image/png';
+            const commaIdx = href.indexOf(',');
+            const base64Data = commaIdx >= 0 ? href.slice(commaIdx + 1) : href;
+
+            if (isHtmlPayload(base64Data, dataFilename, dataType)) {
+              postToRN({
+                type: 'CERT_FETCH_ERROR',
+                url: href,
+                error: '官網目前流量過大或塞車，回傳為網頁錯誤訊息而非有效證書。',
+                isHtmlResponse: true,
+              });
+              return;
+            }
+
+            postToRN({
+              type: 'CERT_DOWNLOADED',
+              dataUrl: href,
+              filename: dataFilename,
+              contentType: dataType,
+              title: text || '數位完成證書',
+            });
+            return;
+          }
+
+          const isExplicitCert =
+            !isVerificationLink(href, text) &&
+            ((text.includes('下載證書') || (text.includes('證書') && hasDownload)) ||
+             ((href.includes('/certificates/') || href.includes('/certificate/')) && (href.includes('download') || hasDownload || /\\.(pdf|png)($|\\?)/i.test(href))));
+
+          if (isExplicitCert) {
+            try {
+              const absUrl = new URL(href, window.location.href).href;
+              window.downloadCertificateWithAuth(absUrl, text || downloadAttr || '數位完成證書');
+              return;
+            } catch(e) {}
+          }
+
+          if (hasDownload || /\\.(pdf|png|jpe?g|webp|zip)($|\\?)/i.test(href)) {
+            try {
+              const absUrl = new URL(href, window.location.href).href;
+              postToRN({
+                type: 'DOWNLOAD_OR_LINK',
+                url: absUrl,
+                filename: downloadAttr || '',
+                title: text || '證書檔案',
+                source: 'anchor.click',
+              });
+              return;
+            } catch(e) {}
+          }
+        }
+        return origAnchorClick.apply(this, arguments);
+      };
+
+      // 5. Capture phase click listener on DOM
+      document.addEventListener('click', function(e) {
+        const target = e.target;
+        if (!target) return;
+        const anchor = target.closest('a');
+        const button = target.closest('button, [role="button"], input[type="button"], input[type="submit"], .btn');
+        const el = anchor || button;
+        if (!el) return;
+
+        const text = (el.innerText || el.textContent || el.value || '').trim();
+        const href = anchor ? (anchor.getAttribute('href') || anchor.href || '') : '';
+        const hasDownload = anchor ? anchor.hasAttribute('download') : false;
+        const downloadAttr = anchor ? anchor.getAttribute('download') : '';
+        const targetAttr = anchor ? anchor.getAttribute('target') : '';
+
+        // If this is a verification link/button (e.g. 「證書防偽查驗」), do NOT intercept as download!
+        if (isVerificationLink(href, text)) {
+          if (anchor && href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+            try {
+              const absUrl = new URL(href, window.location.href).href;
+              if (targetAttr === '_blank') {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = absUrl;
+                return;
+              }
+            } catch(e) {}
+          }
+          return;
+        }
+
+        const isCertRelated = (text.includes('證書') || text.includes('下載')) && !isVerificationLink(href, text);
+
+        // Handle blob: URL
+        if (anchor && href.startsWith('blob:')) {
+          e.preventDefault();
+          e.stopPropagation();
+          fetch(href)
+            .then(r => r.blob())
+            .then(blob => {
+              const reader = new FileReader();
+              reader.onloadend = function() {
+                const resultStr = String(reader.result || '');
+                const commaIdx = resultStr.indexOf(',');
+                const base64Data = commaIdx >= 0 ? resultStr.slice(commaIdx + 1) : resultStr;
+                const finalFilename = downloadAttr || (text ? text + '.pdf' : '115年揮汗有禮數位完成證書.pdf');
+                const finalType = blob.type || 'application/pdf';
+
+                if (isHtmlPayload(base64Data, finalFilename, finalType)) {
+                  postToRN({
+                    type: 'CERT_FETCH_ERROR',
+                    url: href,
+                    error: '官網伺服器目前流量過大或塞車，回傳為網頁錯誤訊息而非有效證書。',
+                    isHtmlResponse: true,
+                  });
+                  return;
+                }
+
+                postToRN({
+                  type: 'CERT_DOWNLOADED',
+                  dataUrl: reader.result,
+                  filename: finalFilename,
+                  contentType: finalType,
+                  size: blob.size,
+                  title: text || '數位完成證書',
+                });
+              };
+              reader.readAsDataURL(blob);
+            })
+            .catch(err => {
+              console.error('[Sports500Helper] Blob click fetch failed', err);
+            });
+          return;
+        }
+
+        // Handle data: URL
+        if (anchor && href.startsWith('data:')) {
+          e.preventDefault();
+          e.stopPropagation();
+          const dataFilename = downloadAttr || '115年揮汗有禮數位完成證書.png';
+          const dataType = href.includes('application/pdf') ? 'application/pdf' : 'image/png';
+          const commaIdx = href.indexOf(',');
+          const base64Data = commaIdx >= 0 ? href.slice(commaIdx + 1) : href;
+
+          if (isHtmlPayload(base64Data, dataFilename, dataType)) {
+            postToRN({
+              type: 'CERT_FETCH_ERROR',
+              url: href,
+              error: '官網伺服器目前流量過大或塞車，回傳為網頁錯誤訊息而非有效證書。',
+              isHtmlResponse: true,
+            });
+            return;
+          }
+
+          postToRN({
+            type: 'CERT_DOWNLOADED',
+            dataUrl: href,
+            filename: dataFilename,
+            contentType: dataType,
+            title: text || '數位完成證書',
+          });
+          return;
+        }
+
+        // Special handling for Certificate downloads
+        const isCertDownload =
+          !isVerificationLink(href, text) &&
+          (text === '下載證書' ||
+           text.includes('下載證書') ||
+           (isCertRelated && (hasDownload || href.includes('download'))) ||
+           ((href.includes('/certificates/') || href.includes('/certificate/')) && (hasDownload || href.includes('download') || /\\.(pdf|png)($|\\?)/i.test(href))));
+
+        if (isCertDownload) {
+          let targetUrl = href;
+          if (!targetUrl && button) {
+            targetUrl = button.getAttribute('data-href') || button.getAttribute('data-url') || '';
+          }
+          if (targetUrl && !targetUrl.startsWith('#') && !targetUrl.startsWith('javascript:')) {
+            try {
+              const absUrl = new URL(targetUrl, window.location.href).href;
+              e.preventDefault();
+              e.stopPropagation();
+              window.downloadCertificateWithAuth(absUrl, text || '數位完成證書');
+              return;
+            } catch(e) {}
+          }
+        }
+
+        // Handle other standard download or target="_blank" links (excluding cert download already handled)
+        if (anchor && href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+          const isDownloadExt = /\\.(pdf|png|jpe?g|webp|zip)($|\\?)/i.test(href);
+
+          if (hasDownload || isDownloadExt || targetAttr === '_blank') {
+            try {
+              const absUrl = new URL(href, window.location.href).href;
+              e.preventDefault();
+              e.stopPropagation();
+              postToRN({
+                type: 'DOWNLOAD_OR_LINK',
+                url: absUrl,
+                filename: downloadAttr || '',
+                title: text || '檔案下載',
+                target: targetAttr,
+                source: 'user_click',
+              });
+              return;
+            } catch(e) {}
+          }
+        }
+      }, true);
+    })();
+    true;
+  `;
+}
 
 export function generateAutoFillScript(profile: UserProfile | null, isManual = false): string {
+  const downloadScript = generateDownloadInterceptorScript();
+
   if (!profile) {
     return `
+      ${downloadScript}
       (function() {
         console.log('[Sports500Helper] No active profile to auto-fill');
       })();
@@ -22,6 +531,7 @@ export function generateAutoFillScript(profile: UserProfile | null, isManual = f
   });
 
   return `
+    ${downloadScript}
     (function() {
       const user = ${payload};
       const manualMode = ${JSON.stringify(isManual)};
