@@ -49,6 +49,11 @@ export default function AccountsScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const formScrollRef = useRef<ScrollView>(null);
+  const idNoInputRef = useRef<TextInput>(null);
+  const rocYearInputRef = useRef<TextInput>(null);
+  const monthInputRef = useRef<TextInput>(null);
+  const dayInputRef = useRef<TextInput>(null);
+  const phoneInputRef = useRef<TextInput>(null);
   const { preference, colorScheme, setThemePreference } = useThemeContext();
 
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
@@ -867,6 +872,9 @@ export default function AccountsScreen() {
                   placeholderTextColor={theme.textMuted}
                   value={formName}
                   onChangeText={setFormName}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => idNoInputRef.current?.focus()}
                   clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
@@ -909,6 +917,7 @@ export default function AccountsScreen() {
                   身分證字號 <Text style={{ color: theme.primary }}>*</Text>
                 </Text>
                 <TextInput
+                  ref={idNoInputRef}
                   style={[
                     styles.input,
                     {
@@ -923,6 +932,9 @@ export default function AccountsScreen() {
                   maxLength={10}
                   value={formIdNo}
                   onChangeText={(t) => setFormIdNo(t.toUpperCase())}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => rocYearInputRef.current?.focus()}
                   clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
@@ -946,6 +958,7 @@ export default function AccountsScreen() {
                       民國年
                     </Text>
                     <TextInput
+                      ref={rocYearInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -961,6 +974,9 @@ export default function AccountsScreen() {
                       maxLength={2}
                       value={formRocYear}
                       onChangeText={setFormRocYear}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      onSubmitEditing={() => monthInputRef.current?.focus()}
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -972,6 +988,7 @@ export default function AccountsScreen() {
                   <View style={styles.dateInputCol}>
                     <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>月份</Text>
                     <TextInput
+                      ref={monthInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -987,6 +1004,9 @@ export default function AccountsScreen() {
                       maxLength={2}
                       value={formMonth}
                       onChangeText={setFormMonth}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      onSubmitEditing={() => dayInputRef.current?.focus()}
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -998,6 +1018,7 @@ export default function AccountsScreen() {
                   <View style={styles.dateInputCol}>
                     <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>日期</Text>
                     <TextInput
+                      ref={dayInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -1013,6 +1034,9 @@ export default function AccountsScreen() {
                       maxLength={2}
                       value={formDay}
                       onChangeText={setFormDay}
+                      returnKeyType="next"
+                      blurOnSubmit={false}
+                      onSubmitEditing={() => phoneInputRef.current?.focus()}
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -1032,6 +1056,7 @@ export default function AccountsScreen() {
                   手機號碼 <Text style={{ color: theme.primary }}>*</Text>
                 </Text>
                 <TextInput
+                  ref={phoneInputRef}
                   style={[
                     styles.input,
                     {
@@ -1046,6 +1071,8 @@ export default function AccountsScreen() {
                   maxLength={10}
                   value={formPhone}
                   onChangeText={setFormPhone}
+                  returnKeyType="done"
+                  onSubmitEditing={handleSave}
                   clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
