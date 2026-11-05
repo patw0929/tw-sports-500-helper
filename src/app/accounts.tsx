@@ -49,10 +49,6 @@ export default function AccountsScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const formScrollRef = useRef<ScrollView>(null);
-  const rocYearInputRef = useRef<TextInput>(null);
-  const monthInputRef = useRef<TextInput>(null);
-  const dayInputRef = useRef<TextInput>(null);
-  const phoneInputRef = useRef<TextInput>(null);
   const { preference, colorScheme, setThemePreference } = useThemeContext();
 
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
@@ -773,7 +769,7 @@ export default function AccountsScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.linkRow}
+            style={[styles.linkRow, { borderBottomWidth: 0 }]}
             onPress={() => handleOpenUrl('https://patw.me/')}
           >
             <Ionicons name="globe-outline" size={20} color={theme.primary} />
@@ -782,20 +778,6 @@ export default function AccountsScreen() {
               <Text style={[styles.linkSubtext, { color: theme.textMuted }]}>patw.me</Text>
             </View>
             <Ionicons name="open-outline" size={16} color={theme.textMuted} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.linkRow, { borderBottomWidth: 0 }]}
-            onPress={() => handleOpenUrl('mailto:patw.hi@gmail.com')}
-          >
-            <Ionicons name="mail-outline" size={20} color={theme.accent} />
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.linkRowText, { color: theme.text }]}>聯絡作者信箱</Text>
-              <Text style={[styles.linkSubtext, { color: theme.textMuted }]}>
-                patw.hi@gmail.com
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={16} color={theme.textMuted} />
           </TouchableOpacity>
         </View>
 
@@ -885,7 +867,6 @@ export default function AccountsScreen() {
                   placeholderTextColor={theme.textMuted}
                   value={formName}
                   onChangeText={setFormName}
-                  selectTextOnFocus
                   clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
@@ -942,7 +923,6 @@ export default function AccountsScreen() {
                   maxLength={10}
                   value={formIdNo}
                   onChangeText={(t) => setFormIdNo(t.toUpperCase())}
-                  selectTextOnFocus
                   clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
@@ -966,7 +946,6 @@ export default function AccountsScreen() {
                       民國年
                     </Text>
                     <TextInput
-                      ref={rocYearInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -981,13 +960,7 @@ export default function AccountsScreen() {
                       placeholderTextColor={theme.textMuted}
                       maxLength={2}
                       value={formRocYear}
-                      onChangeText={(t) => {
-                        setFormRocYear(t);
-                        if (t.length === 2) {
-                          monthInputRef.current?.focus();
-                        }
-                      }}
-                      selectTextOnFocus
+                      onChangeText={setFormRocYear}
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -999,7 +972,6 @@ export default function AccountsScreen() {
                   <View style={styles.dateInputCol}>
                     <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>月份</Text>
                     <TextInput
-                      ref={monthInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -1014,13 +986,7 @@ export default function AccountsScreen() {
                       placeholderTextColor={theme.textMuted}
                       maxLength={2}
                       value={formMonth}
-                      onChangeText={(t) => {
-                        setFormMonth(t);
-                        if (t.length === 2) {
-                          dayInputRef.current?.focus();
-                        }
-                      }}
-                      selectTextOnFocus
+                      onChangeText={setFormMonth}
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -1032,7 +998,6 @@ export default function AccountsScreen() {
                   <View style={styles.dateInputCol}>
                     <Text style={[styles.dateSubLabel, { color: theme.textSecondary }]}>日期</Text>
                     <TextInput
-                      ref={dayInputRef}
                       style={[
                         styles.input,
                         styles.dateInput,
@@ -1047,13 +1012,7 @@ export default function AccountsScreen() {
                       placeholderTextColor={theme.textMuted}
                       maxLength={2}
                       value={formDay}
-                      onChangeText={(t) => {
-                        setFormDay(t);
-                        if (t.length === 2) {
-                          phoneInputRef.current?.focus();
-                        }
-                      }}
-                      selectTextOnFocus
+                      onChangeText={setFormDay}
                       onFocus={() => {
                         setTimeout(() => {
                           formScrollRef.current?.scrollTo({ y: 150, animated: true });
@@ -1073,7 +1032,6 @@ export default function AccountsScreen() {
                   手機號碼 <Text style={{ color: theme.primary }}>*</Text>
                 </Text>
                 <TextInput
-                  ref={phoneInputRef}
                   style={[
                     styles.input,
                     {
@@ -1088,7 +1046,6 @@ export default function AccountsScreen() {
                   maxLength={10}
                   value={formPhone}
                   onChangeText={setFormPhone}
-                  selectTextOnFocus
                   clearButtonMode="while-editing"
                   onFocus={() => {
                     setTimeout(() => {
